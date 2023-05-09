@@ -1,184 +1,216 @@
 {
-    "students": [
-    {
-    "persona": "The Overachiever",
-    "description": "Highly motivated, competitive, driven",
-    "journalEntries": 17,
-    "promptedEntries": 12
-    },
-    {
-    "persona": "The Class Clown",
-    "description": "Loves to make others laugh",
-    "journalEntries": 9,
-    "promptedEntries": 4
-    },
-    {
-    "persona": "The Shy Student",
-    "description": "Quiet, introverted, hesitant",
-    "journalEntries": 13,
-    "promptedEntries": 10
-    },
-    {
-    "persona": "The Sports Star",
-    "description": "Athletic, competitive, involved",
-    "journalEntries": 9,
-    "promptedEntries": 6
-    },
-    {
-    "persona": "The Artistic Soul",
-    "description": "Creative, expressive, excels in arts",
-    "journalEntries": 16,
-    "promptedEntries": 10
-    },
-    {
-    "persona": "The Social Butterfly",
-    "description": "Outgoing, popular, enjoys being around",
-    "journalEntries": 10,
-    "promptedEntries": 6
-    },
-    {
-    "persona": "The Teacher's Pet",
-    "description": "Eager to please, highly attentive",
-    "journalEntries": 15,
-    "promptedEntries": 11
-    },
-    {
-    "persona": "The Perfectionist",
-    "description": "Detail-oriented, highly critical",
-    "journalEntries": 14,
-    "promptedEntries": 10
-    },
-    {
-    "persona": "The Rebel",
-    "description": "Non-conformist, independent",
-    "journalEntries": 6,
-    "promptedEntries": 2
-    },
-    {
-    "persona": "The Bookworm",
-    "description": "Highly intellectual, enjoys reading",
-    "journalEntries": 14,
-    "promptedEntries": 9
-    },
-    {
-    "persona": "The Loner",
-    "description": "Prefers solitude, independent",
-    "journalEntries": 12,
-    "promptedEntries": 8
-    },
-    {
-    "persona": "The Outspoken Advocate",
-    "description": "Passionate, vocal, opinionated",
-    "journalEntries": 11,
-    "promptedEntries": 7
-    },
-    {
-    "persona": "The Technology Expert",
-    "description": "Proficient with computers, helps others",
-    "journalEntries": 10,
-    "promptedEntries": 7
-    },
-    {
-    "persona": "The Fashionista",
-    "description": "Trendy, stylish, accessorized",
-    "journalEntries": 8,
-    "promptedEntries": 5
-    },
-    {
-    "persona": "The Rebel Without a Cause",
-    "description": "Disruptive, disobedient",
-    "journalEntries": 5,
-    "promptedEntries": 1
-    },
-    {
-    "persona": "The Philosopher",
-    "description": "Deep thinker, ponders big questions",
-    "journalEntries": 13,
-    "promptedEntries": 8
-    },
-    {
-    "persona": "The Team Player",
-    "description": "Cooperative, collaborative, enjoys teamwork",
-    "journalEntries": 12,
-    "promptedEntries": 8
-    },
-    {
-    "persona": "The Know-it-all",
-    "description": "Arrogant, overly confident",
-    "journalEntries":10,
-    "promptedEntries": 6
+  "students": [
+  {
+      "persona": "The Overachiever",
+      "description": "Highly motivated, competitive, driven",
+      "journalEntries": 17,
+      "promptedEntries": 12,
+      "archetype": "Performing"
   },
   {
-    "persona": "The Daydreamer",
-    "description": "Lost in thought, easily distracted",
-    "journalEntries": 11,
-    "promptedEntries": 6
+      "persona": "The Class Clown",
+      "description": "Loves to make others laugh",
+      "journalEntries": 9,
+      "promptedEntries": 4,
+      "archetype": "Known Issues"
   },
   {
-    "persona": "The Go-Getter",
-    "description": "Ambitious, determined, highly motivated",
-    "journalEntries": 15,
-    "promptedEntries": 10
+      "persona": "The Shy Student",
+      "description": "Quiet, introverted, hesitant",
+      "journalEntries": 13,
+      "promptedEntries": 10,
+      "archetype": "Issues Unknown"
   },
   {
-    "persona": "The Good Samaritan",
-    "description": "Kind-hearted, empathetic",
-    "journalEntries": 13,
-    "promptedEntries": 9
+      "persona": "The Sports Star",
+      "description": "Athletic, competitive, involved",
+      "journalEntries": 9,
+      "promptedEntries": 6,
+      "archetype": "Performing"
   },
   {
-    "persona": "The Nerd",
-    "description": "Highly knowledgeable in a particular area",
-    "journalEntries": 13,
-    "promptedEntries": 9
+      "persona": "The Artistic Soul",
+      "description": "Creative, expressive, excels in arts",
+      "journalEntries": 16,
+      "promptedEntries": 10,
+      "archetype": "Performing"
   },
   {
-    "persona": "The Nonchalant",
-    "description": "Carefree, easy-going",
-    "journalEntries": 10,
-    "promptedEntries": 5
+      "persona": "The Social Butterfly",
+      "description": "Outgoing, popular, enjoys being around",
+      "journalEntries": 10,
+      "promptedEntries": 6,
+      "archetype": "Performing"
   },
   {
-    "persona": "The Hipster",
-    "description": "Non-conformist, unique",
-    "journalEntries": 12,
-    "promptedEntries": 7
+      "persona": "The Teacher's Pet",
+      "description": "Eager to please, highly attentive",
+      "journalEntries": 15,
+      "promptedEntries": 11,
+      "archetype": "Performing"
   },
   {
-    "persona": "The Busy Bee",
-    "description": "Highly involved, balancing multiple tasks",
-    "journalEntries": 11,
-    "promptedEntries": 7
+      "persona": "The Perfectionist",
+      "description": "Detail-oriented, highly critical",
+      "journalEntries": 14,
+      "promptedEntries": 10,
+      "archetype": "Issues Unknown"
   },
   {
-    "persona": "The Rebel With a Cause",
-    "description": "Advocates for change, respectful",
-    "journalEntries": 12,
-    "promptedEntries": 8
+      "persona": "The Rebel",
+      "description": "Non-conformist, independent",
+      "journalEntries": 6,
+      "promptedEntries": 2,
+      "archetype": "Known Issues"
   },
   {
-    "persona": "The Minimalist",
-    "description": "Prefers simplicity",
-    "journalEntries": 10,
-    "promptedEntries": 6
+      "persona": "The Bookworm",
+      "description": "Highly intellectual, enjoys reading",
+      "journalEntries": 14,
+      "promptedEntries": 9,
+      "archetype": "Performing"
   },
   {
-    "persona": "The Entrepreneur",
-    "description": "Business-savvy, involved in ventures",
-    "journalEntries": 11,
-    "promptedEntries": 7
+      "persona": "The Loner",
+      "description": "Prefers solitude, independent",
+      "journalEntries": 12,
+      "promptedEntries": 8,
+      "archetype": "Issues Unknown"
   },
   {
-    "persona": "The International Student",
-    "description": "Culturally diverse, language barriers",
-    "journalEntries": 12,
-    "promptedEntries": 9
+      "persona": "The Outspoken Advocate",
+      "description": "Passionate, vocal, opinionated",
+      "journalEntries": 11,
+      "promptedEntries": 7,
+      "archetype": "Performing"
   },
   {
-    "persona": "The Student-Athlete",
-    "description": "Balances academics and sports",
-    "journalEntries": 10,
-    "promptedEntries": 6
+      "persona": "The Technology Expert",
+      "description": "Proficient with computers, helps others",
+      "journalEntries": 10,
+      "promptedEntries": 7,
+      "archetype": "Performing"
+  },
+  {
+      "persona": "The Fashionista",
+      "description": "Trendy, stylish, accessorized",
+      "journalEntries": 8,
+      "promptedEntries": 5,
+      "archetype": "Performing"
+  },
+  {
+     
+    
+      "persona": "The Rebel Without a Cause",
+      "description": "Disruptive, disobedient",
+      "journalEntries": 5,
+      "promptedEntries": 1,
+      "archetype": "Known Issues"
+  },
+  {
+      "persona": "The Philosopher",
+      "description": "Deep thinker, ponders big questions",
+      "journalEntries": 13,
+      "promptedEntries": 8,
+      "archetype": "Performing"
+  },
+  {
+      "persona": "The Team Player",
+      "description": "Cooperative, collaborative, enjoys teamwork",
+      "journalEntries": 12,
+      "promptedEntries": 8,
+      "archetype": "Performing"
+  },
+  {
+      "persona": "The Know-it-all",
+      "description": "Arrogant, overly confident",
+      "journalEntries":10,
+      "promptedEntries": 6,
+      "archetype": "Known Issues"
+  },
+  {
+      "persona": "The Daydreamer",
+      "description": "Lost in thought, easily distracted",
+      "journalEntries": 11,
+      "promptedEntries": 6,
+      "archetype": "Issues Unknown"
+  },
+  {
+      "persona": "The Go-Getter",
+      "description": "Ambitious, determined, highly motivated",
+      "journalEntries": 15,
+      "promptedEntries": 10,
+      "archetype": "Performing"
+  },
+  {
+      "persona": "The Good Samaritan",
+      "description": "Kind-hearted, empathetic",
+      "journalEntries": 13,
+      "promptedEntries": 9,
+      "archetype": "Performing"
+  },
+  {
+      "persona": "The Nerd",
+      "description": "Highly knowledgeable in a particular area",
+      "journalEntries": 13,
+      "promptedEntries": 9,
+      "archetype": "Performing"
+  },
+  {
+      "persona": "The Nonchalant",
+      "description": "Carefree, easy-going",
+      "journalEntries": 10,
+      "promptedEntries": 5,
+      "archetype": "Performing"
+  },
+  {
+      "persona": "The Hipster",
+      "description": "Non-conformist, unique",
+      "journalEntries": 12,
+      "promptedEntries": 7,
+      "archetype": "Performing"
+  },
+  {
+      "persona": "The Busy Bee",
+      "description": "Highly involved, balancing multiple tasks",
+      "journalEntries": 11,
+      "promptedEntries": 7,
+      "archetype": "Performing"
+  },
+  {
+      "persona": "The Rebel With a Cause",
+      "description": "Advocates for change, respectful",
+      "journalEntries": 12,
+      "promptedEntries": 8,
+      "archetype": "Performing"
+  },
+  {
+      "persona": "The Minimalist",
+      "description": "Prefers simplicity",
+      "journalEntries": 10,
+      "promptedEntries": 6,
+      "archetype": "Performing"
+  },
+  {
+      "persona": "The Entrepreneur",
+      "description": "Business-savvy, involved in ventures",
+      "journalEntries": 11,
+      "promptedEntries": 7,
+      "archetype": "Performing"
+  },
+  {
+      "persona": "The International Student",
+      "description": "Culturally diverse, language barriers",
+      "journalEntries": 12,
+      "promptedEntries": 9,
+      "archetype": "Issues Unknown"
+  },
+  {
+      "persona": "The Student-Athlete",
+      "description": "Balances academics and sports",
+      "journalEntries": 10,
+      "promptedEntries": 6,
+      "archetype": "Performing"
   }
 ]
 }
