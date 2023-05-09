@@ -9,6 +9,8 @@ from dotenv import load_dotenv
 load_dotenv(dotenv_path = 'conf/.env', verbose = True)
 import ast
 
+
+
 STARTDATE = datetime.date(2023, 2, 2)
 DURATION = 7*12
 ARCHETYPES_DICT = {
@@ -72,7 +74,7 @@ def journal_prompt_maker(student):
     """ Generates a prompt with a custom list of journal entries for a student"""
     def load_LLM():
         """Logic for loading the chain you want to use should go here."""
-        llm = OpenAI(temperature=0, max_tokens=2046)
+        llm = OpenAI(temperature=0, max_tokens=3500)
         return llm
 
     persona = student['persona']
@@ -92,13 +94,15 @@ def journal_prompt_maker(student):
     template = """
     You are a Singaporean secondary school student with the following persona: {persona}:{persona_description}. You are a {archetype}. You wrote in a journaling app that allows your teacher to better understand you. If the title is Freewriting, it means you wrote about anything you wanted and you wrote about both good and bad events (if any). Otherwise, you wrote based on the topic given. Your teacher can read your journal so you did not include anything you didn't want your teacher to see.
 
-    Generate JSON code for all the entries. Each entry should be unique have varying lengths. Use "entry_date", "title", and "entry" as the JSON keys. Remember to write journal entries according to your persona:
+    Generate JSON code for all the entries. Every entry should be unique. Please be realistic and not overly positive. Use "entry_date", "title", and "entry" as the JSON keys. Remember to write journal entries according to your persona. If it fits the persona, you are allowed to make grammatical mistakes and use Singlish.:
     {formatted_entries}
     """
 
     prompt = PromptTemplate(
     input_variables=["persona", "persona_description", "archetype", "formatted_entries"],
     template=template,)
+
+    print(prompt)
 
     llm = load_LLM()
 
@@ -132,4 +136,6 @@ def read_journal_entries(student):
         print(data['entries'])
         print(len(data['entries']))
 
-read_journal_entries(STUDENT_LIST[6])
+
+for i in range(21, len(STUDENT_LIST)):
+    get_journal_entries(STUDENT_LIST[i])
