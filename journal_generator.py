@@ -121,6 +121,7 @@ def get_journal_entries(student):
     response = journal_prompt_maker(student)
     print(response)
     response = ast.literal_eval(response)
+    response = {"entries" : response}
     filename = filename_formatter(student)
     with open(f'journals/{filename}.json', 'w') as f:
         json.dump(response, f)
