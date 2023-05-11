@@ -4,12 +4,12 @@ import os
 
 load_dotenv("conf/.env")
 
-MONGODB_PW = os.getenv("MONGODB_PW")
+CONNECT_STR = os.getenv("CONNECT_STR")
 
 # Create a DBHandler class
 class DBHandler:
     def __init__(self):
-        client = MongoClient(f'mongodb+srv://empathtech:{MONGODB_PW}@cluster0.it4z2ov.mongodb.net/?retryWrites=true&w=majority')
+        client = MongoClient(CONNECT_STR)
         db = client['empathtech']
         self.students = db['students']
         self.teachers = db['teachers']
@@ -92,7 +92,7 @@ class DBHandler:
         return teacher
     
 
-    def insert_journal(self, student_id, title, content, date):
+    def insert_journal_entry(self, student_id, title, content, date):
         """
         Inserts a journal entry for a student
 
@@ -122,6 +122,31 @@ class DBHandler:
         return journal_id
 
 
+    def update_journal_entry(self, journal_id, title, content):
+        """ Updates a journal entry
+
+        Parameters
+        ----------
+        journal_id : ObjectId
+            _id of the journal entry
+        title : str
+            title of the journal entry
+        content : str
+            content of the journal entry
+
+        Returns
+        -------
+        None
+        """
+
+        update_entry = {
+            "title": title,
+            "content": content
+        }
+        self.journals.update_one({"_id": journal_id}, {"$set": update_entry})
+        return None
+    
+
     def get_journal_entries(self, student_id):
         """ Return all journal entries for a student given the student_id
 
@@ -139,11 +164,39 @@ class DBHandler:
         return entries
 
 
+    def get_all_teachers(self):
+        """ Returns all the teachers in the collection
+
+        Returns
+        -------
+        pymongo.cursor.Cursor
+            list of all the teachers
+        """
+        return self.teachers.find({})
+
+
+    def get_all_students(self):
+        """ Returns all the students in the collection
+
+        Returns
+        -------
+        pymongo.cursor.Cursor
+            list of all the students
+        """
+        return self.students.find({})
+    
+
+
 db = DBHandler()
-my_student = db.get_student("Jun Hao Ng")
-entries = db.get_journal_entries(my_student["_id"])
-print("type of entries is ", type(entries))
-for entry in entries:
-    print(entry['date'], entry["title"])
-    print(entry["content"])
-    print(type(my_student))
+# my_student = db.get_student("Jun Hao Ng")
+# entries = db.get_journal_entries(my_student["_id"])
+# print("type of entries is ", type(entries))
+# for entry in entries:
+#     print(entry['date'], entry["title"])
+#     print(entry["content"])
+#     print(type(my_student))
+
+teachers = db.get_all_teachers()
+print(type(teachers))
+for teacher in teachers:
+    print(teacher)
