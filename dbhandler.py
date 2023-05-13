@@ -1,5 +1,6 @@
 from pymongo import MongoClient
 from dotenv import load_dotenv
+from bson.objectid import ObjectId
 import os
 
 load_dotenv("conf/.env")
@@ -14,6 +15,8 @@ class DBHandler:
         self.students = db['students']
         self.teachers = db['teachers']
         self.journals = db['journals']
+        self.summaries = db['j_summaries']
+        self.auth = db['auth']
 
     def insert_student(self, student_name, teacher_id):
         """ Insert a new student into the database give
@@ -92,6 +95,19 @@ class DBHandler:
         return teacher
     
 
+    def del_teacher(self, teacher_id):
+        """ Deletes a teacher given the teacher_id
+
+        Parameters
+        ----------
+        teacher_id : ObjectId
+            _id of the teacher
+        """
+        self.teachers.find_one_and_delete({"_id": teacher_id})
+        print("Teacher deleted")
+        return None
+
+
     def insert_journal_entry(self, student_id, title, content, date):
         """
         Inserts a journal entry for a student
@@ -145,7 +161,19 @@ class DBHandler:
         }
         self.journals.update_one({"_id": journal_id}, {"$set": update_entry})
         return None
-    
+
+
+    def del_journal_entry(self, journal_id):
+        """ Deletes a journal entry
+
+        Parameters
+        ----------
+        journal_id : ObjectId
+            _id of the journal entry
+        """
+        self.journals.delete_one({"_id": journal_id})
+        return None
+
 
     def get_journal_entries(self, student_id):
         """ Return all journal entries for a student given the student_id
@@ -185,8 +213,57 @@ class DBHandler:
         """
         return self.students.find({})
     
+    
+    def insert_summary(self, journal_id, is_genuine, sentiment, events):
+        """_summary_
+
+        Parameters
+        ----------
+        journal_id : ObjectId
+            _description_
+        is_genuine : dict
+            dict containing keys "is_genuine" and "explanation"
+        sentiment : dict 
+            dict containing keys "score" and "explanation"
+        events : dict
+            dict containing keys "positive", "neutral", "negative", "concerning"
+            with nested dicts containing keys "count" for number of sub-events and "list" for a list of sub-events
+
+        Returns
+        -------
+        ObjectId
+            _id of inserted summary
+        """
+
+        new_summary = {
+            "journal_entry" : is_genuine,
+            "sentiment" : sentiment,
+            "events" : events,
+            "journal_id" : journal_id,
+            "student_id" : self.journals.find_one({"_id": journal_id})["student_id"]
+        }
+
+        summary_id = self.summaries.insert_one(new_summary).inserted_id
+        return summary_id
 
 
+    def get_summary(self, journal_id):
+        """ Given a journal_id, gets the summary / sentiment analysis
+
+        Parameters
+        ----------
+        journal_id : ObjectId
+            ObjectId of the journal entry
+
+        Returns
+        -------
+        dict
+            dict containing the summary
+        """
+
+        summary = self.summaries.find_one({"journal_id": journal_id})
+        return summary
+    
 db = DBHandler()
 # my_student = db.get_student("Jun Hao Ng")
 # entries = db.get_journal_entries(my_student["_id"])
@@ -196,7 +273,7 @@ db = DBHandler()
 #     print(entry["content"])
 #     print(type(my_student))
 
-teachers = db.get_all_teachers()
-print(type(teachers))
-for teacher in teachers:
-    print(teacher)
+
+# teacher = db.get_teacher("Mr. Tan")
+# print(teacher)
+# db.del_teacher(teacher["_id"])

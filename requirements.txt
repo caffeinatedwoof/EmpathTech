@@ -2,3 +2,5 @@ langchain
 dotenv
 openai
 pymongo
+streamlit
+streamlit-extras
