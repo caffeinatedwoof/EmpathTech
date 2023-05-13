@@ -1,0 +1,83 @@
+{
+    "prompts": [
+      {
+        "title": "Gratitude challenge",
+        "description": "What are three things you're grateful for today, and why are you grateful for these things?"
+      },
+      {
+        "title": "Kindness stories",
+        "description": "Can you recall a time when you helped someone or when someone helped you in a meaningful way? How did it make you feel?"
+      },
+      {
+        "title": "Empowering statements",
+        "description": "What are five personal power statements that showcase your unique talents, skills, or characteristics?"
+      },
+      {
+        "title": "Dream big",
+        "description": "What would your ultimate dream life look like in the future, where everything has gone incredibly well? What have you achieved?"
+      },
+      {
+        "title": "Memory lane",
+        "description": "What is a happy memory from your past? Can you describe the details and feelings associated with the memory?"
+      },
+      {
+        "title": "Compliment challenge",
+        "description": "How did you feel when you last brightened someone's day by giving them three genuine compliments? What was their reaction?"
+      },
+      {
+        "title": "Proud moments",
+        "description": "What are three moments, accomplishments, or personal qualities that make you proud of who you are?"
+      },
+      {
+        "title": "Epic experiences",
+        "description": "Can you describe a recent experience that you thoroughly enjoyed? What made it awesome, and how did it make you feel?"
+      },
+      {
+        "title": "Happy place",
+        "description": "What does your ideal happy place look like? Can you use your senses to describe the sights, sounds, and feelings in this special location?"
+      },
+      {
+        "title": "Mindful moments",
+        "description": "After taking a few minutes to focus on your breath or the sensations in your body, how did it make you feel and what did you notice during the practice?"
+      },
+      {
+        "title": "Personal growth",
+        "description": "What challenge have you overcome in the past, and how did it contribute to your personal growth? How did it make you a stronger or more resilient person?"
+      },
+      {
+        "title": "Inspiring role models",
+        "description": "Who is someone you admire or look up to? What qualities do you find inspiring about them, and how have they influenced your life?"
+      },
+      {
+        "title": "Future goals",
+        "description": "What are three goals you would like to achieve in the next year, and how will accomplishing these goals make you feel?"
+      },
+      {
+        "title": "Cherished values",
+        "description": "What are your top three personal values, and why are they important to you? Can you share examples of how you've embodied these values in your life?"
+      },
+      {
+        "title": "Creative expression",
+        "description": "What is a creative activity (drawing, painting, writing, playing music, etc.) that brings you joy? How does it make you feel, and why is it important to you?"
+      },
+      {
+        "title": "Connecting with nature",
+        "description": "After spending some time outside, observing and appreciating the beauty of nature, what observations did you make, and how did it make you feel?"
+      },
+      {
+        "title": "Laughter therapy",
+        "description": "When was the last time you watched a funny video or listened to a humorous podcast, and how did laughter positively impact your mood?"
+    },
+    {
+      "title": "Social connections",
+      "description": "When was the last time you reached out to a friend or family member you haven't talked to in a while? What was a positive update about your life that you shared, and how were they doing?"
+    },
+    {
+      "title": "Curiosity and learning",
+      "description": "What is something new that you've learned recently that interests you (a hobby, a skill, or an interesting fact)?"
+    },
+    {
+      "title": "Self-care routines",
+      "description": "What does your self-care routine look like, and how do the activities included promote your physical, mental, and emotional well-being? How does this routine impact your overall mood and well-being?"
+    }
+    ]}      

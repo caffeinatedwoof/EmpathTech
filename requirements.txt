@@ -4,3 +4,4 @@ openai
 pymongo
 streamlit
 streamlit-extras
+st-pages

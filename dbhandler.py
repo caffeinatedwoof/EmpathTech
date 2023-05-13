@@ -201,7 +201,7 @@ class DBHandler:
         return self.teachers.find({})
 
 
-    def get_all_students(self):
+    def get_all_students(self, teacher_id):
         """ Returns all the students in the collection
 
         Returns
@@ -209,7 +209,10 @@ class DBHandler:
         pymongo.cursor.Cursor
             list of all the students
         """
-        return self.students.find({})
+        if teacher_id is None:
+            return self.students.find({})
+        else:
+            return self.students.find({"teacher_id": teacher_id})
     
     
     def insert_summary(self, journal_id, is_genuine, sentiment, events):
