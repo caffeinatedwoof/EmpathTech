@@ -1,0 +1,7 @@
+langchain
+dotenv
+openai
+pymongo
+streamlit
+streamlit-extras
+st-pages
