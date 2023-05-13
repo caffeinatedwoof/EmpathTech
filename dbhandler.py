@@ -76,20 +76,20 @@ class DBHandler:
         return teacher_id
 
 
-    def get_teacher(self, teacher_name):
+    def get_teacher(self, teacher_id):
         """ Returns a teacher given the teacher_name
 
         Parameters
         ----------
-        teacher_name : str
-            name of the teacher
+        teacher_id : str
+            id of the teacher
 
         Returns
         -------
         dict
             a teacher document
         """
-        teacher = self.teachers.find_one({"name": teacher_name})
+        teacher = self.teachers.find_one({"_id": teacher_id})
         return teacher
     
 
@@ -302,16 +302,3 @@ class DBHandler:
         print(f"{role} User, '{username}' inserted")
         return None
 
-db = DBHandler()
-# my_student = db.get_student("Jun Hao Ng")
-# entries = db.get_journal_entries(my_student["_id"])
-# print("type of entries is ", type(entries))
-# for entry in entries:
-#     print(entry['date'], entry["title"])
-#     print(entry["content"])
-#     print(type(my_student))
-
-
-# teacher = db.get_teacher("Mr. Tan")
-# print(teacher)
-# db.del_teacher(teacher["_id"])
