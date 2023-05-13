@@ -173,6 +173,22 @@ class DBHandler:
         return None
 
 
+    def get_journal_entry(self, journal_id):
+        """ Returns a journal entry given the journal_id
+
+        Parameters
+        ----------
+        journal_id : ObjectId
+            _id of the journal entry
+
+        Returns
+        -------
+        dict
+            a journal entry document
+        """
+        entry = self.journals.find_one({"_id": journal_id})
+        return entry
+    
     def get_journal_entries(self, student_id):
         """ Return all journal entries for a student given the student_id
 
