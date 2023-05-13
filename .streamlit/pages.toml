@@ -1,0 +1,9 @@
+[[pages]]
+path = "login.py"
+name = "Home"
+icon = "🏠"
+
+[[pages]]
+path = "pages/teachertest.py"
+name = "Teachers Dashboard"
+icon = ":books:"
