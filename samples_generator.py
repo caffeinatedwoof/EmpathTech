@@ -1,6 +1,9 @@
-from dbhandler import connect_to_db, choose_collections
+from dbhandler import DBHandler
 import os
 import json
+
+db = DBHandler()
+students, teachers, journals = db.students, db.teachers, db.journals
 
 def create_sample_students():
     """ Generate sample students """
@@ -9,13 +12,10 @@ def create_sample_students():
         student_names = [line.strip() for line in lines]
         print(student_names)
 
-    db = connect_to_db()
-    students, teachers, journals = choose_collections(db)
-
-    teacher = get_teacher("Miss Lim")
+    teacher = db.get_teacher("Miss Lim")
 
     for name in student_names:
-        insert_student(name, teacher["_id"])
+        db.insert_student(name, teacher["_id"])
 
 
 def create_sample_journals():
@@ -29,9 +29,6 @@ def create_sample_journals():
     # load all json files in journals/
     folder_path = os.path.join(os.getcwd(), 'journals')
     journal_filenames = [f for f in os.listdir(folder_path) if os.path.isfile(os.path.join(folder_path, f))]
-
-    db = connect_to_db()
-    students, teachers, journals = choose_collections(db)
     journal_index = 0
 
     for student in students.find():
@@ -59,3 +56,17 @@ def load_journal_entries(filepath):
         print("Title: " + entry['title'])
         print("Content: " + entry['entry'])
         print("Date: " + entry['entry_date'])
+
+
+def generate_users():
+    """ Generate sample users """
+    teachers = db.get_all_teachers()
+    students = db.get_all_students()
+
+    # for teacher in teachers:
+    #     teacher_name = teacher['name'].lower().replace(" ", "")
+    #     db.insert_user(username=teacher_name, password="password", role="teacher", role_id=teacher['_id'])
+
+    for student in students:
+        student_name = student['name'].lower().replace(" ", "")
+        db.insert_user(username=student_name, password="password", role="student", role_id=student['_id'])    

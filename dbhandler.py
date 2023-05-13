@@ -1,11 +1,9 @@
 from pymongo import MongoClient
-from dotenv import load_dotenv
 from bson.objectid import ObjectId
 import os
+import streamlit as st
 
-load_dotenv("conf/.env")
-
-CONNECT_STR = os.getenv("CONNECT_STR")
+CONNECT_STR = st.secrets.CONNECT_STR
 
 # Create a DBHandler class
 class DBHandler:
@@ -264,6 +262,43 @@ class DBHandler:
         summary = self.summaries.find_one({"journal_id": journal_id})
         return summary
     
+
+    def insert_user(self, username, password, role, role_id):
+        """
+        Inserts a user into the database
+
+        Parameters
+        ----------
+        username : str
+            login username
+        password : str
+            user password
+        role : str
+            'student' or 'teacher'
+        role_id : ObjectId
+            Optional ObjectId of the student or teacher. If not provided, a new teacher / student will be created in the appropriate collection
+        """
+        if role == "student":
+            new_student = {
+                "username": username,
+                "password": password,
+                "role": role,
+                "student_id": role_id
+            }
+            self.auth.insert_one(new_student)
+
+        elif role == "teacher":
+            new_teacher = {
+                "username": username,
+                "password": password,
+                "role": role,
+                "teacher_id": role_id
+            }
+            self.auth.insert_one(new_teacher)
+        
+        print(f"{role} User, '{username}' inserted")
+        return None
+
 db = DBHandler()
 # my_student = db.get_student("Jun Hao Ng")
 # entries = db.get_journal_entries(my_student["_id"])
