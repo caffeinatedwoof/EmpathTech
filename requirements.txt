@@ -1,5 +1,4 @@
 langchain
-dotenv
 openai
 pymongo
 streamlit
