@@ -47,6 +47,7 @@ def get_all_pages():
         saved_default_pages = default_pages.copy()
         pages_path.write_text(json.dumps(default_pages, indent=4), encoding='utf-8')
 
+    st.session_state.pages = saved_default_pages
     return saved_default_pages
 
 # clear all page but not login page
@@ -102,12 +103,15 @@ def hide_page(name):
         if val["page_name"] == name:
             del current_pages[key]
             _on_pages_changed.send()
+
+            # Update session state pages
+            st.session_state.pages = current_pages
             break
     
     return None
 
 def hide_student_pages():
-    """Function that hides pages related to student view, namely: student_view_journal, student_create_journal
+    """Function that hides pages related to student view, namely: error_access_denied, student_view_journal, student_create_journal
 
     Args:
         None
@@ -117,7 +121,9 @@ def hide_student_pages():
     """
     current_pages = get_pages(LOGIN_PAGE)
 
-    student_pages_name_list = ["student_view_journal","student_create_journal"]
+    student_pages_name_list = ["error_access_denied",
+                               "student_view_journal",
+                               "student_create_journal"]
 
     for key, val in current_pages.items():
         if val["page_name"] in student_pages_name_list:
@@ -125,10 +131,14 @@ def hide_student_pages():
         #    _on_pages_changed.send()
         else:
             continue
+    
+    # Update session state pages
+    st.session_state.pages = current_pages
+
     _on_pages_changed.send()
 
 def hide_teacher_pages():
-    """Function that hides pages related to teacher view, namely: teacher_dashboard, teacher_teaching_class, teacher_view_student_journal
+    """Function that hides pages related to teacher view, namely: error_access_denied, teacher_dashboard, teacher_teaching_class, teacher_view_student_journal
 
     Args:
         None
@@ -138,7 +148,8 @@ def hide_teacher_pages():
     """
     current_pages = get_pages(LOGIN_PAGE)
 
-    teacher_pages_name_list = ["teacher_dashboard",
+    teacher_pages_name_list = ["error_access_denied",
+                               "teacher_dashboard",
                                "teacher_teaching_class",
                                "teacher_view_student_journal"
                                ]
@@ -149,6 +160,10 @@ def hide_teacher_pages():
         #    _on_pages_changed.send()
         else:
             continue
+
+    # Update session state pages
+    st.session_state.pages = current_pages
+
     _on_pages_changed.send()
 
     return None
@@ -217,7 +232,6 @@ def main():
                     st.session_state.logged_in = True
                     if st.session_state["logged_in"]:
                         get_all_pages()
-                        hide_page("error_access_denied")
                     st.session_state.username = username
                     
                     # Clear variable to prevent info storage
