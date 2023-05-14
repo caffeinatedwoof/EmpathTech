@@ -4,3 +4,6 @@ EmpathTech is a platform that uses speech-to-text technology and language models
 
 # About this branch
 This branch is created for the UI development of EmpathTech platform which aims to provide the look and feel of the platform.
+
+# Other notes:
+A secrets.toml is required in .streamlit folder indicating login credentials to backend MongoDB in order for the frontend to work properly.
