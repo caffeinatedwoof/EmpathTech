@@ -1,10 +1,10 @@
 import streamlit as st
 from st_helper_func import remove_top_space_canvas, navbar_edit
-from streamlit_extras.switch_page_button import switch_page
+#from streamlit_extras.switch_page_button import switch_page
 
 # Layout config 
 st.set_page_config(
-    layout = "centered",
+    layout = "wide",
     initial_sidebar_state = 'expanded'
 )
 remove_top_space_canvas()
