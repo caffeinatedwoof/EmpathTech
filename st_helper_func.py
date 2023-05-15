@@ -1,6 +1,12 @@
 #Helper functions to facilitate certain streamlit frontend implementation
+from pathlib import Path
+
+import json
 import streamlit as st
 from st_aggrid import GridOptionsBuilder, AgGrid
+from streamlit.source_util import _on_pages_changed, get_pages
+
+LOGIN_PAGE = "home.py"
 
 def navbar_edit():
     """Helper function to add text to the top of sidebar.
@@ -154,4 +160,150 @@ def add_space_param():
     """
     st.text("")
     st.text("")
+    return None
+
+# all pages request
+def get_all_pages():
+    """Function that retrieves all pages info by utilising streamlit's get_pages function and writes to a json file on such information if does not exist. Otherwise, it reads existing pages.json.
+
+    Returns:
+        dict: Dictionary with strings as keys, and dictionaries containing details about that page.
+    """
+
+    # Returns a dictionary with strings as keys, and dictionaries containing details about that page
+    default_pages = get_pages(LOGIN_PAGE)
+
+    pages_path = Path("pages.json")
+
+    if pages_path.exists():
+        saved_default_pages = json.loads(pages_path.read_text(), encoding='utf-8')
+    else:
+        saved_default_pages = default_pages.copy()
+        pages_path.write_text(json.dumps(default_pages, indent=4), encoding='utf-8')
+
+    return saved_default_pages
+
+# clear all page but not login page
+def clear_all_but_first_page():
+    """Function that retrieves all pages info by utilising streamlit's get_pages function and writes to a json file on such information. Otherwise, it reads existing pages.json. This is called during the loading of page.
+
+    Returns:
+        None
+    """
+    current_pages = get_pages(LOGIN_PAGE)
+
+    if len(current_pages.keys()) == 1:
+        return
+
+    # Update to session state
+    st.session_state.page_info = get_all_pages()
+
+    # Extract current page information prior to removing all but the first page
+    key, val = list(current_pages.items())[0]
+    current_pages.clear()
+    current_pages[key] = val
+
+    # Send event change signal
+    _on_pages_changed.send()
+    return None
+
+# show all pages
+def update_current_pages():
+    """This function updates current pages by comparing with known information
+    """
+    current_pages = get_pages(LOGIN_PAGE)
+
+    saved_pages = get_all_pages()
+
+    # Replace all the missing pages
+    for key in saved_pages:
+        if key not in current_pages:
+            current_pages[key] = saved_pages[key]
+
+    _on_pages_changed.send()
+
+# Hide default page
+def hide_page(name):
+    """Function that hides only the stated page name
+
+    Args:
+        name (str): Page name to hide
+
+    Returns:
+        None
+    """
+    current_pages = get_pages(LOGIN_PAGE)
+
+    for key, val in current_pages.items():
+        if val["page_name"] == name:
+            del current_pages[key]
+            _on_pages_changed.send()
+            break
+    
+    return None
+
+def hide_student_pages():
+    """Function that hides pages related to student view, namely: error_access_denied, student_view_journal, student_create_journal
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    current_pages = get_pages(LOGIN_PAGE)
+
+    student_pages_name_list = ["error_access_denied",
+                               "student_view_journal",
+                               "student_create_journal"]
+
+    for key, val in current_pages.items():
+        if val["page_name"] in student_pages_name_list:
+            del current_pages[key]
+        #    _on_pages_changed.send()
+        else:
+            continue
+    
+
+    _on_pages_changed.send()
+
+def hide_teacher_pages():
+    """Function that hides pages related to teacher view, namely: error_access_denied, teacher_dashboard, teacher_teaching_class, teacher_view_student_journal
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    current_pages = get_pages(LOGIN_PAGE)
+
+    teacher_pages_name_list = ["error_access_denied",
+                               "teacher_dashboard",
+                               "teacher_teaching_class",
+                               "teacher_view_student_journal"
+                               ]
+
+    for key, val in current_pages.items():
+        if val["page_name"] in teacher_pages_name_list:
+            del current_pages[key]
+        #    _on_pages_changed.send()
+        else:
+            continue
+
+    _on_pages_changed.send()
+
+    return None
+
+def reset_session_state():
+    """Function that resets streamlit session state involving username, logged_in state, role_id, user_full_name and form
+
+    Returns:
+        None
+    """
+    st.session_state.username = ''
+    st.session_state.logged_in = False
+    st.session_state.role_id = ''
+    st.session_state.user_fullname = ''
+    st.session_state.form = ''
     return None
