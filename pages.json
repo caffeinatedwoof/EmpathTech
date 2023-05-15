@@ -1,0 +1,44 @@
+{
+    "98727575a7b784827c3f3dda33fb2ac5": {
+        "page_script_hash": "98727575a7b784827c3f3dda33fb2ac5",
+        "page_name": "home",
+        "icon": "",
+        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\home.py"
+    },
+    "7c93bdec4d6a735fa824f575c62bbe03": {
+        "page_script_hash": "7c93bdec4d6a735fa824f575c62bbe03",
+        "page_name": "student_create_journal",
+        "icon": "",
+        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\pages\\1_student_create_journal.py"
+    },
+    "becf91e23a97d2c9c61dd450b547f2c8": {
+        "page_script_hash": "becf91e23a97d2c9c61dd450b547f2c8",
+        "page_name": "student_view_journal",
+        "icon": "",
+        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\pages\\2_student_view_journal.py"
+    },
+    "26a2dc0b5d4d76b3d9368e61c7ee6153": {
+        "page_script_hash": "26a2dc0b5d4d76b3d9368e61c7ee6153",
+        "page_name": "teacher_dashboard",
+        "icon": "",
+        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\pages\\3_teacher_dashboard.py"
+    },
+    "c1457ab698ee78793f9552e8ed228cc7": {
+        "page_script_hash": "c1457ab698ee78793f9552e8ed228cc7",
+        "page_name": "teacher_teaching_class",
+        "icon": "",
+        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\pages\\4_teacher_teaching_class.py"
+    },
+    "cf91fe86349a0e07c1d97e939c4a87e7": {
+        "page_script_hash": "cf91fe86349a0e07c1d97e939c4a87e7",
+        "page_name": "teacher_view_student_journal",
+        "icon": "",
+        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\pages\\5_teacher_view_student_journal.py"
+    },
+    "d7e21fce76890e718806dd2983bd548d": {
+        "page_script_hash": "d7e21fce76890e718806dd2983bd548d",
+        "page_name": "error_access_denied",
+        "icon": "",
+        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\pages\\6_error_access_denied.py"
+    }
+}
