@@ -1,13 +1,25 @@
 #Helper functions to facilitate certain streamlit frontend implementation
 from pathlib import Path
-
+import os
 import json
 import streamlit as st
+import toml
+import dbhandler
 from st_aggrid import GridOptionsBuilder, AgGrid
 from streamlit.source_util import _on_pages_changed, get_pages
 from streamlit_extras.switch_page_button import switch_page
 
-LOGIN_PAGE = "home.py"
+#CONFIG
+data = toml.load(os.path.join('.streamlit','pages.toml'))
+LOGIN_PAGE = data['login_path_name']['name']
+ACCESS_DENY = data['accessed_denied']['name']
+
+
+#@st.cache_resource
+def connect_db():
+    db = dbhandler.DBHandler()
+    st.session_state.db = db
+    return db
 
 def navbar_edit():
     """Helper function to add text to the top of sidebar.
@@ -172,12 +184,13 @@ def get_all_pages():
     """
 
     # Returns a dictionary with strings as keys, and dictionaries containing details about that page
+
     default_pages = get_pages(LOGIN_PAGE)
 
     pages_path = Path("pages.json")
 
     # To remove any old pages.json, especially for deveklopment where changes to naming or new/removal of existing file.
-    pages_path.unlink(missing_ok=False)
+    #pages_path.unlink(missing_ok=False)
     if pages_path.exists():
         saved_default_pages = json.loads(pages_path.read_text(encoding='utf-8'), encoding='utf-8')
     else:
@@ -262,7 +275,7 @@ def hide_student_pages():
 
     student_pages_name_list = ["Access_denied",
                                'Login',
-                               "View_past_journal",
+                               "View_past_journals",
                                "Create_journal"]
 
     # Hide listed pages
@@ -320,8 +333,15 @@ def display_logout_button():
     """
     # Case when user is logged in
     if st.session_state.logged_in == True:
-        logout = st.sidebar.button(label='Log Out', on_click=switch_page(LOGIN_PAGE))
+        logout = st.sidebar.button(label='Log Out', on_click=reset_session_state())
         if logout:
-            reset_session_state()
+            update_current_pages()
+            switch_page(LOGIN_PAGE)
     
     return None
+
+def error_page_redirect():
+    if 'logged_in' not in st.session_state or st.session_state.logged_in == False:
+        update_current_pages()
+        switch_page(ACCESS_DENY)
+
