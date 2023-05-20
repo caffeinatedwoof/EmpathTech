@@ -5,6 +5,7 @@ import json
 import streamlit as st
 from st_aggrid import GridOptionsBuilder, AgGrid
 from streamlit.source_util import _on_pages_changed, get_pages
+from streamlit_extras.switch_page_button import switch_page
 
 LOGIN_PAGE = "home.py"
 
@@ -175,8 +176,10 @@ def get_all_pages():
 
     pages_path = Path("pages.json")
 
+    # To remove any old pages.json, especially for deveklopment where changes to naming or new/removal of existing file.
+    pages_path.unlink(missing_ok=False)
     if pages_path.exists():
-        saved_default_pages = json.loads(pages_path.read_text(), encoding='utf-8')
+        saved_default_pages = json.loads(pages_path.read_text(encoding='utf-8'), encoding='utf-8')
     else:
         saved_default_pages = default_pages.copy()
         pages_path.write_text(json.dumps(default_pages, indent=4), encoding='utf-8')
@@ -223,24 +226,28 @@ def update_current_pages():
     _on_pages_changed.send()
 
 # Hide default page
-def hide_page(name):
-    """Function that hides only the stated page name
+def hide_page(name, current_pages):
+    """Function that hides the stated page name by deleting information on provided dictionary of navigatable pages based on the first instance info was found.
+
+    Code adopted from https://discuss.streamlit.io/t/hide-show-pages-in-multipage-app-based-on-conditions/28642/5
 
     Args:
         name (str): Page name to hide
+        current_pages (dict): Dictionary containing pages information based on some reference script path.
 
     Returns:
-        None
+        dict: updated page info.
     """
-    current_pages = get_pages(LOGIN_PAGE)
-
     for key, val in current_pages.items():
         if val["page_name"] == name:
             del current_pages[key]
-            _on_pages_changed.send()
             break
-    
-    return None
+        else:
+            pass
+
+    _on_pages_changed.send()
+
+    return current_pages
 
 def hide_student_pages():
     """Function that hides pages related to student view, namely: error_access_denied, student_view_journal, student_create_journal
@@ -253,16 +260,14 @@ def hide_student_pages():
     """
     current_pages = get_pages(LOGIN_PAGE)
 
-    student_pages_name_list = ["error_access_denied",
-                               "student_view_journal",
-                               "student_create_journal"]
+    student_pages_name_list = ["Access_denied",
+                               'Login',
+                               "View_past_journal",
+                               "Create_journal"]
 
-    for key, val in current_pages.items():
-        if val["page_name"] in student_pages_name_list:
-            del current_pages[key]
-        #    _on_pages_changed.send()
-        else:
-            continue
+    # Hide listed pages
+    for pages in student_pages_name_list:
+        current_pages = hide_page(pages, current_pages)
     
 
     _on_pages_changed.send()
@@ -277,19 +282,16 @@ def hide_teacher_pages():
         None
     """
     current_pages = get_pages(LOGIN_PAGE)
-
-    teacher_pages_name_list = ["error_access_denied",
-                               "teacher_dashboard",
-                               "teacher_teaching_class",
-                               "teacher_view_student_journal"
+    # Hide listed pages
+    teacher_pages_name_list = ["Access_denied",
+                               "Dashboard_summary",
+                               "Login",
+                               "Teaching_classes",
+                               "View_student_journals"
                                ]
 
-    for key, val in current_pages.items():
-        if val["page_name"] in teacher_pages_name_list:
-            del current_pages[key]
-        #    _on_pages_changed.send()
-        else:
-            continue
+    for pages in teacher_pages_name_list:
+        current_pages = hide_page(pages, current_pages)
 
     _on_pages_changed.send()
 
@@ -306,4 +308,20 @@ def reset_session_state():
     st.session_state.role_id = ''
     st.session_state.user_fullname = ''
     st.session_state.form = ''
+    return None
+
+def display_logout_button():
+    """Function that triggers display of logout function when session state for logged in is currently True, indicating actual log in.
+
+    Args:
+        None
+    Returns:
+        None
+    """
+    # Case when user is logged in
+    if st.session_state.logged_in == True:
+        logout = st.sidebar.button(label='Log Out', on_click=switch_page(LOGIN_PAGE))
+        if logout:
+            reset_session_state()
+    
     return None
