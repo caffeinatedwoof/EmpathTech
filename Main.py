@@ -19,10 +19,8 @@ import toml
 # Load landing page info
 data = toml.load(os.path.join('.streamlit','pages.toml'))
 
-LOGIN_PAGE = data['login_path_name']['name']
 TEACHER_LANDING_PAGE = data['teacher']['classes']['name']
 STUDENT_LANDING_PAGE = data['student']['view_past_journal']['name']
-ERROR_PAGE = data['student']['view_past_journal']['name']
 
 #Internally, Streamlit manages two different states : user-defined states (used when you store values like so: st.session_state.my_state = "hey"), and widget states (when you use a key parameter). These two states work a little bit differently. User-defined states are completely persistent after multiple runs. However if a widget with a key assigned disappear (when your page changes for example), its associated widget state will be cleared. To make widget state persistent, the trick is to transform a widget state into a user-defined state. 
 
@@ -37,13 +35,17 @@ remove_top_space_canvas()
 navbar_edit()
 
 
-def user_update(name):
-    """Function that updates streamlit session username with input name
+def st_state_update(state, value):
+    """Function that updates streamlit session states with given state and values info
 
     Args:
-        name (str): Name of user
+        state(str): Name of state
+        value(any): Value for the state
+
+    Returns:
+        None
     """
-    st.session_state.username = name
+    st.session_state[state]= value
 
     return None
 
@@ -70,40 +72,49 @@ def main():
     user_pas = login_form.text_input(label='Enter Password', type='password')
 
     # SHould place after text input before connect db
-    login_submit = login_form.form_submit_button(label='Sign In', on_click=user_update(username))
+    login_submit = login_form.form_submit_button(label='Sign In')
 
     if login_submit and username and user_pas:
+        st_state_update('username', True)
         # Init connect to database
         update_current_pages()
+
+        # Check database for authentication
         user = db.auth.find_one({'username' : username, 'password' : user_pas})
-        if user:
-            if login_submit:
-                st.success(f"You are logged in as {username.upper()}, a {user['role']}")
-                st.session_state.logged_in = True
-                st.session_state.username = username
-                
-                # Clear variable to prevent info storage
-                del user_pas
+        if user and login_submit:
+            st.success(f"You are logged in as {username.upper()}, a {user['role']}")
+            st_state_update('logged_in', True)
+            st_state_update('username', username)            
+            # Clear variable to prevent info storage
+            del user_pas
 
-                # Once update state, switch to relevant page
-                if user['role'] == 'teacher':
-                    curr_teacher = db.teachers.find_one({'_id' : user['teacher_id']})
-                    st.session_state.user_fullname = curr_teacher['name']
-                    st.session_state.role_id = user['teacher_id']
+            # Once update state, switch to relevant page
+            if user['role'] == 'teacher':
+                # Get info from teacher database which contains mapping of authentication info and profile
+                curr_teacher = db.teachers.find_one({'_id' : user['teacher_id']})
+                st_state_update('user_fullname', curr_teacher['name'])
+                st_state_update('role_id', user['teacher_id'])
+                #st.session_state.user_fullname = curr_teacher['name']
+                #st.session_state.role_id = user['teacher_id']
 
-                    # Route to teaching page
-                    switch_page(TEACHER_LANDING_PAGE)
+                # Route to teaching page
+                switch_page(TEACHER_LANDING_PAGE)
 
+            elif user['role'] == 'student':
+                # Get info from student database which contains mapping of authentication info and profile
+                curr_student = db.students.find_one({'_id' : user['student_id']})
+                st_state_update('user_fullname', curr_student['name'])
+                st_state_update('class', curr_student['class'])
+                st_state_update('role_id', user['student_id'])
 
-                elif user['role'] == 'student':
-                    # Route to Student View Journal page
-                    switch_page(STUDENT_LANDING_PAGE)
+                # Route to Student View Journal page
+                switch_page(STUDENT_LANDING_PAGE)
 
-                else:
-                    # Route to error page if login is a joke
-                    st.error("Error in retrieving your role for account. Please relogin")
-                    # Reload page
-                    st.experimental_rerun()
+            else:
+                # Route to error page if login has some unknown issue
+                st.error("Error in retrieving your role for account. Please relogin")
+                # Reload page
+                st.experimental_rerun()
 
         # If no matching details or empty
         else:
