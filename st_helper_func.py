@@ -323,18 +323,21 @@ def reset_session_state():
     st.session_state.form = ''
     return None
 
-def display_logout_button():
+def display_logout_button(state):
     """Function that triggers display of logout function when session state for logged in is currently True, indicating actual log in.
 
     Args:
-        None
+        state: Streamlit session state
     Returns:
         None
     """
+    state_copy = state
+
     # Case when user is logged in
     if st.session_state.logged_in == True:
         logout = st.sidebar.button(label='Log Out', on_click=reset_session_state())
         if logout:
+            st.session_state.update(state_copy)
             update_current_pages()
             switch_page(LOGIN_PAGE)
     
