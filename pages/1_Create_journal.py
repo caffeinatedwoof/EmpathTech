@@ -1,5 +1,5 @@
 import streamlit as st
-from st_helper_func import remove_top_space_canvas, navbar_edit, hide_teacher_pages, display_logout_button
+from st_helper_func import remove_top_space_canvas, navbar_edit, hide_teacher_pages, display_logout_button, error_page_redirect
 
 #from streamlit_extras.switch_page_button import switch_page
 
@@ -14,20 +14,23 @@ hide_teacher_pages()
 
 st.session_state.update(st.session_state)
 
-db = st.session_state.db
+#db = st.session_state.db
 
 # Case when user is logged in
 display_logout_button()
+if st.session_state.logged_in:
+    if "selected_student" not in st.session_state:
+        st.title("Student not yet selected")
 
-if "selected_student" not in st.session_state:
-    st.title("Student not yet selected")
+    elif st.session_state.selected_student:
+        selected_student = st.session_state.selected_student
+        st.title(f"Journal Entries for {selected_student['name']}")
+        entries = db.get_journal_entries(selected_student['_id'])
+        for entry in entries:
+            st.markdown(f"**{entry['date']}**")
+            st.markdown(f"{entry['title']}")
+            st.markdown(f"{entry['content']}")
+            st.markdown(f"---")
 
-elif st.session_state.selected_student:
-    selected_student = st.session_state.selected_student
-    st.title(f"Journal Entries for {selected_student['name']}")
-    entries = db.get_journal_entries(selected_student['_id'])
-    for entry in entries:
-        st.markdown(f"**{entry['date']}**")
-        st.markdown(f"{entry['title']}")
-        st.markdown(f"{entry['content']}")
-        st.markdown(f"---")
+else:
+    error_page_redirect()

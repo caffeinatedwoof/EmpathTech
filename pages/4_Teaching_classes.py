@@ -1,5 +1,5 @@
 import streamlit as st
-from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages, display_logout_button
+from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages, display_logout_button, error_page_redirect
 #from streamlit_extras.switch_page_button import switch_page
 
 # Layout config 
@@ -8,22 +8,17 @@ st.set_page_config(
     initial_sidebar_state = 'expanded'
 )
 
+st.session_state.update(st.session_state)
+db = st.session_state.db
+
 remove_top_space_canvas()
 navbar_edit()
 hide_student_pages()
 
-st.session_state.update(st.session_state)
-
 # Case when user is logged in
 display_logout_button()
 
-if "logged_in" not in st.session_state:
-    "Please return to home page and wait for page to load"
-
-elif not st.session_state.logged_in:
-    "You are not logged in"
-
-elif st.session_state.logged_in:
+if st.session_state.logged_in:
     st.title("Teacher Dashboard")
 
     # Initialize variables
@@ -47,3 +42,6 @@ elif st.session_state.logged_in:
             selected_student = student
             st.session_state.selected_student = selected_student
             break
+
+else:
+    error_page_redirect()
