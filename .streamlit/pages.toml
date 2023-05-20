@@ -22,7 +22,7 @@ name = "Login"
 
     [teacher.view_journal]
     path = "pages/5_View_student_journal.py"
-    path_name = "View student journal"
+    path_name = "View student journals"
 
 [accessed_denied]
 path = "pages/6_Access_Denied.py"
