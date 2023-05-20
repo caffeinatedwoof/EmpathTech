@@ -1,44 +1,50 @@
 {
-    "98727575a7b784827c3f3dda33fb2ac5": {
-        "page_script_hash": "98727575a7b784827c3f3dda33fb2ac5",
-        "page_name": "home",
+    "23cf24abf6ea2714130f8b0ec8a929ef": {
+        "page_script_hash": "23cf24abf6ea2714130f8b0ec8a929ef",
+        "page_name": "Main",
         "icon": "",
-        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\home.py"
+        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\Main.py"
     },
-    "7c93bdec4d6a735fa824f575c62bbe03": {
-        "page_script_hash": "7c93bdec4d6a735fa824f575c62bbe03",
-        "page_name": "student_create_journal",
+    "5f019c1b077d0c0fe3a6e9bcdcf8e470": {
+        "page_script_hash": "5f019c1b077d0c0fe3a6e9bcdcf8e470",
+        "page_name": "Create_journal",
         "icon": "",
-        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\pages\\1_student_create_journal.py"
+        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\1_Create_journal.py"
     },
-    "becf91e23a97d2c9c61dd450b547f2c8": {
-        "page_script_hash": "becf91e23a97d2c9c61dd450b547f2c8",
-        "page_name": "student_view_journal",
+    "fe591e9e8f32c69eb00c480ae3a4248b": {
+        "page_script_hash": "fe591e9e8f32c69eb00c480ae3a4248b",
+        "page_name": "View_past_journals",
         "icon": "",
-        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\pages\\2_student_view_journal.py"
+        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\2_View_past_journals.py"
     },
-    "26a2dc0b5d4d76b3d9368e61c7ee6153": {
-        "page_script_hash": "26a2dc0b5d4d76b3d9368e61c7ee6153",
-        "page_name": "teacher_dashboard",
+    "6a4003576a861ea7ab318d49097ff252": {
+        "page_script_hash": "6a4003576a861ea7ab318d49097ff252",
+        "page_name": "Dashboard_summary",
         "icon": "",
-        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\pages\\3_teacher_dashboard.py"
+        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\3_Dashboard_summary.py"
     },
-    "c1457ab698ee78793f9552e8ed228cc7": {
-        "page_script_hash": "c1457ab698ee78793f9552e8ed228cc7",
-        "page_name": "teacher_teaching_class",
+    "9a9a4b4a4501a05eb5e1cdf820e2e08e": {
+        "page_script_hash": "9a9a4b4a4501a05eb5e1cdf820e2e08e",
+        "page_name": "Teaching_classes",
         "icon": "",
-        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\pages\\4_teacher_teaching_class.py"
+        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\4_Teaching_classes.py"
     },
-    "cf91fe86349a0e07c1d97e939c4a87e7": {
-        "page_script_hash": "cf91fe86349a0e07c1d97e939c4a87e7",
-        "page_name": "teacher_view_student_journal",
+    "d164f11cf2ee376d352576245d1caa85": {
+        "page_script_hash": "d164f11cf2ee376d352576245d1caa85",
+        "page_name": "View_student_journal",
         "icon": "",
-        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\pages\\5_teacher_view_student_journal.py"
+        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\5_View_student_journal.py"
     },
-    "d7e21fce76890e718806dd2983bd548d": {
-        "page_script_hash": "d7e21fce76890e718806dd2983bd548d",
-        "page_name": "error_access_denied",
+    "862b38aa4a7c321335d26c012755bfbb": {
+        "page_script_hash": "862b38aa4a7c321335d26c012755bfbb",
+        "page_name": "Access_denied",
         "icon": "",
-        "script_path": "C:\\Users\\quekz\\OneDrive\\hackathon2023\\EmpathTech\\pages\\6_error_access_denied.py"
+        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\6_Access_denied.py"
+    },
+    "824177fa6b97b03573d71bc2a033cb6a": {
+        "page_script_hash": "824177fa6b97b03573d71bc2a033cb6a",
+        "page_name": "Logout",
+        "icon": "",
+        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\7_Logout.py"
     }
 }
