@@ -1,5 +1,5 @@
 import streamlit as st
-from st_helper_func import remove_top_space_canvas, navbar_edit, hide_teacher_pages, display_logout_button, error_page_redirect
+from st_helper_func import remove_top_space_canvas, navbar_edit, hide_teacher_pages, display_logout_button, error_page_redirect, connect_db
 
 #from streamlit_extras.switch_page_button import switch_page
 
@@ -10,15 +10,17 @@ st.set_page_config(
 )
 remove_top_space_canvas()
 navbar_edit()
-hide_teacher_pages()
 
 st.session_state.update(st.session_state)
 
-#db = st.session_state.db
+if 'logged_in' in st.session_state and st.session_state.logged_in:
+    hide_teacher_pages()
+    display_logout_button()
+    if 'db' in st.session_state:
+        db = st.session_state.db
+    else:
+        db = connect_db()
 
-# Case when user is logged in
-display_logout_button()
-if st.session_state.logged_in:
     if "selected_student" not in st.session_state:
         st.title("Student not yet selected")
 

@@ -1,5 +1,5 @@
 import streamlit as st
-from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages, display_logout_button, error_page_redirect
+from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages, display_logout_button, error_page_redirect, connect_db
 #from streamlit_extras.switch_page_button import switch_page
 
 # Layout config 
@@ -9,17 +9,18 @@ st.set_page_config(
 )
 
 st.session_state.update(st.session_state)
-db = st.session_state.db
 
 remove_top_space_canvas()
 navbar_edit()
 hide_student_pages()
 
-# Case when user is logged in
-display_logout_button()
+#Temporary hack
+st.session_state.logged_in = True
 
-if st.session_state.logged_in:
-    st.title("Teacher Dashboard")
+if 'logged_in' in st.session_state and st.session_state.logged_in:
+
+    display_logout_button()
+    st.title("Teaching Classes")
 
     # Initialize variables
     teacher_id = st.session_state.role_id
@@ -29,7 +30,10 @@ if st.session_state.logged_in:
     def show_student_filter():
         return [student for student in db.get_all_students(teacher_id)]
 
-    db = st.session_state.db
+    if 'db' in st.session_state:
+        db = st.session_state.db
+    else:
+        db = connect_db()
 
     st.markdown(f"You have logged in! :) {teacher_name}")
     students = db.students
@@ -44,4 +48,5 @@ if st.session_state.logged_in:
             break
 
 else:
-    error_page_redirect()
+    pass
+    #error_page_redirect()
