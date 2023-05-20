@@ -63,22 +63,23 @@ def navbar_edit():
     """
     html_string = """
     <style>
-        [data-testid="stSidebar"] {{
-            padding: 1rem 1rem 1rem 1rem;
+        [data-testid="stSidebar"] {
+            padding: 0rem 1rem 1rem 1rem;
             font-size: 3rem;
             position: sticky;
-        }}
-        [data-testid="stSidebarNav"]::before {{
+            margin: auto;
+        }
+        [data-testid="stSidebarNav"]::before {
             content: "EmpathTech platform";
             display: inline;
-        }}
-        .css-lrlib {{
+        }
+        .css-lrlib {
             padding-top: 1rem;
-        }}
-        ul {{
+        }
+        ul {
             font-size: 2rem;
             position: sticky;
-        }}
+        }
     </style>
     """
     
