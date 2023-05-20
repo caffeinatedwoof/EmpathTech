@@ -27,3 +27,7 @@ name = "Login"
 [accessed_denied]
 path = "pages/6_Access_Denied.py"
 name = "Access denied"
+
+[logout]
+path = "pages/7_Logout.py"
+name = "Logout"
