@@ -252,6 +252,7 @@ class DBHandler:
             return self.students.find({"teacher_id": teacher_id})
     
     
+    
     def insert_summary(self, journal_id, is_genuine, sentiment, events):
         """_summary_
 
