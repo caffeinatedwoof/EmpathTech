@@ -1,6 +1,6 @@
-[login_path_name]
-path = "Login.py"
-name = "Login"
+[main_page]
+path = "Main.py"
+name = "Main"
 
 [student]
     [student.create_journal]
