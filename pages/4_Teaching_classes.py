@@ -54,12 +54,11 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
     df = pd.DataFrame(teaching_info_dict)
     hide_table_row_index = """
-                <style>
-                thead tr th:first-child {display:none}
-                tbody th {display:none}
-                </style>
-                """
-
+        <style>
+        thead tr th:first-child {display:none}
+        tbody th {display:none}
+        </style>
+        """
     # Inject CSS with Markdown
     st.markdown(hide_table_row_index, unsafe_allow_html=True)
     st.table(df)
