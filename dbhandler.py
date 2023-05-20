@@ -1,9 +1,8 @@
 from pymongo import MongoClient
 from bson.objectid import ObjectId
-import os
 import streamlit as st
-import ssl
 import certifi
+
 # Access CONNECT STR secrets
 CONNECT_STR = st.secrets.CONNECT_STR
 
@@ -22,7 +21,7 @@ def init_connection():
     # Disable ssl handshake due to [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed  (not for production use)
 
     return MongoClient(CONNECT_STR, 
-                        tlsCAFile=certifi.where(), tlsAllowInvalidCertificates=True)
+                       tlsCAFile=certifi.where(), tlsAllowInvalidCertificates=True)
 
 
 # Create a DBHandler class
