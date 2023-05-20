@@ -3,6 +3,12 @@ from src.journal_guidance import provide_journal_guidance
 import streamlit as st
 from streamlit_chat import message
 
+def generate_chat():
+    for i in range(0, len(st.session_state["generated"]) - 1, 1):
+        message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
+        message(st.session_state["generated"][i], key=str(i))
+        
+
 st.title("Journal Guidance")
 
 if "generated" not in st.session_state:
@@ -16,8 +22,13 @@ if "sources" not in st.session_state:
 
 if "chat_history" not in st.session_state:
     st.session_state["chat_history"] = []
+    placeholder = st.empty()
 
-placeholder = st.empty()
+else:
+    placeholder = st.empty()
+    # with placeholder.container():
+    #     if st.session_state["generated"]:
+    #         generate_chat()
 
 text_input = st.text_area("Type your journal entry here!")
 
@@ -50,6 +61,4 @@ with col2:
 
 with placeholder.container():
     if st.session_state["generated"]:
-        for i in range(len(st.session_state["generated"]) - 1, -1, -1):
-            message(st.session_state["generated"][i], key=str(i))
-            message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
+        generate_chat()
