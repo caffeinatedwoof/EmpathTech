@@ -1,5 +1,5 @@
 import streamlit as st
-from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages, display_logout_button, error_page_redirect, connect_db
+from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages,  error_page_redirect, connect_db
 #from streamlit_extras.switch_page_button import switch_page
 
 # Layout config 
@@ -9,21 +9,23 @@ st.set_page_config(
 )
 remove_top_space_canvas()
 navbar_edit()
-
+hide_student_pages()
 st.session_state.update(st.session_state)
 
+    
+@st.cache_data
+def show_student_filter():
+    return [student for student in db.get_all_students(teacher_id)]
+
+
 if 'logged_in' in st.session_state and st.session_state.logged_in:
-    hide_student_pages()
-    display_logout_button()
+
     st.title("Teacher Dashboard")
 
     # Initialize variables
     teacher_id = st.session_state.role_id
     teacher_name = st.session_state.user_fullname
-
-    @st.cache_data
-    def show_student_filter():
-        return [student for student in db.get_all_students(teacher_id)]
+    teaching_class = st.session_state.teaching_class
 
     if 'db' in st.session_state:
         db = st.session_state.db
