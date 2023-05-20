@@ -11,7 +11,8 @@ from streamlit_extras.switch_page_button import switch_page
 
 #CONFIG
 data = toml.load(os.path.join('.streamlit','pages.toml'))
-LOGIN_PAGE = data['login_path_name']['name']
+
+LOGIN_PAGE = data['main_page']['name']
 ACCESS_DENY = data['accessed_denied']['name']
 
 
@@ -20,6 +21,34 @@ def connect_db():
     db = dbhandler.DBHandler()
     st.session_state.db = db
     return db
+
+
+def hide_main_page_tabs():
+    """Helper function to hide main page tabs(login) which is seen on side navigation bar for student/teacher view.
+
+    This is a css workaround to hide them instead of actual removal of info from pages information of the app get_pages function as such removal would cause errors in routing back to main page(login).
+
+    Args:
+        None
+    Returns:
+        None
+    Raise:
+        None
+    
+    """
+    html_string = f"""
+        <style>
+
+            .css-lrlib li:nth-child(1), .css-lrlib li:nth-child(2) {{
+                display: None;
+            }}
+
+        </style>
+        """
+    
+    st.markdown(html_string, unsafe_allow_html=True)
+
+    return None
 
 def navbar_edit():
     """Helper function to add text to the top of sidebar.
@@ -32,28 +61,28 @@ def navbar_edit():
         None
     
     """
-    st.markdown(
-        """
-        <style>
-            [data-testid="stSidebar"] {
-                padding: 1rem 1rem 1rem 1rem;
-                font-size: 3rem;
-                position: sticky;
-            }
-            [data-testid="stSidebarNav"]::before {
-                content: "Welcome to EmpathTech Platform";
-                display: inline;
-            }
-
-            ul {
-                font-size: 2rem;
-                position: sticky;
-            }
-        </style>
-        
-        """,
-        unsafe_allow_html=True,
-    )
+    html_string = """
+    <style>
+        [data-testid="stSidebar"] {{
+            padding: 1rem 1rem 1rem 1rem;
+            font-size: 3rem;
+            position: sticky;
+        }}
+        [data-testid="stSidebarNav"]::before {{
+            content: "EmpathTech platform";
+            display: inline;
+        }}
+        .css-lrlib {{
+            padding-top: 1rem;
+        }}
+        ul {{
+            font-size: 2rem;
+            position: sticky;
+        }}
+    </style>
+    """
+    
+    st.markdown(html_string, unsafe_allow_html=True)
     return None
 
 def adjust_filter_font():
@@ -273,8 +302,8 @@ def hide_student_pages():
     """
     current_pages = get_pages(LOGIN_PAGE)
 
+    # Exclude main page as we need to do logout
     student_pages_name_list = ["Access_denied",
-                               'Login',
                                "View_past_journals",
                                "Create_journal"]
 
@@ -282,7 +311,8 @@ def hide_student_pages():
     for pages in student_pages_name_list:
         current_pages = hide_page(pages, current_pages)
     
-
+    # Workaround to hide main page tab without removing from current page
+    hide_main_page_tabs()
     _on_pages_changed.send()
 
 def hide_teacher_pages():
@@ -296,16 +326,18 @@ def hide_teacher_pages():
     """
     current_pages = get_pages(LOGIN_PAGE)
     # Hide listed pages
+    # Exclude main page as we need to do logout
     teacher_pages_name_list = ["Access_denied",
                                "Dashboard_summary",
-                               "Login",
                                "Teaching_classes",
-                               "View_student_journals"
+                               "View_student_journal",
                                ]
 
     for pages in teacher_pages_name_list:
         current_pages = hide_page(pages, current_pages)
 
+    # Workaround to hide main page tab without removing from current page
+    hide_main_page_tabs()
     _on_pages_changed.send()
 
     return None
@@ -321,26 +353,6 @@ def reset_session_state():
     st.session_state.role_id = ''
     st.session_state.user_fullname = ''
     st.session_state.form = ''
-    return None
-
-def display_logout_button(state):
-    """Function that triggers display of logout function when session state for logged in is currently True, indicating actual log in.
-
-    Args:
-        state: Streamlit session state
-    Returns:
-        None
-    """
-    state_copy = state
-
-    # Case when user is logged in
-    if st.session_state.logged_in == True:
-        logout = st.sidebar.button(label='Log Out', on_click=reset_session_state())
-        if logout:
-            st.session_state.update(state_copy)
-            update_current_pages()
-            switch_page(LOGIN_PAGE)
-    
     return None
 
 def error_page_redirect():
