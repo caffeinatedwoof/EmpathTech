@@ -94,8 +94,7 @@ def main():
                 curr_teacher = db.teachers.find_one({'_id' : user['teacher_id']})
                 st_state_update('user_fullname', curr_teacher['name'])
                 st_state_update('role_id', user['teacher_id'])
-                #st.session_state.user_fullname = curr_teacher['name']
-                #st.session_state.role_id = user['teacher_id']
+                st_state_update('teaching_class', curr_teacher['class'])
 
                 # Route to teaching page
                 switch_page(TEACHER_LANDING_PAGE)
