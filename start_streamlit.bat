@@ -4,4 +4,4 @@ echo "Please ensure that you have created an conda environment named empathtech 
 echo "Activate empathtech env"
 call activate empathtech
 
-call streamlit run home.py
+call streamlit run Login.py
