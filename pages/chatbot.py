@@ -19,13 +19,29 @@ def clear_messages():
     st.session_state.past = []
 
 # find student from username and cache it
-st.cache_data
+@st.cache_data
 def get_student(username):
     student = db.get_student(username=username)
     return student
 
+def init_new_chatlog():
+    print("chatlog id does not exist")
+    st.session_state.chatlog_id = None
+    st.session_state.entry_value = ""
+    st.session_state.date_value = date.today()
+    st.session_state.title_value = ""
+    st.session_state.create_journal_label = "Create your journal"
+    chatlog = {
+    "start_time": datetime.now(),
+    "end_time": None,
+    "student_id": student_id,
+    "journal_id": None,
+    "messages": []
+    }
+
+    return chatlog
+
 current_student = get_student(username)
-print("current_student", current_student)
 student_name = current_student['name']
 student_id = current_student['_id']
 st.markdown(f"Hi, {student_name}!")
@@ -47,11 +63,13 @@ def switch_chatlog(chatlog_id):
         st.session_state.entry_value = journal['content']
         st.session_state.date_value = journal['date']
         st.session_state.title_value = journal['title']
+        st.session_state.create_journal_label = "Update your journal"
 
     else:
         st.session_state.entry_value = chatlog['messages'][-1]['student_msg']
         st.session_state.date_value = chatlog['start_time'].date()
         st.session_state.title_value = ""
+        st.session_state.create_journal_label = "Continue writing your journal"
 
     clear_messages()
     for message in chatlog['messages']:
@@ -61,20 +79,7 @@ def switch_chatlog(chatlog_id):
     return chatlog
 
 if 'chatlog_id' not in st.session_state or st.session_state.chatlog_id is None:
-    print("chatlog id does not exist")
-    st.session_state.chatlog_id = None
-    st.session_state.entry_value = ""
-    st.session_state.date_value = date.today()
-    st.session_state.title_value = ""
-    chatlog = {
-    "start_time": datetime.now(),
-    "end_time": None,
-    "student_id": student_id,
-    "journal_id": None,
-    "messages": []
-    }
-
-    current_chatlog = None
+    current_chatlog = init_new_chatlog()
 
 else:
     current_chatlog = switch_chatlog(st.session_state.chatlog_id)
@@ -106,7 +111,7 @@ def save_chatlog(chatlog):
         db.update_chatlog(st.session_state.chatlog_id, chatlog)
 
 today = date.today()
-st.title("Create your journal")
+st.title(st.session_state.create_journal_label)
 st.text_input("Give your entry a title", value=st.session_state.title_value, key="journal_title")
 st.date_input("Date", value=st.session_state.date_value, key="journal_date")
 
@@ -139,9 +144,11 @@ with col1:
 with col2:
     if st.button("Submit Journal"):
         # Submit journal for sentiment analysis
+        # Save sentiment analysis to db
+        # Save journal to db
         pass
 
-print(st.session_state["generated"])
+st.markdown("---")
 
 for i in range(len(st.session_state["generated"])-1, -1, -1):
     message(st.session_state["generated"][i], key=str(i))
