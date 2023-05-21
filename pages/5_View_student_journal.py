@@ -82,20 +82,26 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     st.subheader(f"Journal entries by {selected_student_name}")
     # Iterate cursor
     for entry in entries_list:
-        subcol1, subcol2, subcol3= st.columns([3,1,1])
+        subcol1, subcol2, subcol3, subcol4= st.columns([2,0.5,0.5,1.5])
         with subcol1:
             st.markdown(f"{entry['title']}")
             st.markdown(f"{entry['content']}")
 
-        with subcol2:   
-            st.markdown(f"Date submitted") 
+        with subcol2:
+            st.markdown(f"Date submitted")
             st.markdown(f"**{entry['date']}**")
 
         with subcol3:
             st.markdown("Sentiment")
             st.markdown("TBC")
+
+        with subcol4:
+            with st.expander("Click to provide comments"):
+                sentence = st.text_area('Input your text here:', key=str(entry['_id'])+'_text_student') 
+                button = st.button('Click to submit', key=str(entry['_id'])+'_button_student')
+            with st.expander("Click to view past comments"):
+                st.write("No comments available")
         st.markdown("----")
- 
 
 else:
     error_page_redirect()
