@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages, error_page_redirect, connect_db
+from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages, error_page_redirect, connect_db, hide_st_table_row_index
 #from streamlit_extras.switch_page_button import switch_page
 
 # Layout config 
@@ -53,14 +53,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     }
 
     df = pd.DataFrame(teaching_info_dict)
-    hide_table_row_index = """
-        <style>
-        thead tr th:first-child {display:none}
-        tbody th {display:none}
-        </style>
-        """
-    # Inject CSS with Markdown
-    st.markdown(hide_table_row_index, unsafe_allow_html=True)
+
+    hide_st_table_row_index()
     st.table(df)
 
 else:
