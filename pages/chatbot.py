@@ -9,6 +9,23 @@ from datetime import date, datetime
 db = st.session_state.db
 username = st.session_state.username
 
+
+def map_labels(label):
+    label = label.strip().lower()
+    if label == "negative":
+        return 0
+    elif label == "neutral":
+        return 1
+    elif label == "positive":
+        return 2
+    
+def clean_llm_output(llm_output):
+    cleaned_output = json.loads(llm_output)
+    score = map_labels(cleaned_output['sentiment']["label"])
+    cleaned_output['sentiment'].pop("label", None)
+    cleaned_output['sentiment']["score"] = score
+    return cleaned_output
+
 def toggle_elements_disabled(state=False):
     if state == True:    
         st.session_state.title_disabled = True
@@ -65,6 +82,7 @@ def save_journal(title, content, date):
 current_student = get_student(username)
 student_name = current_student['name']
 student_id = current_student['_id']
+print(student_id)
 st.markdown(f"Hi, {student_name}!")
 
 def switch_chatlog(chatlog_id):
@@ -193,8 +211,8 @@ with col2:
 
                 # Submit journal for sentiment analysis
                 sent_analysis_results = perform_sentiment_analysis(text_input)
-                sent_analysis_json = json.loads(sent_analysis_results)
-                db.insert_summary(journal_id, sent_analysis_json)
+                cleaned_output = clean_llm_output(sent_analysis_results)
+                db.insert_summary(journal_id, cleaned_output)
                 
 
                             
