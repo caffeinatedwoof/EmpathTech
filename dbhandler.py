@@ -318,3 +318,27 @@ class DBHandler:
         print(f"{role} User, '{username}' inserted")
         return None
 
+    
+    def insert_chatlog(self, chatlog):
+        new_chatlog = {
+            "start_time": chatlog.start_time,
+            "end_time": chatlog.end_time,
+            "student_id": chatlog.student_id,
+            "journal_id": chatlog.journal_id,
+            "messages": chatlog.messages
+        }
+        chatlog_id = self.chatlogs.insert_one(new_chatlog).inserted_id
+
+        print("Chatlog inserted")
+        return chatlog_id
+
+    def update_chatlog(self, chatlog_id, chatlog):
+        update_chatlog = { 
+            "end_time": chatlog.end_time,
+            "journal_id": chatlog.journal_id,
+            "messages": chatlog.messages
+        }
+
+        self.chatlogs.update_one({"_id": chatlog_id}, {"$set": update_chatlog})
+        print("Chatlog updated")
+        return None
