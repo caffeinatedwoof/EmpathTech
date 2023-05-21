@@ -34,17 +34,14 @@ def hide_main_page_tabs():
         None
     Raise:
         None
-    
     """
-    html_string = f"""
+    html_string = """
         <style>
-
-            .css-lrlib li:nth-child(1), .css-lrlib li:nth-child(2) {{
+            .css-lrlib li:nth-child(1) {
                 display: None;
-            }}
-
+            }
         </style>
-        """
+    """
     
     st.markdown(html_string, unsafe_allow_html=True)
 
@@ -357,7 +354,7 @@ def reset_session_state():
     return None
 
 def error_page_redirect():
-    if 'logged_in' not in st.session_state or st.session_state.logged_in == False:
+    if 'logged_in' not in st.session_state or not st.session_state.logged_in:
         update_current_pages()
         switch_page(ACCESS_DENY)
 
