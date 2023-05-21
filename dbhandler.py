@@ -341,9 +341,9 @@ class DBHandler:
 
     def update_chatlog(self, chatlog_id, chatlog):
         update_chatlog = { 
-            "end_time": chatlog.end_time,
-            "journal_id": chatlog.journal_id,
-            "messages": chatlog.messages
+            "end_time": chatlog["end_time"],
+            "journal_id": chatlog["journal_id"],
+            "messages": chatlog["messages"]
         }
 
         self.chatlogs.update_one({"_id": chatlog_id}, {"$set": update_chatlog})
@@ -352,3 +352,6 @@ class DBHandler:
     
     def get_all_chatlogs(self, student_id):
         return self.chatlogs.find({"student_id": student_id})
+    
+    def get_chatlog(self, chatlog_id):
+        return self.chatlogs.find_one({"_id": chatlog_id})
