@@ -39,20 +39,25 @@ class DBHandler:
         return student_id
 
 
-    def get_student(self, student_name):
-        """ Returns a single student given the name
+    def get_student(self, student_name=None, username=None):
+        """ Returns a single student given the name or username
 
         Parameters
         ----------
         student_name : str
-            name of the student
+            username or name of the student
 
         Returns
         -------
         dict
             a student document
         """
-        student = self.students.find_one({"name": student_name})
+        if student_name:
+            student = self.students.find_one({"name": student_name})
+
+        elif username:
+            student = self.auth.find_one({"username": username})
+        
         return student
     
 
