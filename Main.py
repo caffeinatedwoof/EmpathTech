@@ -90,10 +90,12 @@ def main():
 
             # Once update state, switch to relevant page
             if user['role'] == 'teacher':
-                # Get info from teacher database which contains mapping of authentication info and profile
+                # Get info from teacher database which contains mapping of authentication info and profile.
                 curr_teacher = db.teachers.find_one({'_id' : user['teacher_id']})
                 st_state_update('user_fullname', curr_teacher['name'])
                 st_state_update('role_id', user['teacher_id'])
+
+                # If more class are taught, curr_teacher['class'] would be a list instead of a string
                 st_state_update('teaching_class', curr_teacher['class'])
 
                 # Route to teaching page
