@@ -2,14 +2,11 @@ from src.journal_utils import is_journal_entry
 from src.journal_guidance import provide_journal_guidance
 import streamlit as st
 from streamlit_chat import message
+from datetime import date, datetime
 
-def generate_chat():
-    for i in range(0, len(st.session_state["generated"]) - 1, 1):
-        message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
-        message(st.session_state["generated"][i], key=str(i))
-        
-
-st.title("Journal Guidance")
+db = st.session_state.db
+username = st.session_state.username
+date_value = date.today()
 
 if "generated" not in st.session_state:
     st.session_state["generated"] = []
@@ -17,20 +14,103 @@ if "generated" not in st.session_state:
 if "past" not in st.session_state:
     st.session_state["past"] = []
 
-if "sources" not in st.session_state:
-    st.session_state["sources"] = []
+def clear_messages():
+    st.session_state.generated = []
+    st.session_state.past = []
 
-if "chat_history" not in st.session_state:
-    st.session_state["chat_history"] = []
-    placeholder = st.empty()
+# find student from username and cache it
+st.cache_data
+def get_student(username):
+    student = db.get_student(username=username)
+    return student
+
+current_student = get_student(username)
+print("current_student", current_student)
+student_name = current_student['name']
+student_id = current_student['_id']
+st.markdown(f"Hi, {student_name}!")
+
+def switch_chatlog(chatlog_id):
+    st.session_state.chatlog_id = chatlog_id
+    chatlog_obj = db.get_chatlog(chatlog_id)
+    chatlog = {
+    "_id" : chatlog_id,
+    "start_time": chatlog_obj['start_time'],
+    "end_time": chatlog_obj["end_time"],
+    "student_id": chatlog_obj["student_id"],
+    "journal_id": chatlog_obj["journal_id"],
+    "messages": chatlog_obj["messages"]
+    }
+
+    if chatlog['journal_id'] is not None:
+        journal = db.get_journal(chatlog['journal_id'])
+        st.session_state.entry_value = journal['content']
+        st.session_state.date_value = journal['date']
+        st.session_state.title_value = journal['title']
+
+    else:
+        st.session_state.entry_value = chatlog['messages'][-1]['student_msg']
+        st.session_state.date_value = chatlog['start_time'].date()
+        st.session_state.title_value = ""
+
+    clear_messages()
+    for message in chatlog['messages']:
+        st.session_state.past.append(message['student_msg'])
+        st.session_state.generated.append(message['llm_msg'])
+
+    return chatlog
+
+if 'chatlog_id' not in st.session_state or st.session_state.chatlog_id is None:
+    print("chatlog id does not exist")
+    st.session_state.chatlog_id = None
+    st.session_state.entry_value = ""
+    st.session_state.date_value = date.today()
+    st.session_state.title_value = ""
+    chatlog = {
+    "start_time": datetime.now(),
+    "end_time": None,
+    "student_id": student_id,
+    "journal_id": None,
+    "messages": []
+    }
+
+    current_chatlog = None
 
 else:
-    placeholder = st.empty()
-    # with placeholder.container():
-    #     if st.session_state["generated"]:
-    #         generate_chat()
+    current_chatlog = switch_chatlog(st.session_state.chatlog_id)
 
-text_input = st.text_area("Type your journal entry here!")
+
+
+def show_chatlog_filter(status):
+    if status=='Complete':
+        return [chatlogs for chatlogs in db.get_all_chatlogs(student_id) if chatlogs['journal_id'] is not None]
+    else:
+        return [chatlogs for chatlogs in db.get_all_chatlogs(student_id) if chatlogs['journal_id'] is None]
+    
+def chatlog_list_format(chatlog_obj):
+    return chatlog_obj['start_time'].strftime("%d %b %Y %H:%M:%S")
+
+with st.form(key="journal_selection"):
+    chatlog_list = show_chatlog_filter('Incomplete')
+    chatlog_selection = st.selectbox("Your incomplete journals", chatlog_list, format_func=chatlog_list_format)
+    submit_button = st.form_submit_button(label="Select journal")
+    if submit_button:
+        current_chatlog = switch_chatlog(chatlog_selection['_id'])
+        print("Switched chatlog to", current_chatlog['_id'])
+
+def save_chatlog(chatlog):
+    if st.session_state.chatlog_id == None:
+        chatlog_id = db.insert_chatlog(chatlog)
+        st.session_state.chatlog_id = chatlog_id
+    else:
+        db.update_chatlog(st.session_state.chatlog_id, chatlog)
+
+today = date.today()
+st.title("Create your journal")
+st.text_input("Give your entry a title", value=st.session_state.title_value, key="journal_title")
+st.date_input("Date", value=st.session_state.date_value, key="journal_date")
+
+text_input = st.text_area("Type your journal entry here!", value=st.session_state.entry_value)
 
 # Get feedback
 col1, col2, col3 = st.columns([1, 1, 3])
@@ -50,15 +130,20 @@ with col1:
         print(output)
         print("type of output", type(output))
 
-        st.session_state['chat_history'].append((text_input, output))
         st.session_state.past.append(text_input)
         st.session_state.generated.append(output)
+        current_chatlog['messages'].append({"student_msg": text_input, "llm_msg": output})
+        current_chatlog['endtime'] = datetime.now()
+        save_chatlog(current_chatlog)
 
 with col2:
     if st.button("Submit Journal"):
         # Submit journal for sentiment analysis
         pass
 
-with placeholder.container():
-    if st.session_state["generated"]:
-        generate_chat()
+print(st.session_state["generated"])
+
+for i in range(len(st.session_state["generated"])-1, -1, -1):
+    message(st.session_state["generated"][i], key=str(i))
+    message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
+    
