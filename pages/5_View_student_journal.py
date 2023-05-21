@@ -29,12 +29,13 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     else:
         db = connect_db()
 
-    st.title("View Student Journal")
+    st.title("Student Journal View")
 
     # Initialize variables
     teacher_id = st.session_state.role_id
     teacher_name = st.session_state.user_fullname
     teaching_class = st.session_state.teaching_class
+    
     students = db.students
     student_list = show_student_filter()
 
@@ -69,7 +70,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     st.subheader("Emotion history")
     emotion_list = ['Positive', 'Neutral', 'Negative']
     time_periods = [entry['date'] for entry in entries_list[::-1]]
-    emotions = [random.choice(emotion_list) for time in time_periods]
+    emotions = [random.choice(emotion_list) for _ in time_periods]
 
     fig = px.scatter(x=time_periods, y=emotions)
     fig.update_layout(xaxis_title=None, yaxis_title=None)
