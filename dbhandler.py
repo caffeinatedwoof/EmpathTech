@@ -288,6 +288,18 @@ class DBHandler:
         return summary
     
 
+    def get_all_summaries(self, student_id):
+        """ Returns all the summaries for a student
+
+        Parameters
+        ----------
+        student_id : ObjectId
+            ObjectId of the student
+        """
+
+        summaries = self.summaries.find({"student_id": student_id})
+        return summaries
+
     def insert_user(self, username, password, role, role_id):
         """
         Inserts a user into the database
@@ -338,6 +350,7 @@ class DBHandler:
         print("Chatlog inserted")
         return chatlog_id
 
+
     def update_chatlog(self, chatlog_id, chatlog):
         update_chatlog = { 
             "end_time": chatlog["end_time"],
@@ -349,8 +362,10 @@ class DBHandler:
         print("Chatlog updated")
         return None
     
+ 
     def get_all_chatlogs(self, student_id):
         return self.chatlogs.find({"student_id": student_id})
     
+ 
     def get_chatlog(self, chatlog_id):
         return self.chatlogs.find_one({"_id": chatlog_id})
