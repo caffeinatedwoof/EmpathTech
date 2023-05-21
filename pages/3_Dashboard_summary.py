@@ -1,4 +1,5 @@
 import streamlit as st
+import numpy as np
 import random
 import pandas as pd
 from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages,  error_page_redirect, connect_db, hide_st_table_row_index
@@ -21,8 +22,8 @@ def show_student_filter():
 
 
 # Function to highlight using different colours for positive/neutral/negative based on the max value amongst these 3.
-def highlight_sentiments():
-    """_summary_
+def highlight_sentiments(row):
+    """Highlights sentiment based on defined color.
 
     Args:
         row (pd.series): Panda series of interest
@@ -30,11 +31,19 @@ def highlight_sentiments():
     Returns:
         str: css string indicating highlight color
     """
+    if row.name == 'Positive':
+        highlight = 'background-color: green'
 
-    return ['background-color: green;',
-            'background-color: grey;',
-            'background-color: red;']
-
+    elif row.name == 'Neutral':
+        highlight = 'background-color: grey'
+    
+    elif row.name == 'Negative':
+        highlight = 'background-color: red'
+    
+    else:
+        highlight = 'background-color: inherit'
+    
+    return highlight
 
 if 'logged_in' in st.session_state and st.session_state.logged_in:
     if 'db' in st.session_state:
@@ -74,18 +83,36 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             else:
                 student_names_id_dict[key][emotion] = random.random()
 
-    
+    def highlight_cols(x):
+      
+        # copy df to new - original data is not changed
+        df = x.copy()
+        
+        # select all values to green color
+        df.loc[:, :] = 'background-color: transparent'
+        
+        # overwrite values grey color
+        df[['Positive']] = 'background-color: green'
+        df[['Neutral']] = 'background-color: grey'
+        df[['Negative']] = 'background-color: red'
+        # return color df
+        return df 
     # Construct dataframe for display
     df = pd.DataFrame(student_names_id_dict).T
     df = df.reset_index().drop('index', axis=1)
+
     # Shift index to start from 1
     df.index = df.index + 1
     #hide_st_table_row_index()
-
+    #df.style.apply(lambda x: ['background-color: lightgreen']*len(df)\
+    #                    if (x.name == 'Positive') \
+    #                        else (['background-color: grey']*len(df) if (x.name == 'Negative') else 'background-color: red'*len(df), axis = 0))
 
     # Rowwise highlight
-    st.dataframe(df.style\
-                .highlight_max(subset=['Positive','Neutral','Negative'], axis=1),
-                use_container_width=True)
+    st.dataframe(df.style.highlight_max(
+        props='background-color: grey; color: Blue;',
+        subset=['Positive','Neutral','Negative'],
+        axis=1)
+        ,use_container_width=True)
 else:
     error_page_redirect()
