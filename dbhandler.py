@@ -15,6 +15,7 @@ class DBHandler:
         self.journals = db['journals']
         self.summaries = db['j_summaries']
         self.auth = db['auth']
+        self.chatlogs = db['chatlogs']
 
     def insert_student(self, student_name, teacher_id):
         """ Insert a new student into the database give
@@ -56,7 +57,8 @@ class DBHandler:
             student = self.students.find_one({"name": student_name})
 
         elif username:
-            student = self.auth.find_one({"username": username})
+            student_id = self.auth.find_one({"username": username})['student_id']
+            student = self.students.find_one({"_id": student_id})
         
         return student
     
@@ -326,11 +328,11 @@ class DBHandler:
     
     def insert_chatlog(self, chatlog):
         new_chatlog = {
-            "start_time": chatlog.start_time,
-            "end_time": chatlog.end_time,
-            "student_id": chatlog.student_id,
-            "journal_id": chatlog.journal_id,
-            "messages": chatlog.messages
+            "start_time": chatlog['start_time'],
+            "end_time": chatlog["end_time"],
+            "student_id": chatlog["student_id"],
+            "journal_id": chatlog["journal_id"],
+            "messages": chatlog["messages"]
         }
         chatlog_id = self.chatlogs.insert_one(new_chatlog).inserted_id
 
@@ -347,3 +349,6 @@ class DBHandler:
         self.chatlogs.update_one({"_id": chatlog_id}, {"$set": update_chatlog})
         print("Chatlog updated")
         return None
+    
+    def get_all_chatlogs(self, student_id):
+        return self.chatlogs.find({"student_id": student_id})
