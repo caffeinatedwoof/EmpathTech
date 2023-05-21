@@ -24,19 +24,25 @@ def init_connection():
                        tlsCAFile=certifi.where(), tlsAllowInvalidCertificates=True)
 
 
+from pymongo import MongoClient
+from bson.objectid import ObjectId
+import os
+import streamlit as st
+
+CONNECT_STR = st.secrets.CONNECT_STR
+
 # Create a DBHandler class
 class DBHandler:
     def __init__(self):
-        client = init_connection()
-        db = client['empathtech'] # Establish connetion to empathtech db
+        client = MongoClient(CONNECT_STR)
+        db = client['empathtech']
         self.students = db['students']
         self.teachers = db['teachers']
         self.journals = db['journals']
         self.summaries = db['j_summaries']
         self.auth = db['auth']
+        self.chatlogs = db['chatlogs']
 
-
-            
     def insert_student(self, student_name, teacher_id):
         """ Insert a new student into the database give
 
@@ -60,20 +66,26 @@ class DBHandler:
         return student_id
 
 
-    def get_student(self, student_name):
-        """ Returns a single student given the name
+    def get_student(self, student_name=None, username=None):
+        """ Returns a single student given the name or username
 
         Parameters
         ----------
         student_name : str
-            name of the student
+            username or name of the student
 
         Returns
         -------
         dict
             a student document
         """
-        student = self.students.find_one({"name": student_name})
+        if student_name:
+            student = self.students.find_one({"name": student_name})
+
+        elif username:
+            student_id = self.auth.find_one({"username": username})['student_id']
+            student = self.students.find_one({"_id": student_id})
+        
         return student
     
 
@@ -252,8 +264,7 @@ class DBHandler:
             return self.students.find({"teacher_id": teacher_id})
     
     
-    
-    def insert_summary(self, journal_id, is_genuine, sentiment, events):
+    def insert_summary(self, journal_id, summary):
         """_summary_
 
         Parameters
@@ -275,9 +286,8 @@ class DBHandler:
         """
 
         new_summary = {
-            "journal_entry" : is_genuine,
-            "sentiment" : sentiment,
-            "events" : events,
+            "sentiment" : summary['sentiment'],
+            "events" : summary['events'],
             "journal_id" : journal_id,
             "student_id" : self.journals.find_one({"_id": journal_id})["student_id"]
         }
@@ -303,6 +313,18 @@ class DBHandler:
         summary = self.summaries.find_one({"journal_id": journal_id})
         return summary
     
+
+    def get_all_summaries(self, student_id):
+        """ Returns all the summaries for a student
+
+        Parameters
+        ----------
+        student_id : ObjectId
+            ObjectId of the student
+        """
+
+        summaries = self.summaries.find({"student_id": student_id})
+        return summaries
 
     def insert_user(self, username, password, role, role_id):
         """
@@ -340,3 +362,36 @@ class DBHandler:
         print(f"{role} User, '{username}' inserted")
         return None
 
+    
+    def insert_chatlog(self, chatlog):
+        new_chatlog = {
+            "start_time": chatlog['start_time'],
+            "end_time": chatlog["end_time"],
+            "student_id": chatlog["student_id"],
+            "journal_id": chatlog["journal_id"],
+            "messages": chatlog["messages"]
+        }
+        chatlog_id = self.chatlogs.insert_one(new_chatlog).inserted_id
+
+        print("Chatlog inserted")
+        return chatlog_id
+
+
+    def update_chatlog(self, chatlog_id, chatlog):
+        update_chatlog = { 
+            "end_time": chatlog["end_time"],
+            "journal_id": chatlog["journal_id"],
+            "messages": chatlog["messages"]
+        }
+
+        self.chatlogs.update_one({"_id": chatlog_id}, {"$set": update_chatlog})
+        print("Chatlog updated")
+        return None
+    
+ 
+    def get_all_chatlogs(self, student_id):
+        return self.chatlogs.find({"student_id": student_id})
+    
+ 
+    def get_chatlog(self, chatlog_id):
+        return self.chatlogs.find_one({"_id": chatlog_id})
