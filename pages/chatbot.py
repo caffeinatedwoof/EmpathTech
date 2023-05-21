@@ -20,6 +20,11 @@ def map_labels(label):
         return 2
     
 def clean_llm_output(llm_output):
+    if "output:" in llm_output:
+        llm_output = llm_output.replace("output:", "")
+    elif "Output:" in llm_output:
+        llm_output = llm_output.replace("Output:", "")
+
     cleaned_output = json.loads(llm_output)
     score = map_labels(cleaned_output['sentiment']["label"])
     cleaned_output['sentiment'].pop("label", None)
