@@ -238,7 +238,7 @@ class DBHandler:
             return self.students.find({"teacher_id": teacher_id})
     
     
-    def insert_summary(self, journal_id, is_genuine, sentiment, events):
+    def insert_summary(self, journal_id, summary):
         """_summary_
 
         Parameters
@@ -260,9 +260,8 @@ class DBHandler:
         """
 
         new_summary = {
-            "journal_entry" : is_genuine,
-            "sentiment" : sentiment,
-            "events" : events,
+            "sentiment" : summary['sentiment'],
+            "events" : summary['events'],
             "journal_id" : journal_id,
             "student_id" : self.journals.find_one({"_id": journal_id})["student_id"]
         }
