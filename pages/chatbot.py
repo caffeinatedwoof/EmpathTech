@@ -218,9 +218,7 @@ with col2:
                 sent_analysis_results = perform_sentiment_analysis(text_input)
                 cleaned_output = clean_llm_output(sent_analysis_results)
                 db.insert_summary(journal_id, cleaned_output)
-                
-
-                            
+                                  
             else:
                 st.error("Please enter a valid journal entry.")
 
