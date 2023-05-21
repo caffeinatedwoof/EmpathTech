@@ -343,6 +343,9 @@ def hide_teacher_pages():
 def reset_session_state():
     """Function that resets streamlit session state involving username, logged_in state, role_id, user_full_name and form
 
+    Args:
+        None
+
     Returns:
         None
     """
@@ -354,7 +357,35 @@ def reset_session_state():
     return None
 
 def error_page_redirect():
+    """Function that offers redirect to access deny page when triggered in some situations as part of browsing flow.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     if 'logged_in' not in st.session_state or not st.session_state.logged_in:
         update_current_pages()
         switch_page(ACCESS_DENY)
 
+    return None
+
+def hide_st_table_row_index():
+    """Function to hide dataframe index row when display with st.table wrapper.
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    hide_table_row_index = """
+        <style>
+            thead tr th:first-child {display:none}
+            tbody th {display:none}
+        </style>
+        """
+    # Inject CSS with Markdown
+    st.markdown(hide_table_row_index, unsafe_allow_html=True)
+
+    return None
