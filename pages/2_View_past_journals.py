@@ -27,11 +27,29 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
     st.title(f"Journal Entries for {student_name}")
     entries = db.get_journal_entries(student_id)
-    for entry in entries:
-        st.markdown(f"**{entry['date']}**")
-        st.markdown(f"{entry['title']}")
-        st.markdown(f"{entry['content']}")
-        st.markdown(f"---")
+
+    # Consolidate results and reverse their order. Not needed if we can use pymongo to sort based on dates itself
+    entries_list = [i for i in entries][::-1]
+
+    # Iterate cursor
+    for entry in entries_list:
+        subcol1, subcol2, subcol3, subcol4= st.columns([3,1,1,1])
+        with subcol1:
+            st.markdown(f"{entry['title']}")
+            st.markdown(f"{entry['content']}")
+
+        with subcol2:
+            st.markdown(f"Date submitted")
+            st.markdown(f"**{entry['date']}**")
+
+        with subcol3:
+            st.markdown("Sentiment")
+            st.markdown("TBC")
+
+        with subcol4:
+            with st.expander("Teachers comments"):
+                st.write("No comments available")
+        st.markdown("----")
 
 else:
     error_page_redirect()
