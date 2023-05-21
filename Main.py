@@ -29,7 +29,7 @@ STUDENT_LANDING_PAGE = data['student']['view_past_journal']['name']
 # Layout config 
 st.set_page_config(
     layout = "centered",
-    initial_sidebar_state = 'expanded'
+    initial_sidebar_state = 'collapsed'
 )
 remove_top_space_canvas()
 navbar_edit()
