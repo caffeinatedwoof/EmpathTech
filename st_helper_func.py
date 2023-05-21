@@ -62,7 +62,7 @@ def navbar_edit():
     <style>
         [data-testid="stSidebar"] {
             padding: 0rem 1rem 1rem 1rem;
-            font-size: 3rem;
+            font-size: 2rem;
             position: sticky;
             margin: auto;
         }
@@ -74,8 +74,9 @@ def navbar_edit():
             padding-top: 1rem;
         }
         ul {
-            font-size: 2rem;
+            font-size: 1rem;
             position: sticky;
+            margin: auto;
         }
     </style>
     """
