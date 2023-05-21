@@ -1,5 +1,7 @@
 from src.journal_utils import is_journal_entry
 from src.journal_guidance import provide_journal_guidance
+from src.sentiment_analysis import perform_sentiment_analysis
+import json
 import streamlit as st
 from streamlit_chat import message
 from datetime import date, datetime
@@ -148,6 +150,8 @@ st.markdown(f"Date: {st.session_state.date_value.strftime('%d %b %Y')}")
 
 text_input = st.text_area("Type your journal entry here!", value=st.session_state.entry_value, disabled=st.session_state.content_disabled)
 
+
+placeholder = st.empty()
 # Get feedback
 col1, col2, col3 = st.columns([1, 1, 3])
 
@@ -178,21 +182,31 @@ with col2:
         with st.spinner('Checking entry before submission...'):
             check = is_journal_entry(text_input)
 
-        # Save journal to db
-        if check['journal_entry']:
-            entry_date = current_chatlog['start_time']
-            journal_id = save_journal(entry_title, text_input, entry_date)
-            current_chatlog['journal_id'] = journal_id
-            save_chatlog(current_chatlog)
-            print(journal_id)
+            # Save journal to db
+            if check['journal_entry']:
+                entry_date = current_chatlog['start_time']
+                journal_id = save_journal(entry_title, text_input, entry_date)
+                current_chatlog['journal_id'] = journal_id
+                save_chatlog(current_chatlog)
+                print(journal_id, "has been saved to db")
+                st.success('Your journal has been submitted!', icon="✅")
 
-        # Submit journal for sentiment analysis
+                # Submit journal for sentiment analysis
+                sent_analysis_results = perform_sentiment_analysis(text_input)
+                sent_analysis_json = json.loads(sent_analysis_results)
+                db.insert_summary(journal_id, sent_analysis_json)
+                
+
+                            
+            else:
+                st.error("Please enter a valid journal entry.")
+
+        
 
 
         # Save sentiment analysis to db
         
         pass
-
 st.markdown("---")
 
 for i in range(len(st.session_state["generated"])-1, -1, -1):
