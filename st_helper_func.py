@@ -37,7 +37,7 @@ def hide_main_page_tabs():
     """
     html_string = """
         <style>
-            .css-lrlib li:nth-child(1), .css-lrlib li:nth-child(2) {
+            .css-lrlib li:nth-child(1) {
                 display: None;
             }
         </style>
@@ -304,7 +304,9 @@ def hide_student_pages():
     # Exclude main page as we need to do logout
     student_pages_name_list = ["Access_denied",
                                "View_past_journals",
-                               "Create_journal"]
+                               "Create_journal",
+                               "Sentiment_analysis",
+                               "Chatbot"]
 
     # Hide listed pages
     for pages in student_pages_name_list:
@@ -330,6 +332,8 @@ def hide_teacher_pages():
                                "Dashboard_summary",
                                "Teaching_classes",
                                "View_student_journal",
+                               "Chatbot",
+                               "Sentiment_analysis"
                                ]
 
     for pages in teacher_pages_name_list:
@@ -355,6 +359,7 @@ def reset_session_state():
     st.session_state.role_id = ''
     st.session_state.user_fullname = ''
     st.session_state.form = ''
+    st.session_state.is_teacher = False
     return None
 
 def error_page_redirect():
