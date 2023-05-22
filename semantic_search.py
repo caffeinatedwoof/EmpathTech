@@ -26,7 +26,7 @@ def filter_journal_entries(student_name, start_date, end_date):
         journal_id = journal['_id'] # ID of the journal entry
         journal_title = journal['title']
         journal_content = journal['content']
-        date = journal['date']
+        date = journal['date'].date()
 
         # Check if the journal entry falls within the date range
         if start_date <= date <= end_date:
@@ -37,7 +37,7 @@ def filter_journal_entries(student_name, start_date, end_date):
                 'class': class_,
                 'source': str(journal_id),
                 'journal_title': journal_title,
-                'journal_date': date
+                'journal_date': str(date)
             })
 
             # Append content only
