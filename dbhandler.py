@@ -1,4 +1,5 @@
 from pymongo import MongoClient
+import pymongo
 from bson.objectid import ObjectId
 import os
 import streamlit as st
@@ -210,7 +211,7 @@ class DBHandler:
         pymongo.cursor.Cursor
             a list of all the journal entries of the student
         """
-        entries = self.journals.find({"student_id": student_id})
+        entries = self.journals.find({"student_id": student_id}).sort('date', pymongo.DESCENDING)
         return entries
 
 
@@ -365,7 +366,7 @@ class DBHandler:
     
  
     def get_all_chatlogs(self, student_id):
-        return self.chatlogs.find({"student_id": student_id})
+        return self.chatlogs.find({"student_id": student_id}).sort('start_time', pymongo.DESCENDING)
     
  
     def get_chatlog(self, chatlog_id):
