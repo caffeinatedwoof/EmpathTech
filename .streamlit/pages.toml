@@ -11,6 +11,10 @@ name = "Main"
     path = "pages/2_View_past_journals.py"
     name = "View past journals"
 
+    [student.view_journal]
+    path = "pages/9_View_journal.py"
+    name = "View journal"
+
 [teacher]
     [teacher.dashboard]
     path = "pages/3_Dashboard_summary.py"
@@ -22,8 +26,9 @@ name = "Main"
 
     [teacher.view_journal]
     path = "pages/5_View_student_journal.py"
-    path_name = "View student journals"
+    path_name = "View student journal"
 
+    
 [accessed_denied]
 path = "pages/6_Access_Denied.py"
 name = "Access denied"
@@ -31,3 +36,7 @@ name = "Access denied"
 [logout]
 path = "pages/7_Logout.py"
 name = "Logout"
+
+[sentiment_analysis]
+path = "pages/10_Sentiment_analysis.py"
+name = "Sentiment analysis"
