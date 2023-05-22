@@ -36,7 +36,3 @@ name = "Access denied"
 [logout]
 path = "pages/7_Logout.py"
 name = "Logout"
-
-[sentiment_analysis]
-path = "pages/10_Sentiment_analysis.py"
-name = "Sentiment analysis"
