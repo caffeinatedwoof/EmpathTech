@@ -26,7 +26,7 @@ def connect_db():
 def hide_main_page_tabs():
     """Helper function to hide main page tabs(login) which is seen on side navigation bar for student/teacher view.
 
-    This is a css workaround to hide them instead of actual removal of info from pages information of the app get_pages function as such removal would cause errors in routing back to main page(login).
+    This is a css workaround to hide them instead of actual removal of info from pages information of the app get_pages function as such removal would cause errors in routing back to main page(login) or other page required.
 
     Args:
         None
@@ -35,9 +35,14 @@ def hide_main_page_tabs():
     Raise:
         None
     """
+    # Hide Main page and View Journal
     html_string = """
         <style>
-            .css-lrlib li:nth-child(1) {
+            .css-lrlib li:nth-child(1), .css-1oe5cao li:nth-child(1) {
+                display: None;
+            }
+
+            .css-lrlib li:nth-child(5) {
                 display: None;
             }
         </style>
@@ -70,7 +75,7 @@ def navbar_edit():
             content: "EmpathTech platform";
             display: inline;
         }
-        .css-lrlib {
+        .css-lrlib, .css-1oe5cao {
             padding-top: 1rem;
         }
         ul {
@@ -148,47 +153,6 @@ def disable_sidebar():
     """
     st.markdown(no_sidebar_style, unsafe_allow_html=True)
     return None
-
-def gridbuilder_config_setup(df):
-    """Helper function that specifies and construct a streamlit AgGrid for a dataframe with fixed settings for the purpose of displaying dataframe content and allowing interaction.
-
-    Args:
-        df (dataframe): 
-            Dataframe of interest which gridbuilder is to be used on.
-    Returns:
-        streamlit_gridresponse object for display on streamlit UI 
-
-    Raise:
-        None
-    """
-    gb = GridOptionsBuilder.from_dataframe(df)
-    gb.configure_pagination(paginationAutoPageSize=False, paginationPageSize=5) #Add pagination
-    gb.configure_default_column(selectable=False)
-    gb.configure_side_bar() #Add a sidebar
-    gb.configure_selection('multiple',
-                            use_checkbox=True,
-                            groupSelectsChildren="Group checkbox select children") #Enable multi-row selection
-    gridOptions = gb.build()
-
-    grid_response = AgGrid(
-        df,
-        gridOptions=gridOptions,
-        data_return_mode='FILTERED', 
-        update_mode='MODEL_CHANGED', 
-        fit_columns_on_grid_load=True,
-        theme='streamlit', #Add theme color to the table
-        enable_enterprise_modules=True,
-        domLayout='autoHeight',
-        #height=350, 
-        width='100%',
-        reload_data=False, # Dont reload on each interaction
-    )
-
-    #data = grid_response['data']
-    #selected = grid_response['selected_rows'] 
-    #df = pd.DataFrame(selected) #Pass the selected rows to a new dataframe df
-
-    return grid_response
 
 def add_space_param():
     """Function that add 2 line spaces.
