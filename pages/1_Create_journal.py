@@ -4,7 +4,6 @@ from src.journal_utils import is_journal_entry
 from src.journal_guidance import provide_journal_guidance
 from src.sentiment_analysis import perform_sentiment_analysis
 import json
-import streamlit as st
 from streamlit_chat import message
 from datetime import datetime
 
@@ -155,34 +154,6 @@ else:
     current_chatlog = switch_chatlog(st.session_state.chatlog_id)
 
 
-
-def show_chatlog_filter(status='Incomplete'):
-    if status=='Complete':
-        return [chatlogs for chatlogs in db.get_all_chatlogs(student_id) if chatlogs['journal_id'] is not None]
-    else:
-        return [chatlogs for chatlogs in db.get_all_chatlogs(student_id) if chatlogs['journal_id'] is None]
-    
-def chatlog_list_format(chatlog_obj):
-    return chatlog_obj['start_time'].strftime("%d %b %Y %H:%M")
-
-# with st.sidebar.form(key="journal_selection"):
-with st.sidebar:
-    journal_type = st.radio("Journal type", ["Incomplete", "Complete"])
-    if journal_type == "Complete":
-        chatlog_list = show_chatlog_filter('Complete')
-    else:
-        chatlog_list = show_chatlog_filter()
-        
-    chatlog_selection = st.selectbox("Your journals", chatlog_list, format_func=chatlog_list_format)
-    submit_button = st.button(label="Select journal")
-    if submit_button:
-        if chatlog_selection is None:
-            current_chatlog = init_new_chatlog()
-            print("Started a new chatlog")
-        else:
-            current_chatlog = switch_chatlog(chatlog_selection['_id'])
-            print("Switched chatlog to", current_chatlog['_id'])
-
 def save_chatlog(chatlog):
     if st.session_state.chatlog_id == None:
         chatlog_id = db.insert_chatlog(chatlog)
@@ -190,14 +161,13 @@ def save_chatlog(chatlog):
     else:
         db.update_chatlog(st.session_state.chatlog_id, chatlog)
 
+init_new_chatlog()
 st.title(st.session_state.create_journal_label)
 entry_title = st.text_input("Give your entry a title", value=st.session_state.title_value, key="journal_title", disabled=st.session_state.title_disabled)
 st.markdown(f"Date: {st.session_state.date_value.strftime('%d %b %Y')}")
 
 text_input = st.text_area("Type your journal entry here!", value=st.session_state.entry_value, disabled=st.session_state.content_disabled)
 
-
-placeholder = st.empty()
 # Get feedback
 col1, col2, col3 = st.columns([1, 1, 3])
 
