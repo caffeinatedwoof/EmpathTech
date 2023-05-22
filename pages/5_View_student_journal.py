@@ -103,7 +103,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     )
 
     # Set marker size
-    fig.update_traces(marker=dict(size=15))
+    fig.update(layout_coloraxis_showscale=False)
+    fig.update_traces(marker=dict(size=15) )
     st.plotly_chart(fig, use_container_width=True)
 
     ####
