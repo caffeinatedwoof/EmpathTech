@@ -2,10 +2,12 @@ import json
 from langchain import PromptTemplate
 from langchain.llms import OpenAI
 from langchain.chains import LLMChain
+import streamlit as st
 
 sentiment_analysis_engine = OpenAI(model_name='text-davinci-003',
                                    temperature=0,
-                                   max_tokens=2048)
+                                   max_tokens=2048,
+                                   openai_api_key=st.secrets.OPENAI_API_KEY)
 
 SENTIMENT_ANALYSIS_TEMPLATE = """
 You will be provided with a student's journal entry delimited by <>. 

@@ -9,11 +9,13 @@ from langchain.prompts.chat import (
     HumanMessagePromptTemplate,
 )
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
+import streamlit as st
 
 journaling_model = ChatOpenAI(
     model_name='gpt-3.5-turbo',
     temperature=0,
-    max_tokens=2048
+    max_tokens=2048,
+    openai_api_key=st.secrets.OPENAI_API_KEY
 )
 
 window_memory = ConversationBufferWindowMemory(k=5)
