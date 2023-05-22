@@ -11,10 +11,12 @@ import json
 from langchain import PromptTemplate
 from langchain.llms import OpenAI
 from langchain.chains import LLMChain
+import streamlit as st
 
 language_model = OpenAI(model_name='gpt-3.5-turbo',
                         temperature=0,
-                        max_tokens=2048)
+                        max_tokens=2048,
+                        openai_api_key=st.secrets.OPENAI_API_KEY)
 
 IS_JOURNAL_ENTRY_PROMPT_TEMPLATE = """
 Please determine if the text is a genuine student's journal entry or not.
