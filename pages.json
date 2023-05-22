@@ -1,50 +1,62 @@
 {
-    "23cf24abf6ea2714130f8b0ec8a929ef": {
-        "page_script_hash": "23cf24abf6ea2714130f8b0ec8a929ef",
+    "1d89b6c78893382d426bcb4a2ae8d87b": {
+        "page_script_hash": "1d89b6c78893382d426bcb4a2ae8d87b",
         "page_name": "Main",
         "icon": "",
-        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\Main.py"
+        "script_path": "C:\\Users\\shuyi\\Desktop\\AIAP\\EmpathTech\\Main.py"
     },
-    "5f019c1b077d0c0fe3a6e9bcdcf8e470": {
-        "page_script_hash": "5f019c1b077d0c0fe3a6e9bcdcf8e470",
+    "d53a22b60b36eb16f0a0da19e155af5f": {
+        "page_script_hash": "d53a22b60b36eb16f0a0da19e155af5f",
         "page_name": "Create_journal",
         "icon": "",
-        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\1_Create_journal.py"
+        "script_path": "C:\\Users\\shuyi\\Desktop\\AIAP\\EmpathTech\\pages\\1_Create_journal.py"
     },
-    "fe591e9e8f32c69eb00c480ae3a4248b": {
-        "page_script_hash": "fe591e9e8f32c69eb00c480ae3a4248b",
+    "ea6bd074fcc1eea38441e3d05fbe73cc": {
+        "page_script_hash": "ea6bd074fcc1eea38441e3d05fbe73cc",
         "page_name": "View_past_journals",
         "icon": "",
-        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\2_View_past_journals.py"
+        "script_path": "C:\\Users\\shuyi\\Desktop\\AIAP\\EmpathTech\\pages\\2_View_past_journals.py"
     },
-    "6a4003576a861ea7ab318d49097ff252": {
-        "page_script_hash": "6a4003576a861ea7ab318d49097ff252",
+    "07612b57a829391430cc4bd06b686148": {
+        "page_script_hash": "07612b57a829391430cc4bd06b686148",
         "page_name": "Dashboard_summary",
         "icon": "",
-        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\3_Dashboard_summary.py"
+        "script_path": "C:\\Users\\shuyi\\Desktop\\AIAP\\EmpathTech\\pages\\3_Dashboard_summary.py"
     },
-    "9a9a4b4a4501a05eb5e1cdf820e2e08e": {
-        "page_script_hash": "9a9a4b4a4501a05eb5e1cdf820e2e08e",
+    "31170f3d86359f5fe683eca5e8b105ba": {
+        "page_script_hash": "31170f3d86359f5fe683eca5e8b105ba",
         "page_name": "Teaching_classes",
         "icon": "",
-        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\4_Teaching_classes.py"
+        "script_path": "C:\\Users\\shuyi\\Desktop\\AIAP\\EmpathTech\\pages\\4_Teaching_classes.py"
     },
-    "d164f11cf2ee376d352576245d1caa85": {
-        "page_script_hash": "d164f11cf2ee376d352576245d1caa85",
+    "cb7cbdc583fcd1bf566646d7ce6a77e6": {
+        "page_script_hash": "cb7cbdc583fcd1bf566646d7ce6a77e6",
         "page_name": "View_student_journal",
         "icon": "",
-        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\5_View_student_journal.py"
+        "script_path": "C:\\Users\\shuyi\\Desktop\\AIAP\\EmpathTech\\pages\\5_View_student_journal.py"
     },
-    "862b38aa4a7c321335d26c012755bfbb": {
-        "page_script_hash": "862b38aa4a7c321335d26c012755bfbb",
+    "63e01fd253bd0d83c6a04b22322efb15": {
+        "page_script_hash": "63e01fd253bd0d83c6a04b22322efb15",
         "page_name": "Access_denied",
         "icon": "",
-        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\6_Access_denied.py"
+        "script_path": "C:\\Users\\shuyi\\Desktop\\AIAP\\EmpathTech\\pages\\6_Access_denied.py"
     },
-    "824177fa6b97b03573d71bc2a033cb6a": {
-        "page_script_hash": "824177fa6b97b03573d71bc2a033cb6a",
+    "bb52b3114b5fd9b05c29ae13ba307a19": {
+        "page_script_hash": "bb52b3114b5fd9b05c29ae13ba307a19",
         "page_name": "Logout",
         "icon": "",
-        "script_path": "C:\\Users\\Admin\\OneDrive\\hackathon2023\\EmpathTech\\pages\\7_Logout.py"
+        "script_path": "C:\\Users\\shuyi\\Desktop\\AIAP\\EmpathTech\\pages\\7_Logout.py"
+    },
+    "799c48da9bfffe187ca1ea4c8c773e5f": {
+        "page_script_hash": "799c48da9bfffe187ca1ea4c8c773e5f",
+        "page_name": "chatbot",
+        "icon": "",
+        "script_path": "C:\\Users\\shuyi\\Desktop\\AIAP\\EmpathTech\\pages\\chatbot.py"
+    },
+    "640fbef2e3c27fc1cfe0ccde6da351fe": {
+        "page_script_hash": "640fbef2e3c27fc1cfe0ccde6da351fe",
+        "page_name": "sent_analysis",
+        "icon": "",
+        "script_path": "C:\\Users\\shuyi\\Desktop\\AIAP\\EmpathTech\\pages\\sent_analysis.py"
     }
 }
