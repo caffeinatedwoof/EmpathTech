@@ -37,7 +37,7 @@ def hide_main_page_tabs():
     """
     html_string = """
         <style>
-            .css-lrlib li:nth-child(1) {
+            .css-lrlib li:nth-child(1), .css-lrlib li:nth-child(2) {
                 display: None;
             }
         </style>
