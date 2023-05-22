@@ -18,8 +18,10 @@ st.set_page_config(
 )
 remove_top_space_canvas()
 navbar_edit()
-hide_teacher_pages()
-st.session_state.update(st.session_state)
+
+if st.session_state.is_teacher == False:
+    hide_teacher_pages()
+# st.session_state.update(st.session_state)
 
 if 'logged_in' in st.session_state and st.session_state.logged_in:
 
@@ -40,7 +42,10 @@ if "generated" not in st.session_state:
 if "past" not in st.session_state:
     st.session_state["past"] = []
 
-current_student = get_student(username)
+if "current_student_name" not in st.session_state:
+    current_student = get_student(username)
+else:
+    current_student = db.get_student(student_name=st.session_state.current_student_name)
 student_name = current_student['name']
 student_id = current_student['_id']
 print(student_id)
@@ -58,7 +63,7 @@ else:
 
 # Render sidebar for View journals / journal selection
 with st.sidebar:
-    journal_type = st.radio("Journal type", ["Incomplete", "Complete"])
+    journal_type = st.radio("Journal type", ["Incomplete", "Complete"], )
     if journal_type == "Complete":
         chatlog_list = show_chatlog_filter(student_id, 'Complete')
     else:
@@ -158,10 +163,15 @@ with container2:
     st.header("Comments")
     comments = get_journal_comments(current_chatlog['journal_id'])
     for comment in comments:
-        st.markdown(comment["date"])
-        st.markdown(comment["comment"])
-        teacher = db.get_teacher(comment["teacher_id"])
-        st.markdown(f"- {teacher['name']}")
+        print(type(comment))
+        if (comment is None or type(comment) == str):
+            st.markdown("No comments yet!")
+        else:
+            comment_date = datetime.strftime(comment['date'], "%d/%m/%Y %H:%M")
+            st.markdown(comment_date)
+            st.markdown(comment["comment"])
+            teacher = db.get_teacher(comment["teacher_id"])
+            st.markdown(f"- {teacher['name']}")
 
 with padding3:
     pass

@@ -115,8 +115,11 @@ def save_chatlog(chatlog):
     else:
         db.update_chatlog(st.session_state.chatlog_id, chatlog)
 
-def get_student(username):
-    student = db.get_student(username=username)
+def get_student(username=None, student_name=None):
+    if username is None:
+        student = db.get_student(student_name=student_name)
+    else:
+        student = db.get_student(username=username)
     st.session_state.selected_student = student
     return student
 
@@ -147,9 +150,8 @@ def clean_llm_output(llm_output):
     return cleaned_output
 
 def get_journal_comments(journal_id):
+    print(journal_id)
     if journal_id is not None and journal_id != "":
         entry = db.get_journal_entry(journal_id)
         comments = entry['comments']
         return comments
-    else:
-        return ["No comments yet!"]

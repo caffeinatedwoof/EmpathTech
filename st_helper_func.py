@@ -355,6 +355,7 @@ def reset_session_state():
     st.session_state.role_id = ''
     st.session_state.user_fullname = ''
     st.session_state.form = ''
+    st.session_state.is_teacher = False
     return None
 
 def error_page_redirect():

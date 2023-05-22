@@ -1,12 +1,13 @@
 import streamlit as st
 import random
 import plotly.express as px
+from datetime import datetime
 from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages, error_page_redirect, connect_db
-#from streamlit_extras.switch_page_button import switch_page
+from streamlit_extras.switch_page_button import switch_page
 
 # Layout config 
 st.set_page_config(
-    layout = "wide",
+    # layout = "wide",
     initial_sidebar_state = 'expanded'
 )
 
@@ -14,7 +15,7 @@ remove_top_space_canvas()
 navbar_edit()
 hide_student_pages()
 
-st.session_state.update(st.session_state)
+# st.session_state.update(st.session_state)
 #Temporary hack
 #st.session_state.logged_in = True
 
@@ -51,7 +52,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                             if student['class']==selected_class}
         
         selected_student_name = st.selectbox("Student name", student_names_id_dict.values())
-
+        st.session_state.current_student_name = selected_student_name
     key_list = list(student_names_id_dict.keys())
     value_list = list(student_names_id_dict.values())
 
@@ -69,10 +70,16 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     ####
     st.subheader("Emotion history")
     emotion_list = ['Positive', 'Neutral', 'Negative']
+    sent_dict = dict(zip([2, 1, 0],emotion_list))
     time_periods = [entry['date'] for entry in entries_list[::-1]]
-    emotions = [random.choice(emotion_list) for _ in time_periods]
+    sentiment_list = []
+    for entry in entries_list:
+        sentiment = db.get_summary(entry['_id'])['sentiment']['score']
+        sentiment_list.append(sent_dict[sentiment])
+    
+    # emotions = [random.choice(emotion_list) for _ in time_periods]
 
-    fig = px.scatter(x=time_periods, y=emotions)
+    fig = px.scatter(x=time_periods, y=sentiment_list)
     fig.update_layout(xaxis_title=None, yaxis_title=None)
     st.plotly_chart(fig, use_container_width=True)
 
@@ -81,27 +88,36 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     ####
     st.subheader(f"Journal entries by {selected_student_name}")
     # Iterate cursor
+    counter = 0
     for entry in entries_list:
-        subcol1, subcol2, subcol3, subcol4= st.columns([2,0.5,0.5,1.5])
+        subcol1, subcol2, subcol3, subcol4= st.columns([0.5,2,0.5,0.8])
         with subcol1:
-            st.markdown(f"{entry['title']}")
-            st.markdown(f"{entry['content']}")
-
+            if counter == 0:
+                st.markdown("**Date**")
+            # format entry datetime to dd/mm/yyyy
+            entry_date = datetime.strftime(entry['date'], "%d/%m/%Y")
+            st.markdown(f"{entry_date}")
         with subcol2:
-            st.markdown(f"Date submitted")
-            st.markdown(f"**{entry['date']}**")
-
+            if counter == 0:
+                st.markdown("**Entry**")
+            content = entry['content']
+            content = content[:100] + "..." if len(content) > 100 else content
+            st.markdown(f"{content}")
         with subcol3:
-            st.markdown("Sentiment")
-            st.markdown("TBC")
-
+            if counter == 0:
+                st.markdown("**Emotion**")
+            sentiment = db.get_summary(entry['_id'])['sentiment']['score']
+            st.markdown(f"<div align='center'>{sentiment}</div>", unsafe_allow_html=True)
         with subcol4:
-            with st.expander("Click to provide comments"):
-                sentence = st.text_area('Input your text here:', key=str(entry['_id'])+'_text_student') 
-                button = st.button('Click to submit', key=str(entry['_id'])+'_button_student')
-            with st.expander("Click to view past comments"):
-                st.write("No comments available")
+            if counter == 0:
+                st.markdown("**Action**")
+            if st.button("View full entry", key=f"{entry['_id']}_btn"):
+                chatlog = db.chatlogs.find_one({"journal_id": entry['_id']})
+                st.session_state.chatlog_id = chatlog['_id']
+                st.session_state.current_student_name = selected_student_name
+                switch_page("View Journal")
         st.markdown("----")
+        counter += 1
 
 else:
     error_page_redirect()

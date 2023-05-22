@@ -29,11 +29,8 @@ student_name = st.session_state.user_fullname
 st.title(f"Journal Entries for {student_name}")
 entries = db.get_journal_entries(student_id)
 
-# Consolidate results and reverse their order. Not needed if we can use pymongo to sort based on dates itself
-entries_list = [i for i in entries][::-1]
-
 # Iterate cursor
-for entry in entries_list:
+for entry in entries:
     subcol1, subcol2, subcol3 = st.columns([0.5,2,0.8])
     with subcol2:
         content = entry['content']
