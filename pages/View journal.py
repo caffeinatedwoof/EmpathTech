@@ -19,7 +19,7 @@ st.set_page_config(
 remove_top_space_canvas()
 navbar_edit()
 
-if st.session_state.is_teacher == False:
+if st.session_state.is_teacher == False and st.session_state.current_student_name is None:
     hide_teacher_pages()
 # st.session_state.update(st.session_state)
 
@@ -84,14 +84,34 @@ padding, container1, padding2, container2, padding3 = st.columns([0.5, 3, 0.5, 2
     # st.markdown(f"Hi, {student_name}!") # Display student name
 # Render journal display / entry form
 
+
+def render_comments():
+    if len(comments) == 0:
+            st.markdown("No comments yet!")
+    print(comments)
+    for comment in comments:
+        print(type(comment))
+        if (comment is None or type(comment) == str):
+            st.markdown("No comments yet!")
+        else:
+            comment_date = datetime.strftime(comment['date'], "%d/%m/%Y %H:%M")
+            st.markdown(comment_date)
+            st.markdown(comment["comment"])
+            teacher = db.get_teacher(comment["teacher_id"])
+            st.markdown(f"- {teacher['name']}")
+
 with padding:
     pass
 with container1:
-    st.title(st.session_state.create_journal_label)
+    st.title(f"{student_name}'s Journal")
+    st.session_state.label_visibility = "hidden"
+    if st.session_state.is_teacher == False:
+        st.header(st.session_state.create_journal_label)
+        st.session_state.label_visibility = "visible"
     # entry_title = st.text_input("Give your entry a title", key="journal_title", disabled=st.session_state.title_disabled)
     st.markdown(f"Date: {st.session_state.date_value.strftime('%d %b %Y')}")
 
-    text_input = st.text_area("Type your journal entry here!", value=st.session_state.entry_value, height=300, disabled=st.session_state.content_disabled)
+    text_input = st.text_area("Type your journal entry here!", value=st.session_state.entry_value, height=300, disabled=st.session_state.content_disabled, label_visibility=st.session_state.label_visibility)
 
     # Get feedback
     col1, col2, col3 = st.columns([1, 1, 3])
@@ -161,17 +181,32 @@ with padding2:
     pass
 with container2:
     st.header("Comments")
+    comment_placeholder = st.empty()
     comments = get_journal_comments(current_chatlog['journal_id'])
-    for comment in comments:
-        print(type(comment))
-        if (comment is None or type(comment) == str):
-            st.markdown("No comments yet!")
-        else:
-            comment_date = datetime.strftime(comment['date'], "%d/%m/%Y %H:%M")
-            st.markdown(comment_date)
-            st.markdown(comment["comment"])
-            teacher = db.get_teacher(comment["teacher_id"])
-            st.markdown(f"- {teacher['name']}")
+    with comment_placeholder.container():
+        render_comments()
+        # if len(comments) == 0:
+        #     st.markdown("No comments yet!")
+        # print(comments)
+        # for comment in comments:
+        #     print(type(comment))
+        #     if (comment is None or type(comment) == str):
+        #         st.markdown("No comments yet!")
+        #     else:
+        #         comment_date = datetime.strftime(comment['date'], "%d/%m/%Y %H:%M")
+        #         st.markdown(comment_date)
+        #         st.markdown(comment["comment"])
+        #         teacher = db.get_teacher(comment["teacher_id"])
+        #         st.markdown(f"- {teacher['name']}")
+
+    if st.session_state.is_teacher:
+        comment_input = st.text_area("Add a comment", key="comment_input")
+        submit_comment = st.button("Submit comment")
+        if submit_comment:
+            db.insert_comment(current_chatlog['journal_id'], comment_input, st.session_state.role_id)
+            st.success("Comment submitted!")
+            with comment_placeholder.container():
+                render_comments()
 
 with padding3:
     pass

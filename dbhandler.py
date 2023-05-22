@@ -4,6 +4,7 @@ from bson.objectid import ObjectId
 import os
 import streamlit as st
 import certifi
+from datetime import datetime
 
 CONNECT_STR = st.secrets.CONNECT_STR
 
@@ -373,3 +374,16 @@ class DBHandler:
  
     def get_chatlog(self, chatlog_id):
         return self.chatlogs.find_one({"_id": chatlog_id})
+    
+
+    def insert_comment(self, journal_id, comment, teacher_id):
+        comments = self.journals.find_one({"_id": journal_id})["comments"]
+        new_comment = {
+            "date": datetime.now(),
+            "comment": comment,
+            "teacher_id": teacher_id,
+        }
+        comments.append(new_comment)
+        update_comments = {"comments" : comments}
+        self.journals.update_one({"_id": journal_id}, {"$set": update_comments})
+        return None

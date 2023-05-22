@@ -63,7 +63,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     entries = db.get_journal_entries(key_list[selected_student_id])
     
     # Consolidate results and reverse their order. Not needed if we can use pymongo to sort based on dates itself
-    entries_list = [i for i in entries][::-1]
+    entries_list = [i for i in entries]
     
     ####
     #Emotion history
