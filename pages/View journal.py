@@ -19,6 +19,9 @@ st.set_page_config(
 remove_top_space_canvas()
 navbar_edit()
 
+if "current_student_name" not in st.session_state:
+    st.session_state["current_student_name"] = None
+
 if st.session_state.is_teacher == False and st.session_state.current_student_name is None:
     hide_teacher_pages()
 # st.session_state.update(st.session_state)
