@@ -1,9 +1,37 @@
-[[pages]]
-path = "home.py"
-name = "Home"
-icon = "🏠"
+[main_page]
+path = "Main.py"
+name = "Main"
 
-[[pages]]
-path = "pages/teachertest.py"
-name = "Teachers Dashboard"
-icon = ":books:"
+[student]
+    [student.create_journal]
+    path = "pages/1_Create_journal.py"
+    name = "Create Journal"
+
+    [student.view_journal]
+    path = "pages/View_journal.py"
+    name = "View Journal"
+
+    [student.view_past_journal]
+    path = "pages/2_View_past_journals.py"
+    name = "View past journals"
+
+[teacher]
+    [teacher.dashboard]
+    path = "pages/3_Dashboard_summary.py"
+    name = "Dashboard Summary"
+
+    [teacher.classes]
+    path = "pages/4_Dashboard_summary.py"
+    name = "Teaching Classes"
+
+    [teacher.view_journal]
+    path = "pages/5_View_student_journal.py"
+    path_name = "View student journals"
+
+[accessed_denied]
+path = "pages/6_Access_Denied.py"
+name = "Access denied"
+
+[logout]
+path = "pages/7_Logout.py"
+name = "Logout"
