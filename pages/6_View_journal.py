@@ -1,9 +1,9 @@
 import streamlit as st
-from st_helper_func import remove_top_space_canvas, navbar_edit, hide_teacher_pages, error_page_redirect, connect_db
+from st_helper_func import remove_top_space_canvas, navbar_edit, hide_teacher_pages, error_page_redirect, connect_db, hide_student_pages
 from src.journal_utils import is_journal_entry
 from src.journal_guidance import provide_journal_guidance
 from src.sentiment_analysis import perform_sentiment_analysis
-import json
+
 from streamlit_chat import message
 from datetime import datetime
 import pymongo
@@ -19,11 +19,16 @@ st.set_page_config(
 remove_top_space_canvas()
 navbar_edit()
 
+if st.session_state.is_teacher == True:
+    hide_student_pages()
+
+else:
+    hide_teacher_pages()
+
+
 if "current_student_name" not in st.session_state:
     st.session_state["current_student_name"] = None
 
-if st.session_state.is_teacher == False and st.session_state.current_student_name is None:
-    hide_teacher_pages()
 # st.session_state.update(st.session_state)
 
 if 'logged_in' in st.session_state and st.session_state.logged_in:
