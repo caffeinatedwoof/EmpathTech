@@ -90,6 +90,8 @@ def main():
 
             # Once update state, switch to relevant page
             if user['role'] == 'teacher':
+                # set IS_TEACHER to True
+                st_state_update('is_teacher', True)
                 # Get info from teacher database which contains mapping of authentication info and profile.
                 curr_teacher = db.teachers.find_one({'_id' : user['teacher_id']})
                 st_state_update('user_fullname', curr_teacher['name'])
