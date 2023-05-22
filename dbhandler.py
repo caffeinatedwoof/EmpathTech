@@ -1,40 +1,18 @@
 from pymongo import MongoClient
-from bson.objectid import ObjectId
-import streamlit as st
-import certifi
-
-# Access CONNECT STR secrets
-CONNECT_STR = st.secrets.CONNECT_STR
-
-def init_connection():
-    """_summary_
-
-    Parameters
-    ----------
-    None
-
-    Returns
-    -------
-    Object
-        MongoDB Connection instance
-    """
-    # Disable ssl handshake due to [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed  (not for production use)
-
-    return MongoClient(CONNECT_STR, 
-                       tlsCAFile=certifi.where(), tlsAllowInvalidCertificates=True)
-
-
-from pymongo import MongoClient
+import pymongo
 from bson.objectid import ObjectId
 import os
 import streamlit as st
+import certifi
+from datetime import datetime
 
 CONNECT_STR = st.secrets.CONNECT_STR
 
 # Create a DBHandler class
 class DBHandler:
     def __init__(self):
-        client = MongoClient(CONNECT_STR)
+        client = MongoClient(CONNECT_STR, 
+                       tlsCAFile=certifi.where(), tlsAllowInvalidCertificates=True)
         db = client['empathtech']
         self.students = db['students']
         self.teachers = db['teachers']
@@ -164,6 +142,7 @@ class DBHandler:
             "content": content,
             "date": date,
             "student_id": student_id,
+            "comments": []
         }
         journal_id = self.journals.insert_one(new_entry).inserted_id
         return journal_id
@@ -235,7 +214,7 @@ class DBHandler:
         pymongo.cursor.Cursor
             a list of all the journal entries of the student
         """
-        entries = self.journals.find({"student_id": student_id})
+        entries = self.journals.find({"student_id": student_id}).sort('date', pymongo.DESCENDING)
         return entries
 
 
@@ -390,8 +369,21 @@ class DBHandler:
     
  
     def get_all_chatlogs(self, student_id):
-        return self.chatlogs.find({"student_id": student_id})
+        return self.chatlogs.find({"student_id": student_id}).sort('start_time', pymongo.DESCENDING)
     
  
     def get_chatlog(self, chatlog_id):
         return self.chatlogs.find_one({"_id": chatlog_id})
+    
+
+    def insert_comment(self, journal_id, comment, teacher_id):
+        comments = self.journals.find_one({"_id": journal_id})["comments"]
+        new_comment = {
+            "date": datetime.now(),
+            "comment": comment,
+            "teacher_id": teacher_id,
+        }
+        comments.append(new_comment)
+        update_comments = {"comments" : comments}
+        self.journals.update_one({"_id": journal_id}, {"$set": update_comments})
+        return None
