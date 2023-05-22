@@ -1,3 +1,4 @@
 conf/
 __pycache__
 secrets.toml
+pages.json
