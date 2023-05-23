@@ -42,7 +42,7 @@ def hide_main_page_tabs_of_teacher():
                 display: None;
             }
 
-            .css-lrlib li:nth-child(4) {
+            .css-lrlib li:nth-last-child(2), .css-1oe5cao li:nth-last-child(1) {
                 display: None;
             }
 
