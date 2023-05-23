@@ -9,11 +9,8 @@ st.set_page_config(
     initial_sidebar_state = 'expanded'
 )
 remove_top_space_canvas()
-#navbar_edit
-post_navbar_edit(st.session.user_full_name)
-hide_student_pages()
 post_navbar_edit(st.session_state.user_fullname)
-
+hide_student_pages()
     
 @st.cache_data
 def show_student_filter():
