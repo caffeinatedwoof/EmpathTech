@@ -49,6 +49,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                             for student in student_list\
                             if student['class']==selected_class}
         
+        # Create a selectbox using dict values containing student full name
         selected_student_name = st.selectbox("Student name", student_names_id_dict.values())
         st.session_state.current_student_name = selected_student_name
 
