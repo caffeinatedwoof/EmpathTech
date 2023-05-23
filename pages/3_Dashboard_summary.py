@@ -1,8 +1,6 @@
 import streamlit as st
-import numpy as np
-import random
 import pandas as pd
-from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages,  error_page_redirect, connect_db, hide_st_table_row_index
+from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages,  error_page_redirect, connect_db
 #from streamlit_extras.switch_page_button import switch_page
 
 # Layout config 
