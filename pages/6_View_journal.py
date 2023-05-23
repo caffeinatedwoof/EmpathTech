@@ -7,9 +7,9 @@ from src.sentiment_analysis import perform_sentiment_analysis
 from streamlit_chat import message
 from datetime import datetime
 import pymongo
-from src.st_utils import clear_messages, toggle_elements_disabled, switch_chatlog, show_chatlog_filter, chatlog_list_format, save_chatlog, get_student, save_journal, map_labels, clean_llm_output, get_journal_comments
+from src.st_utils import switch_chatlog, show_chatlog_filter, chatlog_list_format, save_chatlog, get_student, save_journal, clean_llm_output, get_journal_comments
 
-#from streamlit_extras.switch_page_button import switch_page
+# st.session_state.update(st.session_state)
 
 # Layout config 
 st.set_page_config(
@@ -41,7 +41,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 else:
     error_page_redirect()
 
-# st.session_state.update(st.session_state)
 username = st.session_state.username
 
 if "generated" not in st.session_state:
@@ -54,6 +53,8 @@ if "current_student_name" not in st.session_state:
     current_student = get_student(username)
 else:
     current_student = db.get_student(student_name=st.session_state.current_student_name)
+
+
 student_name = current_student['name']
 student_id = current_student['_id']
 print(student_id)
@@ -91,8 +92,6 @@ padding, container1, padding2, container2, padding3 = st.columns([0.5, 3, 0.5, 2
 
     # st.markdown(f"Hi, {student_name}!") # Display student name
 # Render journal display / entry form
-
-
 def render_comments():
     if len(comments) == 0:
             st.markdown("No comments yet!")
