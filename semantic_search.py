@@ -97,11 +97,6 @@ def ss_query(student_name, start_date, end_date, question):
     Returns:
         dict : Dictionary of response
     """
-    import streamlit as st
-    st.write(student_name)
-    st.write(start_date)
-    st.write(end_date)
-    st.write(question)
     journal_entries, metadatas = filter_journal_entries(student_name,
                                                         start_date,
                                                         end_date)
