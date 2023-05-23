@@ -16,7 +16,9 @@ from src.st_utils import switch_chatlog, show_chatlog_filter, chatlog_list_forma
 # st.session_state.update(st.session_state)
     # Render journal display / entry form
 def render_comments():
-    if len(comments) == 0:
+    if comments is None:
+        st.markdown("No comments yet!")
+    elif len(comments) == 0:
             st.markdown("No comments yet!")
     else:
         for comment in comments:
