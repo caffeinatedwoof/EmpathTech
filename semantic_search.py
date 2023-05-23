@@ -54,7 +54,7 @@ def convert_journal_entries_to_vectors(journal_entries, metadatas):
     return vector_store
 
 def process_query(question, vector_store, student_name):
-    system_template = f"The student's name is {student_name}" + """Use the following pieces of context to answer the user's question.\
+    system_template = f"The student's name is {student_name} All the documents below are {student_name}'s journal entries. any question that asks abut student, or {student_name}, is referring to {student_name}" + """Use the following pieces of context to answer the user's question.\
     No matter what the question is, you should always answer it in the context of the journal entries provided.\
     If possible, point the user to the journal entry where you obtained the information from. \
     Even if the question does not end in a question mark, you should still answer it as if it were a question.\
