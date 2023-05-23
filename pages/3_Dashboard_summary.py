@@ -128,16 +128,18 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                 # Check date
                 if start_date < end_date:
                     if question:
-                        st.progress('Processing your query...')
+                        st.write('Processing your query...')
                         try:
                             result = ss_query(selected_student_name, start_date, end_date, question)
+                            print(result)
                             st.write('Answer:', result['answer'])
                             for i, entry in enumerate(result['source_documents']):
                                 st.write(f'Journal Entry {i+1}')
                                 st.write(f'Date:', result['source_documents'][i].metadata['journal_date'].split(' ')[0])
                                 st.write(f'Journal Prompt:', result['source_documents'][i].metadata['journal_title'])
                                 st.write(f'Journal Entry:', result['source_documents'][i].page_content)
-                        except:
+                        except Exception as e:
+                            print(e)
                             st.write("No records found during the period selected. Please expand the time period of search")
                 else:
                     st.error('Error: End date must fall after start date.')
