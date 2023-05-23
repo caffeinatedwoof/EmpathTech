@@ -20,30 +20,20 @@ st.session_state.update(st.session_state)
 def show_student_filter():
     return [student for student in db.get_all_students(teacher_id)]
 
-
-# Function to highlight using different colours for positive/neutral/negative based on the max value amongst these 3.
-def highlight_sentiments(row):
-    """Highlights sentiment based on defined color.
+def highlight_max(cell):
+    """Function that highlights cells which are positive via css properties
 
     Args:
-        row (pd.series): Panda series of interest
+        cell (pd.dataframe cell): Cell of interest
 
     Returns:
-        str: css string indicating highlight color
+        None.
     """
-    if row.name == 'Positive':
-        highlight = 'background-color: green'
-
-    elif row.name == 'Neutral':
-        highlight = 'background-color: grey'
-    
-    elif row.name == 'Negative':
-        highlight = 'background-color: red'
-    
+    if type(cell) != str and cell > 0 :
+        return 'background-color: red; color:white'
     else:
-        highlight = 'background-color: inherit'
-    
-    return highlight
+        return 'background-color: transparent; color: white'
+    return None
 
 if 'logged_in' in st.session_state and st.session_state.logged_in:
     if 'db' in st.session_state:
@@ -51,8 +41,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     else:
         db = connect_db()
 
-    st.title("Emotion dashboard summary of your students")
-
+    st.title("Emotion dashboard summary of your students based on journal entries - Number of instances")
+ 
     # Initialize variables
     teacher_id = st.session_state.role_id
     teacher_name = st.session_state.user_fullname
@@ -61,45 +51,53 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     students = db.students
     student_list = show_student_filter()
 
-    col1, padding, padding = st.columns(3)
+    col1, padding1, padding2 = st.columns(3)
     
+    # Drop down selector
     with col1:
         student_class = set([student['class'] for student in student_list])
         selected_class = st.selectbox("Class", student_class)
 
+    with padding1:
+        pass
+
+    with padding2:
+        pass    
 
     # Apply filter after extracting all student based on class selection
-    student_names_id_dict = {str(student['_id']): {'Student name': student['name']}\
-                        for student in student_list\
-                        if student['class']==selected_class}
+    student_names_id_dict = {student['name']: {} \
+                             for student in student_list\
+                             if student['class']==selected_class}
     
-    emotion_list = ['Positive', 'Neutral', 'Negative', 'Sentiment Value']
+    emotion_list = ['Positive', 'Neutral', 'Negative', 'Concerning']
 
-    # Arbitrary set positive, neutral, negative emotions count. Removed when we have actual values from sentiment analysis count
-    for key in student_names_id_dict:
-        for emotion in emotion_list:
-            if emotion!='Sentiment Value':
-                student_names_id_dict[key][emotion] = random.randint(1, 10)
-            else:
-                student_names_id_dict[key][emotion] = random.random()
+    # To get all j_summaries via a student_id and subsequently map
+    for student in student_list:
+        if student['class']==selected_class:
+            # Gets cursor object (iterator)
+            journal_summaries = [summary for summary in\
+                                  db.get_all_summaries(student['_id'])]
+            #st.write(journal_summaries)
+            # Start with all 0 for 3 state of emotion and concerning = 0
+            positive, neutral, negative, concerning = 0,0,0,0
 
-    def highlight_cols(x):
-      
-        # copy df to new - original data is not changed
-        df = x.copy()
-        
-        # select all values to green color
-        df.loc[:, :] = 'background-color: transparent'
-        
-        # overwrite values grey color
-        df[['Positive']] = 'background-color: green'
-        df[['Neutral']] = 'background-color: grey'
-        df[['Negative']] = 'background-color: red'
-        # return color df
-        return df 
+
+            # Sum all values of the 3 emotions across journals
+            for j_summary in journal_summaries:
+                positive += int(j_summary['events']['positive']['count'])
+                neutral += int(j_summary['events']['neutral']['count'])
+                negative += int(j_summary['events']['negative']['count'])
+                concerning += int(j_summary['events']['concerning']['count'])
+
+            # Update values to dictionary prior to display in dataframe
+            student_names_id_dict[student['name']]['Positive'] = positive
+            student_names_id_dict[student['name']]['Neutral'] = neutral
+            student_names_id_dict[student['name']]['Negative'] = negative
+            student_names_id_dict[student['name']]['Concerning'] = concerning
+    
     # Construct dataframe for display
     df = pd.DataFrame(student_names_id_dict).T
-    df = df.reset_index().drop('index', axis=1)
+    df = df.reset_index().rename(columns = {'index':'Student Name'})
 
     # Shift index to start from 1
     df.index = df.index + 1
@@ -109,10 +107,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     #                        else (['background-color: grey']*len(df) if (x.name == 'Negative') else 'background-color: red'*len(df), axis = 0))
 
     # Rowwise highlight
-    st.dataframe(df.style.highlight_max(
-        props='background-color: grey; color: Blue;',
-        subset=['Positive','Neutral','Negative'],
-        axis=1)
-        ,use_container_width=True)
+    st.dataframe(df.style.applymap(highlight_max,
+        subset=['Concerning']),
+        use_container_width=True)
 else:
     error_page_redirect()
