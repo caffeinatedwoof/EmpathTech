@@ -19,18 +19,18 @@ st.set_page_config(
 remove_top_space_canvas()
 navbar_edit()
 
-if st.session_state.is_teacher == True:
-    hide_student_pages()
-
-else:
+# Since it is a common page viewed by student and teacher, hide navigation pages accordingly based on role
+if st.session_state.role == 'student':
     hide_teacher_pages()
 
+else:
+    hide_student_pages()
 
+# Set None as current student name by default if for some reason session state did not persist.
 if "current_student_name" not in st.session_state:
     st.session_state["current_student_name"] = None
 
-# st.session_state.update(st.session_state)
-
+# Check if status is logged in
 if 'logged_in' in st.session_state and st.session_state.logged_in:
 
     if 'db' in st.session_state:
@@ -41,7 +41,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 else:
     error_page_redirect()
 
-# db = st.session_state.db
+# st.session_state.update(st.session_state)
 username = st.session_state.username
 
 if "generated" not in st.session_state:
