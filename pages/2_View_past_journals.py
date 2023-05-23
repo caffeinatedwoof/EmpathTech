@@ -22,7 +22,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         db = st.session_state.db
     else:
         db = connect_db()
-
+    post_navbar_edit(st.session_state.user_fullname)
     # Get information from session states that is passed in
     student_id = st.session_state.role_id
     student_name = st.session_state.user_fullname
