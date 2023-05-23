@@ -82,10 +82,30 @@ def process_query(question, vector_store, student_name):
     )
 
     result = chain(question)
+
     return result
 
-def main(student_name, start_date, end_date, question):
-    journal_entries, metadatas = filter_journal_entries(student_name, start_date, end_date, question)
+def ss_query(student_name, start_date, end_date, question):
+    """Function that takes in students credentials of interest and search query and conducts a semantic search using langchain API
+
+    Args:
+        student_name (str): Name of student
+        start_date (str): Start date
+        end_date (str): End date
+        question (str): Question to assist in query
+
+    Returns:
+        dict : Dictionary of response
+    """
+    import streamlit as st
+    st.write(student_name)
+    st.write(start_date)
+    st.write(end_date)
+    st.write(question)
+    journal_entries, metadatas = filter_journal_entries(student_name,
+                                                        start_date,
+                                                        end_date,
+                                                        question)
     vector_store = convert_journal_entries_to_vectors(journal_entries, metadatas)
     return process_query(question, vector_store, student_name)
     
