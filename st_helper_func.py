@@ -81,6 +81,49 @@ def hide_main_page_tabs_of_student():
     return None
 
 
+def post_navbar_edit(name_string=None):
+    """Helper function to add text to the top of sidebar.
+
+    Args:
+        string (str): String to parse.
+    Returns:
+        None
+    Raise:
+        None
+    
+    """
+    if name_string:
+        hello_string = f'Hi {name_string}'
+    
+    else:
+        hello_string = None
+
+    html_string = f"""
+    <style>
+        [data-testid="stSidebar"] {{
+            padding: 0rem 1rem 1rem 1rem;
+            font-size: 2rem;
+            position: sticky;
+            margin: auto;
+        }}
+        [data-testid="stSidebarNav"]::before {{
+            content: "EmpathTech platform \ {hello_string}" ;
+            display: inline;
+        }}
+        .css-lrlib, .css-1oe5cao {{
+            padding-top: 1rem;
+        }}
+        ul {{
+            font-size: 1rem;
+            position: sticky;
+            margin: auto;
+        }}
+    </style>
+    """
+    
+    st.markdown(html_string, unsafe_allow_html=True)
+    return None
+
 def navbar_edit():
     """Helper function to add text to the top of sidebar.
 
@@ -101,7 +144,7 @@ def navbar_edit():
             margin: auto;
         }
         [data-testid="stSidebarNav"]::before {
-            content: "EmpathTech platform";
+            content: "EmpathTech platform" ;
             display: inline;
         }
         .css-lrlib, .css-1oe5cao {
