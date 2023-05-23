@@ -15,23 +15,28 @@ name = "Main"
     path = "pages/2_View_past_journals.py"
     name = "View past journals"
 
+    [student.view_journal]
+    path = "pages/6_View_journal.py"
+    name = "View journal"
+
 [teacher]
     [teacher.dashboard]
     path = "pages/3_Dashboard_summary.py"
     name = "Dashboard Summary"
 
     [teacher.classes]
-    path = "pages/4_Dashboard_summary.py"
+    path = "pages/4_Teaching_classes.py"
     name = "Teaching Classes"
 
     [teacher.view_journal]
     path = "pages/5_View_student_journal.py"
-    path_name = "View student journals"
+    path_name = "View student journal"
 
+    
 [accessed_denied]
-path = "pages/6_Access_Denied.py"
+path = "pages/7_Access_Denied.py"
 name = "Access denied"
 
 [logout]
-path = "pages/7_Logout.py"
+path = "pages/8_Logout.py"
 name = "Logout"

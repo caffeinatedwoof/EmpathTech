@@ -5,7 +5,6 @@ import json
 import streamlit as st
 import toml
 import dbhandler
-from st_aggrid import GridOptionsBuilder, AgGrid
 from streamlit.source_util import _on_pages_changed, get_pages
 from streamlit_extras.switch_page_button import switch_page
 
@@ -23,10 +22,10 @@ def connect_db():
     return db
 
 
-def hide_main_page_tabs():
-    """Helper function to hide main page tabs(login) which is seen on side navigation bar for student/teacher view.
+def hide_main_page_tabs_of_teacher():
+    """Helper function to hide main page tabs(login) which is seen on side navigation bar for student view.
 
-    This is a css workaround to hide them instead of actual removal of info from pages information of the app get_pages function as such removal would cause errors in routing back to main page(login).
+    This is a css workaround to hide them instead of actual removal of info from pages information of the app get_pages function as such removal would cause errors in routing back to main page(login) or other page required.
 
     Args:
         None
@@ -35,9 +34,14 @@ def hide_main_page_tabs():
     Raise:
         None
     """
+    # Hide Main page and View Journal
     html_string = """
         <style>
-            .css-lrlib li:nth-child(1) {
+            .css-lrlib li:nth-child(1), .css-1oe5cao li:nth-child(1) {
+                display: None;
+            }
+
+            .css-lrlib li:nth-child(4) {
                 display: None;
             }
         </style>
@@ -45,6 +49,79 @@ def hide_main_page_tabs():
     
     st.markdown(html_string, unsafe_allow_html=True)
 
+    return None
+
+def hide_main_page_tabs_of_student():
+    """Helper function to hide main page tabs(login) which is seen on side navigation bar for teacher view.
+
+    This is a css workaround to hide them instead of actual removal of info from pages information of the app get_pages function as such removal would cause errors in routing back to main page(login) or other page required.
+
+    Args:
+        None
+    Returns:
+        None
+    Raise:
+        None
+    """
+    # Hide Main page and View Journal
+    html_string = """
+        <style>
+            .css-lrlib li:nth-child(1), .css-1oe5cao li:nth-child(1) {
+                display: None;
+            }
+
+            .css-lrlib li:nth-child(5) {
+                display: None;
+            }
+        </style>
+    """
+    
+    st.markdown(html_string, unsafe_allow_html=True)
+
+    return None
+
+
+def post_navbar_edit(name_string=None):
+    """Helper function to add text to the top of sidebar.
+
+    Args:
+        string (str): String to parse.
+    Returns:
+        None
+    Raise:
+        None
+    
+    """
+    if name_string:
+        hello_string = f'Hi {name_string}'
+    
+    else:
+        hello_string = None
+
+    html_string = f"""
+    <style>
+        [data-testid="stSidebar"] {{
+            padding: 0rem 1rem 1rem 1rem;
+            font-size: 2rem;
+            position: sticky;
+            margin: auto;
+        }}
+        [data-testid="stSidebarNav"]::before {{
+            content: "EmpathTech platform \ {hello_string}" ;
+            display: inline;
+        }}
+        .css-lrlib, .css-1oe5cao {{
+            padding-top: 1rem;
+        }}
+        ul {{
+            font-size: 1rem;
+            position: sticky;
+            margin: auto;
+        }}
+    </style>
+    """
+    
+    st.markdown(html_string, unsafe_allow_html=True)
     return None
 
 def navbar_edit():
@@ -67,10 +144,10 @@ def navbar_edit():
             margin: auto;
         }
         [data-testid="stSidebarNav"]::before {
-            content: "EmpathTech platform";
+            content: "EmpathTech platform" ;
             display: inline;
         }
-        .css-lrlib {
+        .css-lrlib, .css-1oe5cao {
             padding-top: 1rem;
         }
         ul {
@@ -148,47 +225,6 @@ def disable_sidebar():
     """
     st.markdown(no_sidebar_style, unsafe_allow_html=True)
     return None
-
-def gridbuilder_config_setup(df):
-    """Helper function that specifies and construct a streamlit AgGrid for a dataframe with fixed settings for the purpose of displaying dataframe content and allowing interaction.
-
-    Args:
-        df (dataframe): 
-            Dataframe of interest which gridbuilder is to be used on.
-    Returns:
-        streamlit_gridresponse object for display on streamlit UI 
-
-    Raise:
-        None
-    """
-    gb = GridOptionsBuilder.from_dataframe(df)
-    gb.configure_pagination(paginationAutoPageSize=False, paginationPageSize=5) #Add pagination
-    gb.configure_default_column(selectable=False)
-    gb.configure_side_bar() #Add a sidebar
-    gb.configure_selection('multiple',
-                            use_checkbox=True,
-                            groupSelectsChildren="Group checkbox select children") #Enable multi-row selection
-    gridOptions = gb.build()
-
-    grid_response = AgGrid(
-        df,
-        gridOptions=gridOptions,
-        data_return_mode='FILTERED', 
-        update_mode='MODEL_CHANGED', 
-        fit_columns_on_grid_load=True,
-        theme='streamlit', #Add theme color to the table
-        enable_enterprise_modules=True,
-        domLayout='autoHeight',
-        #height=350, 
-        width='100%',
-        reload_data=False, # Dont reload on each interaction
-    )
-
-    #data = grid_response['data']
-    #selected = grid_response['selected_rows'] 
-    #df = pd.DataFrame(selected) #Pass the selected rows to a new dataframe df
-
-    return grid_response
 
 def add_space_param():
     """Function that add 2 line spaces.
@@ -304,14 +340,16 @@ def hide_student_pages():
     # Exclude main page as we need to do logout
     student_pages_name_list = ["Access_denied",
                                "View_past_journals",
-                               "Create_journal"]
+                               "Create_journal",
+                               "Sentiment_analysis",
+                               "Chatbot"]
 
     # Hide listed pages
     for pages in student_pages_name_list:
         current_pages = hide_page(pages, current_pages)
     
     # Workaround to hide main page tab without removing from current page
-    hide_main_page_tabs()
+    hide_main_page_tabs_of_student()
     _on_pages_changed.send()
 
 def hide_teacher_pages():
@@ -330,13 +368,15 @@ def hide_teacher_pages():
                                "Dashboard_summary",
                                "Teaching_classes",
                                "View_student_journal",
+                               "Chatbot",
+                               "Sentiment_analysis"
                                ]
 
     for pages in teacher_pages_name_list:
         current_pages = hide_page(pages, current_pages)
 
     # Workaround to hide main page tab without removing from current page
-    hide_main_page_tabs()
+    hide_main_page_tabs_of_teacher()
     _on_pages_changed.send()
 
     return None

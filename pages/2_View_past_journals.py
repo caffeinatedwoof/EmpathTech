@@ -22,33 +22,40 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     else:
         db = connect_db()
 
-# Initialize variables
-student_id = st.session_state.role_id
-student_name = st.session_state.user_fullname
+    # Get information from session states that is passed in
+    student_id = st.session_state.role_id
+    student_name = st.session_state.user_fullname
 
-st.title(f"Journal Entries for {student_name}")
-entries = db.get_journal_entries(student_id)
+    st.title(f"Past Journal Entries for {student_name}")
+    entries = db.get_journal_entries(student_id)
 
-# Iterate cursor
-for entry in entries:
-    subcol1, subcol2, subcol3 = st.columns([0.5,2,0.8])
-    with subcol2:
-        content = entry['content']
-        content = content[:100] + "..." if len(content) > 100 else content
-        st.markdown(f"{content}")
+    # Iterate cursor
+    for entry in entries:
+        subcol1, subcol2, subcol3 = st.columns([0.5,2,0.8])
+        with subcol2:
+            content = entry['content']
 
-    with subcol1:
+            # Structure entry to show only start and end portions
+            content = content[:100] + "..." if len(content) > 100 else content
+            st.markdown(f"{content}")
 
-        # format entry datetime to dd/mm/yyyy
-        entry_date = datetime.strftime(entry['date'], "%d/%m/%Y")
-        st.markdown(f"{entry_date}")
+        with subcol1:
 
-    with subcol3:
-        if st.button("View full entry", key=f"{entry['_id']}_btn"):
-            chatlog = db.chatlogs.find_one({"journal_id": entry['_id']})
-            st.session_state.chatlog_id = chatlog['_id']
-            switch_page("View Journal")
-        pass
+            # format entry datetime to dd/mm/yyyy
+            entry_date = datetime.strftime(entry['date'], "%d/%m/%Y")
+            st.markdown(f"{entry_date}")
 
+        with subcol3:
+            # Upon clicking full entry
+            if st.button("View full entry", key=f"{entry['_id']}_btn"):
+                chatlog = db.chatlogs.find_one({"journal_id": entry['_id']})
+                st.session_state.chatlog_id = chatlog['_id']
+
+                # This is used for view journal (just like how teacher selects the actual name of the student from their page)
+                st.session_state.current_student_name = student_name
+                switch_page("View Journal")
+            else:
+                pass
+        st.markdown("---")
 else:
     error_page_redirect()

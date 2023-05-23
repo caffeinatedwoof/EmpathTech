@@ -8,6 +8,10 @@ This branch is created for the purpose of UI/UX development of envisiioned Empat
 # Other notes:
 - Delete pages.json before starting streamlit. This is to ensure a fresh page reference is used by streamlit, as well as script_path will be updated to your current directory of this cloned repo. For developers, this is particularly important if new pages(.py) are added to pages subdirectory
 - A secrets.toml is required in .streamlit folder indicating login credentials to backend MongoDB in order for the frontend to work properly.
+    - key values required:
+        - MONGODB_PW
+        - CONNECT_STR
+        - OPENAI_API_KEY 
 - For developers: Please note that streamlit sessions do not persist and gets reset so long an widget is added via function call(e.g logout)
 
 # Fix for errors:
