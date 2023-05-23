@@ -31,7 +31,7 @@ def SetColor(df):
     color_list = []
     for i in values:
         if(i == 1):
-            color_list.append("blue")
+            color_list.append("orange")
         elif(i == 0):
             color_list.append("red")
         elif(i == 2):
