@@ -7,10 +7,6 @@ name = "Main"
     path = "pages/1_Create_journal.py"
     name = "Create journal"
 
-    [student.view_journal]
-    path = "pages/View_journal.py"
-    name = "View Journal"
-
     [student.view_past_journal]
     path = "pages/2_View_past_journals.py"
     name = "View past journals"
