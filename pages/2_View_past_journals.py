@@ -22,7 +22,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     else:
         db = connect_db()
 
-    # Initialize variables based on session state info
+    # Get information from session states that is passed in
     student_id = st.session_state.role_id
     student_name = st.session_state.user_fullname
 
@@ -46,11 +46,16 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             st.markdown(f"{entry_date}")
 
         with subcol3:
+            # Upon clicking full entry
             if st.button("View full entry", key=f"{entry['_id']}_btn"):
                 chatlog = db.chatlogs.find_one({"journal_id": entry['_id']})
                 st.session_state.chatlog_id = chatlog['_id']
-                switch_page("View Journal")
-            pass
 
+                # This is used for view journal (just like how teacher selects the actual name of the student from their page)
+                st.session_state.current_student_name = student_name
+                switch_page("View Journal")
+            else:
+                pass
+        st.markdown("---")
 else:
     error_page_redirect()
