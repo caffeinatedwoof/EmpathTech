@@ -12,10 +12,8 @@ st.set_page_config(
 )
 
 remove_top_space_canvas()
-#navbar_edit
-post_navbar_edit(st.session_state.user_fullname)
 hide_student_pages()
-
+navbar_edit()
 # st.session_state.update(st.session_state)
 
 def SetColor(df):
@@ -49,7 +47,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         db = st.session_state.db
     else:
         db = connect_db()
-
+    post_navbar_edit(st.session_state.user_fullname)
     st.title("Student Journal View")
 
     # Initialize variables

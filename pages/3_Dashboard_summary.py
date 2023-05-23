@@ -9,9 +9,9 @@ st.set_page_config(
     initial_sidebar_state = 'expanded'
 )
 remove_top_space_canvas()
-post_navbar_edit(st.session_state.user_fullname)
+navbar_edit()
 hide_student_pages()
-    
+
 @st.cache_data
 def show_student_filter():
     return [student for student in db.get_all_students(teacher_id)]
@@ -23,20 +23,20 @@ def highlight_max(cell):
         cell (pd.dataframe cell): Cell of interest
 
     Returns:
-        None.
+        string: css properties
     """
     if type(cell) != str and cell > 0 :
         return 'background-color: red; color:white'
     else:
         return 'background-color: transparent; color: white'
-    return None
+
 
 if 'logged_in' in st.session_state and st.session_state.logged_in:
     if 'db' in st.session_state:
         db = st.session_state.db
     else:
         db = connect_db()
-
+    post_navbar_edit(st.session_state.user_fullname)
     st.title("Emotion dashboard summary of your students based on journal entries - Number of instances")
  
     # Initialize variables

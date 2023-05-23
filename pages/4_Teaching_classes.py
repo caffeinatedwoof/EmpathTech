@@ -12,7 +12,7 @@ st.set_page_config(
 st.session_state.update(st.session_state)
 
 remove_top_space_canvas()
-#navbar_edit
+navbar_edit()
 post_navbar_edit(st.session_state.user_fullname)
 hide_student_pages()
 
@@ -28,7 +28,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     teacher_id = st.session_state.role_id
     teacher_name = st.session_state.user_fullname
     teaching_class = st.session_state.teaching_class
-
+    post_navbar_edit(st.session_state.user_fullname)
+    
     st.title(f"Hi {teacher_name}, Teaching classes for this year")
 
     if 'db' in st.session_state:

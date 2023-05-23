@@ -15,24 +15,13 @@ st.set_page_config(
     initial_sidebar_state = 'expanded'
 )
 remove_top_space_canvas()
-#navbar_edit
-post_navbar_edit(st.session_state.user_fullname)
+navbar_edit()
 hide_teacher_pages()
 st.session_state.update(st.session_state)
 
-if 'logged_in' in st.session_state and st.session_state.logged_in:
-
-    if 'db' in st.session_state:
-        db = st.session_state.db
-    else:
-        db = connect_db()
-
-else:
-    error_page_redirect()
-
-# db = st.session_state.db
-username = st.session_state.username
-
+###################
+# Helper functions
+##################
 def map_labels(label):
     label = label.strip().lower()
     if label == "negative":
@@ -65,12 +54,6 @@ def toggle_elements_disabled(state=False):
         st.session_state.content_disabled = False
         st.session_state.feedback_disabled = False
         st.session_state.submit_disabled = False
-
-if "generated" not in st.session_state:
-    st.session_state["generated"] = []
-
-if "past" not in st.session_state:
-    st.session_state["past"] = []
 
 def clear_messages():
     st.session_state.generated = []
@@ -107,11 +90,12 @@ def save_journal(title, content, date):
         journal_id = db.insert_journal_entry(student_id, title, content, date)
         return journal_id
 
-current_student = get_student(username)
-student_name = current_student['name']
-student_id = current_student['_id']
-print(student_id)
-st.markdown(f"Hi, {student_name}!")
+def save_chatlog(chatlog):
+    if st.session_state.chatlog_id == None:
+        chatlog_id = db.insert_chatlog(chatlog)
+        st.session_state.chatlog_id = chatlog_id
+    else:
+        db.update_chatlog(st.session_state.chatlog_id, chatlog)
 
 def switch_chatlog(chatlog_id):
     st.session_state.chatlog_id = chatlog_id
@@ -148,82 +132,96 @@ def switch_chatlog(chatlog_id):
 
     return chatlog
 
-if 'chatlog_id' not in st.session_state or st.session_state.chatlog_id is None:
-    current_chatlog = init_new_chatlog()
 
-else:
-    current_chatlog = switch_chatlog(st.session_state.chatlog_id)
+if 'logged_in' in st.session_state and st.session_state.logged_in:
 
-
-def save_chatlog(chatlog):
-    if st.session_state.chatlog_id == None:
-        chatlog_id = db.insert_chatlog(chatlog)
-        st.session_state.chatlog_id = chatlog_id
+    if 'db' in st.session_state:
+        db = st.session_state.db
     else:
-        db.update_chatlog(st.session_state.chatlog_id, chatlog)
+        db = connect_db()
+    post_navbar_edit(st.session_state.user_fullname)
 
-init_new_chatlog()
-st.title(st.session_state.create_journal_label)
-entry_title = st.text_input("Give your entry a title", value=st.session_state.title_value, key="journal_title", disabled=st.session_state.title_disabled)
-st.markdown(f"Date: {st.session_state.date_value.strftime('%d %b %Y')}")
+    
+    # db = st.session_state.db
+    username = st.session_state.username
 
-text_input = st.text_area("Type your journal entry here!", value=st.session_state.entry_value, disabled=st.session_state.content_disabled)
+    if "generated" not in st.session_state:
+        st.session_state["generated"] = []
 
-# Get feedback
-col1, col2, col3 = st.columns([1, 1, 3])
+    if "past" not in st.session_state:
+        st.session_state["past"] = []
 
-with col1:
-    if st.button("Get Feedback", disabled=st.session_state.feedback_disabled):
-        with st.spinner('Checking entry...'):
-            check = is_journal_entry(text_input)
 
-        if check['journal_entry']:
-            with st.spinner('Generating feedback...'):
-                output = provide_journal_guidance(text_input)
-        else:
-            # output = check['explanation']
-            output = "Please enter a valid journal entry."
+    current_student = get_student(username)
+    student_name = current_student['name']
+    student_id = current_student['_id']
+    print(student_id)
+    st.markdown(f"Hi, {student_name}!")
 
-        print(output)
-        print("type of output", type(output))
 
-        st.session_state.past.append(text_input)
-        st.session_state.generated.append(output)
-        current_chatlog['messages'].append({"student_msg": text_input, "llm_msg": output})
-        current_chatlog['endtime'] = datetime.now()
-        save_chatlog(current_chatlog)
+    if 'chatlog_id' not in st.session_state or st.session_state.chatlog_id is None:
+        current_chatlog = init_new_chatlog()
 
-with col2:
-    if st.button("Submit Journal", disabled=st.session_state.submit_disabled):
-        # Check if journal entry is valid
-        with st.spinner('Checking entry before submission...'):
-            check = is_journal_entry(text_input)
+    else:
+        current_chatlog = switch_chatlog(st.session_state.chatlog_id)
 
-            # Save journal to db
+    init_new_chatlog()
+    st.title(st.session_state.create_journal_label)
+    post_navbar_edit(st.session_state.user_fullname)
+    entry_title = st.text_input("Give your entry a title", value=st.session_state.title_value, key="journal_title", disabled=st.session_state.title_disabled)
+    st.markdown(f"Date: {st.session_state.date_value.strftime('%d %b %Y')}")
+
+    text_input = st.text_area("Type your journal entry here!", value=st.session_state.entry_value, disabled=st.session_state.content_disabled)
+
+    # Get feedback
+    col1, col2, col3 = st.columns([1, 1, 3])
+
+    with col1:
+        if st.button("Get Feedback", disabled=st.session_state.feedback_disabled):
+            with st.spinner('Checking entry...'):
+                check = is_journal_entry(text_input)
+
             if check['journal_entry']:
-                entry_date = current_chatlog['start_time']
-                journal_id = save_journal(entry_title, text_input, entry_date)
-                current_chatlog['journal_id'] = journal_id
-                save_chatlog(current_chatlog)
-                print(journal_id, "has been saved to db")
-                st.success('Your journal has been submitted!', icon="✅")
-
-                # Submit journal for sentiment analysis
-                sent_analysis_results = perform_sentiment_analysis(text_input)
-                cleaned_output = clean_llm_output(sent_analysis_results)
-                db.insert_summary(journal_id, cleaned_output)
-                                  
+                with st.spinner('Generating feedback...'):
+                    output = provide_journal_guidance(text_input)
             else:
-                st.error("Please enter a valid journal entry.")
+                # output = check['explanation']
+                output = "Please enter a valid journal entry."
 
-        
+            st.session_state.past.append(text_input)
+            st.session_state.generated.append(output)
+            current_chatlog['messages'].append({"student_msg": text_input, "llm_msg": output})
+            current_chatlog['endtime'] = datetime.now()
+            save_chatlog(current_chatlog)
 
+    with col2:
+        if st.button("Submit Journal", disabled=st.session_state.submit_disabled):
+            # Check if journal entry is valid
+            with st.spinner('Checking entry before submission...'):
+                check = is_journal_entry(text_input)
 
-        # Save sentiment analysis to db
-        
-        pass
-st.markdown("---")
+                # Save journal to db
+                if check['journal_entry']:
+                    entry_date = current_chatlog['start_time']
+                    journal_id = save_journal(entry_title, text_input, entry_date)
+                    current_chatlog['journal_id'] = journal_id
+                    save_chatlog(current_chatlog)
+                    print(journal_id, "has been saved to db")
+                    st.success('Your journal has been submitted!', icon="✅")
 
-for i in range(len(st.session_state["generated"])-1, -1, -1):
-    message(st.session_state["generated"][i], key=str(i))
-    message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
+                    # Submit journal for sentiment analysis
+                    sent_analysis_results = perform_sentiment_analysis(text_input)
+                    cleaned_output = clean_llm_output(sent_analysis_results)
+                    db.insert_summary(journal_id, cleaned_output)
+                                    
+                else:
+                    st.error("Please enter a valid journal entry.")
+            # Save sentiment analysis to db
+            pass
+    st.markdown("---")
+
+    for i in range(len(st.session_state["generated"])-1, -1, -1):
+        message(st.session_state["generated"][i], key=str(i))
+        message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
+else:
+    error_page_redirect()
