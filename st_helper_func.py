@@ -256,10 +256,10 @@ def get_all_pages():
     # To remove any old pages.json, especially for deveklopment where changes to naming or new/removal of existing file.
     #pages_path.unlink(missing_ok=False)
     if pages_path.exists():
-        saved_default_pages = json.loads(pages_path.read_text(encoding='utf-8'), encoding='utf-8')
+        saved_default_pages = json.loads(pages_path.read_text())
     else:
         saved_default_pages = default_pages.copy()
-        pages_path.write_text(json.dumps(default_pages, indent=4), encoding='utf-8')
+        pages_path.write_text(json.dumps(default_pages, indent=4))
 
     return saved_default_pages
 
