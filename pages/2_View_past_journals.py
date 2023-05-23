@@ -26,7 +26,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     student_id = st.session_state.role_id
     student_name = st.session_state.user_fullname
 
-    st.title(f"Journal Entries for {student_name}")
+    st.title(f"Past Journal Entries for {student_name}")
     entries = db.get_journal_entries(student_id)
 
     # Iterate cursor
