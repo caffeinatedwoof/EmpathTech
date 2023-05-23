@@ -18,19 +18,20 @@ from src.st_utils import switch_chatlog, show_chatlog_filter, chatlog_list_forma
 def render_comments():
     if len(comments) == 0:
             st.markdown("No comments yet!")
-    print(comments)
-    for comment in comments:
-        print(type(comment))
-        if (comment is None or type(comment) == str):
-            st.markdown("No comments yet!")
-        else:
-            comment_date = datetime.strftime(comment['date'], "%d/%m/%Y %H:%M")
-            st.markdown(comment_date)
-            st.markdown(comment["comment"])
-            teacher = db.get_teacher(comment["teacher_id"])
-            st.markdown(f"- {teacher['name']}")
-
-
+    else:
+        for comment in comments:
+            if (comment is None or type(comment) == str):
+                st.markdown("No comments yet!")
+            else:
+                comment_col1, comment_col2 = st.columns(2)
+                with comment_col1:
+                    st.markdown(comment["comment"])
+                with comment_col2:
+                    comment_date = datetime.strftime(comment['date'], "%d/%m/%Y %H:%M")
+                    teacher = db.get_teacher(comment["teacher_id"])
+                    comment_string = f"By: {teacher['name']} on {comment_date}"
+                    st.markdown(comment_string)
+                st.markdown('---')
 # Layout config 
 st.set_page_config(
     layout = "wide",
@@ -187,7 +188,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     with padding2:
         pass
     with container2:
-        st.header("Comments")
+        st.header("Past comments on your current journal entry")
         comment_placeholder = st.empty()
         comments = get_journal_comments(current_chatlog['journal_id'])
         with comment_placeholder.container():
@@ -205,7 +206,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             #         st.markdown(comment["comment"])
             #         teacher = db.get_teacher(comment["teacher_id"])
             #         st.markdown(f"- {teacher['name']}")
-
         if st.session_state.is_teacher:
             comment_input = st.text_area("Add a comment", key="comment_input")
             submit_comment = st.button("Submit comment")
