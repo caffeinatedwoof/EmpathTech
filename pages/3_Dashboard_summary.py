@@ -45,7 +45,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     else:
         db = connect_db()
     post_navbar_edit(st.session_state.user_fullname)
-    st.title("Emotion dashboard summary of your students based on journal entries - Number of instances")
+    st.title("Dashboard for Sentiment Analysis")
+    st.markdown("Numbers below indicate the number of events in each category")
  
     # Initialize variables
     teacher_id = st.session_state.role_id
@@ -106,8 +107,10 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         
     # Semantic search via expander
     with col2:
-        with st.expander("Click here to conduct a semantic search"):
-            st.markdown("Please fill in the details")
+        with st.expander("Click here for Smart Search!"):
+            st.markdown("""Select a student, date range, and ask a question about your student's journal entries. 
+                        E.g. *how is my student doing recently?*
+                        """)
             s_col1, s_col2, s_col3 = st.columns(3)
             with s_col1:
                 selected_student_name = st.selectbox("Student name",
