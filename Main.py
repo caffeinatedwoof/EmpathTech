@@ -26,7 +26,7 @@ STUDENT_LANDING_PAGE = data['student']['view_past_journal']['name']
 
 #st.session_state.update(st.session_state)
 
-# Layout config 
+# Layout config
 st.set_page_config(
     layout = "centered",
     initial_sidebar_state = 'collapsed'
@@ -34,6 +34,8 @@ st.set_page_config(
 remove_top_space_canvas()
 navbar_edit()
 
+# Clear cache
+st.runtime.legacy_caching.clear_cache()
 
 def st_state_update(state, value):
     """Function that updates streamlit session states with given state and values info

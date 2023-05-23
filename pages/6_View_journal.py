@@ -1,5 +1,5 @@
 import streamlit as st
-from st_helper_func import remove_top_space_canvas, navbar_edit, hide_teacher_pages, error_page_redirect, connect_db, hide_student_pages
+from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_teacher_pages, error_page_redirect, connect_db, hide_student_pages
 from src.journal_utils import is_journal_entry
 from src.journal_guidance import provide_journal_guidance
 from src.sentiment_analysis import perform_sentiment_analysis
@@ -14,10 +14,11 @@ from src.st_utils import switch_chatlog, show_chatlog_filter, chatlog_list_forma
 # Layout config 
 st.set_page_config(
     layout = "wide",
-    initial_sidebar_state = 'expanded'
+    initial_sidebar_state = 'collapsed'
 )
 remove_top_space_canvas()
-navbar_edit()
+#navbar_edit
+post_navbar_edit(st.session_state.user_fullname)
 
 # Since it is a common page viewed by student and teacher, hide navigation pages accordingly based on role
 if st.session_state.role == 'student':

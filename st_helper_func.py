@@ -93,7 +93,7 @@ def post_navbar_edit(name_string=None):
     
     """
     if name_string:
-        hello_string = f'Hi {name_string}'
+        hello_string = f'{name_string}'
     
     else:
         hello_string = None
@@ -107,7 +107,9 @@ def post_navbar_edit(name_string=None):
             margin: auto;
         }}
         [data-testid="stSidebarNav"]::before {{
-            content: "EmpathTech platform \ {hello_string}" ;
+            content: "Welcome to EmpathTech platform, \A {hello_string}" ;
+            color: #87CEFA;
+            white-space: pre-wrap;
             display: inline;
         }}
         .css-lrlib, .css-1oe5cao {{

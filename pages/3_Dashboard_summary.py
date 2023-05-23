@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages,  error_page_redirect, connect_db
+from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_student_pages,  error_page_redirect, connect_db
 #from streamlit_extras.switch_page_button import switch_page
 
 # Layout config 
@@ -9,9 +9,10 @@ st.set_page_config(
     initial_sidebar_state = 'expanded'
 )
 remove_top_space_canvas()
-navbar_edit()
+#navbar_edit
+post_navbar_edit(st.session.user_full_name)
 hide_student_pages()
-st.session_state.update(st.session_state)
+post_navbar_edit(st.session_state.user_fullname)
 
     
 @st.cache_data
