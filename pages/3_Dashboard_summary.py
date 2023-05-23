@@ -128,7 +128,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                 # Check date
                 if start_date < end_date:
                     if question:
-                        st.progress('Processing your query...')
+                        st.write('Processing your query...')
                         try:
                             result = ss_query(selected_student_name, start_date, end_date, question)
                             st.write('Answer:', result['answer'])
