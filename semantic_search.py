@@ -104,8 +104,7 @@ def ss_query(student_name, start_date, end_date, question):
     st.write(question)
     journal_entries, metadatas = filter_journal_entries(student_name,
                                                         start_date,
-                                                        end_date,
-                                                        question)
+                                                        end_date)
     vector_store = convert_journal_entries_to_vectors(journal_entries, metadatas)
     return process_query(question, vector_store, student_name)
     
