@@ -23,8 +23,37 @@ def connect_db():
     return db
 
 
-def hide_main_page_tabs():
-    """Helper function to hide main page tabs(login) which is seen on side navigation bar for student/teacher view.
+def hide_main_page_tabs_of_teacher():
+    """Helper function to hide main page tabs(login) which is seen on side navigation bar for student view.
+
+    This is a css workaround to hide them instead of actual removal of info from pages information of the app get_pages function as such removal would cause errors in routing back to main page(login) or other page required.
+
+    Args:
+        None
+    Returns:
+        None
+    Raise:
+        None
+    """
+    # Hide Main page and View Journal
+    html_string = """
+        <style>
+            .css-lrlib li:nth-child(1), .css-1oe5cao li:nth-child(1) {
+                display: None;
+            }
+
+            .css-lrlib li:nth-child(4) {
+                display: None;
+            }
+        </style>
+    """
+    
+    st.markdown(html_string, unsafe_allow_html=True)
+
+    return None
+
+def hide_main_page_tabs_of_student():
+    """Helper function to hide main page tabs(login) which is seen on side navigation bar for teacher view.
 
     This is a css workaround to hide them instead of actual removal of info from pages information of the app get_pages function as such removal would cause errors in routing back to main page(login) or other page required.
 
@@ -51,6 +80,7 @@ def hide_main_page_tabs():
     st.markdown(html_string, unsafe_allow_html=True)
 
     return None
+
 
 def navbar_edit():
     """Helper function to add text to the top of sidebar.
@@ -277,7 +307,7 @@ def hide_student_pages():
         current_pages = hide_page(pages, current_pages)
     
     # Workaround to hide main page tab without removing from current page
-    hide_main_page_tabs()
+    hide_main_page_tabs_of_student()
     _on_pages_changed.send()
 
 def hide_teacher_pages():
@@ -304,7 +334,7 @@ def hide_teacher_pages():
         current_pages = hide_page(pages, current_pages)
 
     # Workaround to hide main page tab without removing from current page
-    hide_main_page_tabs()
+    hide_main_page_tabs_of_teacher()
     _on_pages_changed.send()
 
     return None
