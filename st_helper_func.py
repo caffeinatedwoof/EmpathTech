@@ -45,6 +45,7 @@ def hide_main_page_tabs_of_teacher():
             .css-lrlib li:nth-child(4) {
                 display: None;
             }
+
         </style>
     """
     
@@ -73,6 +74,10 @@ def hide_main_page_tabs_of_student():
 
             .css-lrlib li:nth-child(5) {
                 display: None;
+            }
+
+            a[href^="/Main"] {
+              display: None;
             }
         </style>
     """

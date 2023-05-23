@@ -1,21 +1,20 @@
 # Custom class import
 import os
-from streamlit_extras.switch_page_button import switch_page
-from st_helper_func import remove_top_space_canvas, navbar_edit, reset_session_state, update_current_pages, clear_all_but_first_page, connect_db
-from streamlit_extras.app_logo import add_logo
-from PIL import Image
-#from streamlit.source_util import _on_pages_changed, get_pages
-# import json
 import time
 import streamlit as st
 import toml
 
+from PIL import Image
+from streamlit_extras.switch_page_button import switch_page
+from st_helper_func import remove_top_space_canvas, navbar_edit, reset_session_state, update_current_pages, clear_all_but_first_page, connect_db
 
 # GLOBAL VARIABLE ON PAGES
 #LOGIN_PAGE = "Login.py"
 #TEACHER_LANDING_PAGE = "Teaching_classes"
 #STUDENT_LANDING_PAGE = "View_journal"
 #ERROR_PAGE = "Access_denied"
+
+
 # Load landing page info
 data = toml.load(os.path.join('.streamlit','pages.toml'))
 
@@ -54,7 +53,6 @@ def st_state_update(state, value):
 
 def main():
     # Main function
-
     # Reset all session state
     reset_session_state()
 
@@ -63,7 +61,7 @@ def main():
 
     # Init connect to database, which will set session state
     db = connect_db()
-    
+
     st.session_state.username = ''
     # Authenticate with database information, provides additional detail on the role of the login
     image = Image.open("./src/empathjot.jpg")

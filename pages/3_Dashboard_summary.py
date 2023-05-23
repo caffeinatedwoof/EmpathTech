@@ -13,6 +13,12 @@ remove_top_space_canvas()
 navbar_edit()
 hide_student_pages()
 
+def ss_query(student_name, start_date, end_date, question):
+    journal_entries, metadatas = ss.filter_journal_entries(student_name, start_date, end_date)
+    vector_store = ss.convert_journal_entries_to_vectors(journal_entries, metadatas)
+    return ss.process_query(question, vector_store, student_name)
+
+
 @st.cache_data
 def show_student_filter():
     return [student for student in db.get_all_students(teacher_id)]
@@ -46,7 +52,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     teacher_name = st.session_state.user_fullname
     teaching_class = st.session_state.teaching_class
 
-    students = db.students
     student_list = show_student_filter()
 
     col1, col2 = st.columns(2)
@@ -93,10 +98,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
         # Shift index to start from 1
         df.index = df.index + 1
-        #hide_st_table_row_index()
-        #df.style.apply(lambda x: ['background-color: lightgreen']*len(df)\
-        #                    if (x.name == 'Positive') \
-        #                        else (['background-color: grey']*len(df) if (x.name == 'Negative') else 'background-color: red'*len(df), axis = 0))
 
         # Rowwise highlight
         st.dataframe(df.style.applymap(highlight_max,
@@ -109,15 +110,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             st.markdown("Please fill in the details")
             s_col1, s_col2, s_col3 = st.columns(3)
             with s_col1:
-                # Apply filter after extracting all student based on class selection
-                student_names_id_dict = {student['_id']: student['name']\
-                                    for student in student_list\
-                                    if student['class']==selected_class}
-                
-                # Create a selectbox using dict values containing student full name
-                selected_student_name = st.selectbox("Student name",\
-                                                    student_names_id_dict.values())
-                st.session_state.current_student_name = selected_student_name   
+                selected_student_name = st.selectbox("Student name",
+                                                      student_names_id_dict.keys())
 
             with s_col2:
                 # Create date input for start and end date
@@ -131,11 +125,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             # If the query is not empty, process it
             if st.button('Submit'):
                 if question:
-                    st.spinner('Processing your query...')
-                    result = ss.ss_query(selected_student_name, 
-                                      start_date,
-                                      end_date,
-                                      question)
+                    st.write('Processing your query...')
+                    result = ss_query(selected_student_name, start_date, end_date, question)
                     st.write('Answer:', result['answer'])
                     for i, entry in enumerate(result['source_documents']):
                         st.write('Journal Entry {i+1}')

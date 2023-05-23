@@ -10,8 +10,7 @@ st.set_page_config(
 )
 
 remove_top_space_canvas()
-#navbar_edit
-post_navbar_edit(st.session_state.user_fullname)
+navbar_edit()
 hide_teacher_pages()
 
 # st.session_state.update(st.session_state)
