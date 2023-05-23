@@ -180,6 +180,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         if st.button("Get Feedback", disabled=st.session_state.feedback_disabled):
             with st.spinner('Checking entry...'):
                 check = is_journal_entry(text_input)
+                print(check)
 
             if check['journal_entry']:
                 with st.spinner('Generating feedback...'):
