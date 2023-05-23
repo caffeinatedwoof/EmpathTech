@@ -7,6 +7,7 @@ import toml
 import dbhandler
 from streamlit.source_util import _on_pages_changed, get_pages
 from streamlit_extras.switch_page_button import switch_page
+from streamlit_extras.app_logo import add_logo
 
 #CONFIG
 data = toml.load(os.path.join('.streamlit','pages.toml'))
@@ -44,6 +45,7 @@ def hide_main_page_tabs_of_teacher():
             .css-lrlib li:nth-child(4) {
                 display: None;
             }
+
         </style>
     """
     
@@ -72,6 +74,10 @@ def hide_main_page_tabs_of_student():
 
             .css-lrlib li:nth-child(5) {
                 display: None;
+            }
+
+            a[href^="/Main"] {
+              display: None;
             }
         </style>
     """
@@ -107,7 +113,7 @@ def post_navbar_edit(name_string=None):
             margin: auto;
         }}
         [data-testid="stSidebarNav"]::before {{
-            content: "Welcome to EmpathTech platform, \A {hello_string}" ;
+            content: "Welcome to EmpathJot platform, \A {hello_string}" ;
             color: #87CEFA;
             white-space: pre-wrap;
             display: inline;
@@ -146,7 +152,7 @@ def navbar_edit():
             margin: auto;
         }
         [data-testid="stSidebarNav"]::before {
-            content: "EmpathTech platform" ;
+            content: "Welcome to EmpathJot platform";
             display: inline;
         }
         .css-lrlib, .css-1oe5cao {

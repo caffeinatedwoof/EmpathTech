@@ -1,21 +1,20 @@
 # Custom class import
 import os
-from pathlib import Path
-from streamlit_extras.switch_page_button import switch_page
-from st_helper_func import remove_top_space_canvas, navbar_edit, reset_session_state, update_current_pages, clear_all_but_first_page, connect_db
-
-#from streamlit.source_util import _on_pages_changed, get_pages
-# import json
 import time
 import streamlit as st
 import toml
 
+from PIL import Image
+from streamlit_extras.switch_page_button import switch_page
+from st_helper_func import remove_top_space_canvas, navbar_edit, reset_session_state, update_current_pages, clear_all_but_first_page, connect_db
 
 # GLOBAL VARIABLE ON PAGES
 #LOGIN_PAGE = "Login.py"
 #TEACHER_LANDING_PAGE = "Teaching_classes"
 #STUDENT_LANDING_PAGE = "View_journal"
 #ERROR_PAGE = "Access_denied"
+
+
 # Load landing page info
 data = toml.load(os.path.join('.streamlit','pages.toml'))
 
@@ -54,7 +53,6 @@ def st_state_update(state, value):
 
 def main():
     # Main function
-
     # Reset all session state
     reset_session_state()
 
@@ -63,10 +61,20 @@ def main():
 
     # Init connect to database, which will set session state
     db = connect_db()
-    
+
     st.session_state.username = ''
     # Authenticate with database information, provides additional detail on the role of the login
-    st.title("Welcome to Empathtech Platform!")
+    image = Image.open("./src/empathjot.jpg")
+    col1, col2, col3 = st.columns([1,2,1])
+    with col1:
+        st.write(' ')
+
+    with col2:
+        st.image(image, use_column_width=True)
+
+    with col3:
+        st.write(' ')
+    st.title("Welcome to EmpathJot Platform!")
     st.subheader("Login into your account")
 
     login_form = st.form(key='signin_form', clear_on_submit=True)

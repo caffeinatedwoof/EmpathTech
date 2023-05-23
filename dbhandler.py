@@ -1,7 +1,7 @@
 from pymongo import MongoClient
 import pymongo
 from bson.objectid import ObjectId
-import os
+
 import streamlit as st
 import certifi
 from datetime import datetime

@@ -15,4 +15,8 @@ This branch is created for the purpose of UI/UX development of envisiioned Empat
 - For developers: Please note that streamlit sessions do not persist and gets reset so long an widget is added via function call(e.g logout)
 
 # Fix for errors:
-- Occurrence of Pymongo.errors `SSL: CERTIFICATE_VERIFY_FAILED` error when connecting to MongoDB is due to the non-existence of pem file "https://letsencrypt.org/certs/lets-encrypt-r3.pem" in the OS which you are operating. This can be following the steps as suggested by the user: https://www.linkedin.com/pulse/ssl-certificateverifyfailed-while-python-tried-retrieve-sanjeev-kumar
+- Occurrence of Pymongo.errors `SSL: CERTIFICATE_VERIFY_FAILED` error when connecting to MongoDB is due to the non-existence of pem file "https://letsencrypt.org/certs/lets-encrypt-r3.pem" in the OS which you are operating. 
+    - To resolve: This can be following the steps as suggested by the user: https://www.linkedin.com/pulse/ssl-certificateverifyfailed-while-python-tried-retrieve-sanjeev-kumar
+
+- ERROR when installing chromadb library: Could not build wheels for hnswlib, which is required to install pyproject.toml-based projects (For Windows 11).
+    - To resolve: You need to download https://visualstudio.microsoft.com/visual-cpp-build-tools/ first. Find MSVC v143 - VS 2022 C++ x64/x86 build tools (latest) - VS and Windows 11 SDK (10.0.22621.0)
