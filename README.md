@@ -18,34 +18,24 @@ The link to the deployed Streamlit app is: https://shuylaw-empathtech-main-xvm9b
 ---
 
 <div align="center">
-  <h1>Installation</h1>
+  <h1>Usage</h1>
 </div>
 
-## 1. Clone the repository
+Note: Log-in credentials for both teacher-user and student-user are provided in the submission form for HackSingapore 2023 under the Project Description.
 
-`git clone https://github.com/caffeinatedwoof/EmpathTech.git`
+## Teacher's Interface ##
 
-## 2. Set up a conda environment "EmpathTech" with dependencies installed
+Log in using the teacher's credentials to access the following functions:
 
-`conda create --name questionanswer python=3.8`
+1. Dashboard Summary, including sentiment scores, guardrails (flagging concerning events) and semantic search over student's journal entries
+2. View Student Journal, including emotion history and teacher feedback on individual journal entries
 
-`conda activate python=3.8`
+## Student's Interface ##
 
-`pip install -r requirements.txt`
+Log in using the student's credentials to access the following functions:
 
-# Usage
-
-## 1. Run the Streamlit app from terminal (Local Host Only)
-`
-streamlit run src/main.py`
-
-## 2. Open the app in your web browser (Local Host Only)
-
-Open your web browser and navigate to the URL displayed in your terminal, usually `http://localhost:8501`
-
-## 3. Save your OpenAI API key and mongoDB credentials in secret.toml
-
-
+1. Create Journal, including use of AI Journaling Assistant
+2. View Past Journals
 
 # Other notes:
 - Delete pages.json before starting streamlit. This is to ensure a fresh page reference is used by streamlit, as well as script_path will be updated to your current directory of this cloned repo. For developers, this is particularly important if new pages(.py) are added to pages subdirectory
