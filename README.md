@@ -14,11 +14,8 @@ The link to the deployed Streamlit app is: https://shuylaw-empathtech-main-xvm9b
 ## Video Demo
 
 ---
-<div align="center">
 
-[![Video Title](https://img.youtube.com/vi/_JQspMgAZJo/hqdefault.jpg)](http://www.youtube.com/watch?v=_JQspMgAZJo)
-
-</div>
+https://github.com/caffeinatedwoof/EmpathTech/assets/20638685/c19b397d-d971-463b-aa9c-c2683758339f
 
 ---
 
