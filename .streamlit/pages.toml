@@ -5,7 +5,7 @@ name = "Main"
 [student]
     [student.create_journal]
     path = "pages/1_Create_journal.py"
-    name = "Create Journal"
+    name = "Create journal"
 
     [student.view_past_journal]
     path = "pages/2_View_past_journals.py"
@@ -18,11 +18,11 @@ name = "Main"
 [teacher]
     [teacher.dashboard]
     path = "pages/3_Dashboard_summary.py"
-    name = "Dashboard Summary"
+    name = "Dashboard summary"
 
     [teacher.classes]
     path = "pages/4_Teaching_classes.py"
-    name = "Teaching Classes"
+    name = "Teaching classes"
 
     [teacher.view_journal]
     path = "pages/5_View_student_journal.py"
@@ -30,7 +30,7 @@ name = "Main"
 
     
 [accessed_denied]
-path = "pages/7_Access_Denied.py"
+path = "pages/7_Access_denied.py"
 name = "Access denied"
 
 [logout]
