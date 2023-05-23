@@ -2,7 +2,9 @@
   <h1>EmpathJot</h1>
 </div>
 
-EmpathJot is a platform that uses language models to help students record their experiences and emotions, and provide teachers with meaningful insights and analysis. This repository contains the source code and documentation, including the ML/AI models, front-end interface, and backend architecture.
+EmpathTech's journaling tool, EmpathJot, leverages Large Language Models to empower teachers and students in classroom settings, offering a guided journaling experience, sentiment analysis for tracking well-being, a teacher dashboard for sentiment scores, natural language querying, and guardrails for identifying concerning events.
+
+This repository contains the source code and documentation, including the ML/AI models, front-end interface, and backend architecture.
 
 ---
 
@@ -21,7 +23,11 @@ The link to the deployed Streamlit app is: https://shuylaw-empathtech-main-xvm9b
   <h1>Usage</h1>
 </div>
 
-Note: Log-in credentials for both teacher-user and student-user are provided in the submission form for HackSingapore 2023 under the Project Description.
+Log-in credentials for both teacher-user and student-user are provided in the submission form for HackSingapore 2023 under the Project Description.
+
+Please note that our current Minimum Viable Product (MVP) version of the app may experience technical issues if multiple users attempt to log in simultaneously. This can lead to unexpected behavior and potential disruptions in the app's functionality.
+
+To ensure a smooth and optimal experience, we kindly request users not to log in with multiple accounts at the same time during the demo period. This will help us avoid any unintended conflicts and maintain the integrity of the app's performance.
 
 ## Teacher's Interface ##
 
