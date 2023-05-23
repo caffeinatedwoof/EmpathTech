@@ -1,7 +1,8 @@
 import streamlit as st
 import plotly.express as px
+import pandas as pd
 from datetime import datetime
-from st_helper_func import remove_top_space_canvas, navbar_edit, hide_student_pages, error_page_redirect, connect_db
+from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_student_pages, error_page_redirect, connect_db
 from streamlit_extras.switch_page_button import switch_page
 
 # Layout config 
@@ -11,11 +12,32 @@ st.set_page_config(
 )
 
 remove_top_space_canvas()
-navbar_edit()
+#navbar_edit
+post_navbar_edit(st.session_state.user_fullname)
 hide_student_pages()
 
 # st.session_state.update(st.session_state)
 
+def SetColor(df):
+    """Function that sets color in a color list based on dataframe's Sentiment column
+
+    Args:
+        df (pd.Dataframe): Dataframe
+
+    Returns:
+        list: List of color
+    """
+    values = df['Sentiment'].tolist()
+    color_list = []
+    for i in values:
+        if(i == 1):
+            color_list.append("orange")
+        elif(i == 0):
+            color_list.append("red")
+        elif(i == 2):
+            color_list.append("green")
+
+    return color_list
 
 @st.cache_data
 def show_student_filter():
@@ -84,28 +106,27 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         #sentiment_list.append(sent_dict[sentiment])
     
     # emotions = [random.choice(emotion_list) for _ in time_periods]
-    color_dict = {'Negative': 'red',
-                'Neutral': 'grey',
-                'Positive': 'green',
-                }
-    fig = px.scatter(x=time_periods, 
-                     y=sentiment_list,
-                     color=sentiment_list,
+
+    df = pd.DataFrame(zip(time_periods, sentiment_list), 
+                     columns = ['Time', 'Sentiment'])
+    
+    fig = px.scatter(df,
+                     x='Time', 
+                     y='Sentiment',
+                     color='Sentiment',
                      )
     
     fig.update_layout(xaxis_title='Time',
                       yaxis_title=None,
                       yaxis_range=[-0.5,2.5],
-                      yaxis = dict(
-                                tickmode = 'array',
-                                tickvals = [0, 1, 2],
-                                ticktext = emotion_list[::-1]
-                              )
+                      yaxis = dict(tickmode = 'array', tickvals = [0, 1, 2],
+                                ticktext = emotion_list[::-1])
     )
+    
 
-    # Set marker size
+    # Remove color scale, Set marker size
     fig.update(layout_coloraxis_showscale=False)
-    fig.update_traces(marker=dict(size=15) )
+    fig.update_traces(marker=dict(size=15, color=SetColor(df)) )
     st.plotly_chart(fig, use_container_width=True)
 
     ####

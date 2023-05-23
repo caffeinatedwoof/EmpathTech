@@ -1,5 +1,5 @@
 import streamlit as st
-from st_helper_func import remove_top_space_canvas, navbar_edit, hide_teacher_pages, error_page_redirect, connect_db
+from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_teacher_pages, error_page_redirect, connect_db
 from streamlit_extras.switch_page_button import switch_page
 from datetime import datetime
 
@@ -10,7 +10,8 @@ st.set_page_config(
 )
 
 remove_top_space_canvas()
-navbar_edit()
+#navbar_edit
+post_navbar_edit(st.session_state.user_fullname)
 hide_teacher_pages()
 
 # st.session_state.update(st.session_state)
