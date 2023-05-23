@@ -1,4 +1,7 @@
 conf/
 __pycache__
 secrets.toml
+.env
+utils/
+pickle/
 pages.json
