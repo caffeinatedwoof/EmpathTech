@@ -217,6 +217,9 @@ class DBHandler:
         entries = self.journals.find({"student_id": student_id}).sort('date', pymongo.DESCENDING)
         return entries
 
+    def get_public_journals(self, student_id):
+        entries = self.journals.find({"student_id": student_id, "private": False}).sort('date', pymongo.DESCENDING)
+        return entries
 
     def get_all_teachers(self):
         """ Returns all the teachers in the collection
