@@ -117,7 +117,7 @@ class DBHandler:
         return None
 
 
-    def insert_journal_entry(self, student_id, title, content, date):
+    def insert_journal_entry(self, student_id, title, content, date, private=False):
         """
         Inserts a journal entry for a student
 
