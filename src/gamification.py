@@ -3,6 +3,7 @@ import os
 import sys
 from PIL import Image
 from datetime import datetime, timedelta
+from st_helper_func import connect_db
 # getting the name of the directory
 # where the this file is present.
 current = os.path.dirname(os.path.realpath(__file__))
@@ -18,7 +19,7 @@ sys.path.append(parent)
 from dbhandler import DBHandler
 
 if "db" not in st.session_state:
-    st.session_state.db = DBHandler()
+    db = connect_db()
 else:
     db = st.session_state.db
 
