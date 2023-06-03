@@ -32,7 +32,7 @@ LVL_THRESHOLD = {
     "LVL_1": LVL_1_THRESHOLD,
     "LVL_2": LVL_2_THRESHOLD,
     "LVL_3": LVL_3_THRESHOLD,
-    "LVL_4": LVL_4_THRESHOLD
+    "LVL_4": LVL_4_THRESHOLD,
 }
 
 class journalPlant:
@@ -40,6 +40,7 @@ class journalPlant:
         self.student_id = student_id
         self.entries = self._count_journals()
         self.level = self._calculate_lvl(self.entries)
+        self.max_level = 4
         self.plant = plant
         
 
@@ -84,11 +85,17 @@ class journalPlant:
         current_plant = os.path.join(current, "images", f"plant{self.level}.png")
         image = Image.open(current_plant)
         st.image(image)
-        percentage_completion = self.entries/LVL_THRESHOLD[f"LVL_{self.level+1}"]*100
+        if self.level < self.max_level:
+            percentage_completion = self.entries/LVL_THRESHOLD[f"LVL_{self.level+1}"]*100
+            progress_bar_label = f"{self.entries}/{LVL_THRESHOLD[f'LVL_{self.level+1}']}"
+        else:
+            percentage_completion = 100
+            progress_bar_label = f'{LVL_THRESHOLD[f"LVL_{self.max_level}"]}/{LVL_THRESHOLD[f"LVL_{self.max_level}"]}'
+    
         with open(os.path.join(current, 'gamification.css'))as f:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
         st.markdown(f"""<div class="w3-light-grey w3-round-xlarge">
-<div class="w3-blue w3-round-xlarge" style='width:{percentage_completion}%'><p style='text-align:center'>{self.entries}/{LVL_THRESHOLD[f"LVL_{self.level+1}"]}</p></div></div><h2 style='text-align:center'>Level {self.level} Plant</h2>
+<div class="w3-blue w3-round-xlarge" style='width:{percentage_completion}%'><p style='text-align:center'>{progress_bar_label}</p></div></div><h2 style='text-align:center'>Level {self.level} Plant</h2>
                     <p style='text-align:center'>Total Entries: {self.entries}<br>
                     Recent Entries: {self._count_recent_journals()}<br>
                     Write more to grow your plant!</p>
