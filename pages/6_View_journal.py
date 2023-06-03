@@ -8,7 +8,7 @@ from streamlit_chat import message
 from datetime import datetime
 import pymongo
 from src.st_utils import switch_chatlog, show_chatlog_filter, chatlog_list_format, save_chatlog, get_student, save_journal, clean_llm_output, get_journal_comments
-
+from src.gamification import gamified_sidebar
 
 #######
 #Helper function
@@ -37,7 +37,7 @@ def render_comments():
 # Layout config 
 st.set_page_config(
     layout = "wide",
-    initial_sidebar_state = 'collapsed'
+    initial_sidebar_state = 'expanded'
 )
 remove_top_space_canvas()
 navbar_edit()
@@ -106,6 +106,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             else:
                 current_chatlog = switch_chatlog(chatlog_selection['_id'])
                 print("Switched chatlog to", current_chatlog['_id'])
+
+    gamified_sidebar(student_id)
 
     padding, container1, padding2, container2, padding3 = st.columns([0.5, 3, 0.5, 2, 0.5])
 
