@@ -23,11 +23,27 @@ else:
     db = st.session_state.db
 
 WIDTH = 200
+LVL_1_THRESHOLD = 1
+LVL_2_THRESHOLD = 3
+LVL_3_THRESHOLD = 8
+LVL_4_THRESHOLD = 15
 
 class journalPlant:
-    def __init__(self, level, plant="default"):
-        self.level = level
+    def __init__(self, entries, plant="default"):
+        self.level = self._calculate_lvl(entries)
         self.plant = plant
+
+    def _calculate_lvl(self, entries):
+        if entries >= LVL_4_THRESHOLD:
+            return 4
+        elif entries >= LVL_3_THRESHOLD:
+            return 3
+        elif entries >= LVL_2_THRESHOLD:
+            return 2
+        elif entries >= LVL_1_THRESHOLD:
+            return 1
+        else:
+            return 0
 
     def get_level(self):
         return self.level

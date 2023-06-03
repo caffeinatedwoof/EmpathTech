@@ -35,8 +35,9 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
     st.title(f"Past Journal Entries for {student_name}")
     entries = db.get_journal_entries(student_id)
-    plant_lvl = 1
-    jp = journalPlant(plant_lvl)
+    total_journals = count_journals(student_id)
+    jp = journalPlant(total_journals)
+    plant_lvl = jp.get_level()
 
     with st.sidebar:
         sb_col1, sb_col2, sb_col3 = st.columns([0.1,1,0.1])
@@ -45,7 +46,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         with sb_col2:
             jp.show()
             st.markdown(f"""<h2 style='text-align:center'>Level {plant_lvl} Plant</h2>
-                        <p style='text-align:center'>Total Entries: {count_journals(student_id)}<br>
+                        <p style='text-align:center'>Total Entries: {total_journals}<br>
                         Recent Entries: {count_recent_journals(student_id)}<br>
                         Write more to grow your plant!</p>
                         """, unsafe_allow_html=True)
