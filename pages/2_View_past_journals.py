@@ -2,7 +2,7 @@ import streamlit as st
 from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_teacher_pages, error_page_redirect, connect_db
 from streamlit_extras.switch_page_button import switch_page
 from datetime import datetime
-from src.gamification import journalPlant, count_journals, count_recent_journals
+from src.gamification import gamified_sidebar
 from PIL import Image
 
 # Layout config 
@@ -35,23 +35,9 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
     st.title(f"Past Journal Entries for {student_name}")
     entries = db.get_journal_entries(student_id)
-    total_journals = count_journals(student_id)
-    jp = journalPlant(total_journals)
-    plant_lvl = jp.get_level()
 
-    with st.sidebar:
-        sb_col1, sb_col2, sb_col3 = st.columns([0.1,1,0.1])
-        with sb_col1:
-            st.markdown(" ")
-        with sb_col2:
-            jp.show()
-            st.markdown(f"""<h2 style='text-align:center'>Level {plant_lvl} Plant</h2>
-                        <p style='text-align:center'>Total Entries: {total_journals}<br>
-                        Recent Entries: {count_recent_journals(student_id)}<br>
-                        Write more to grow your plant!</p>
-                        """, unsafe_allow_html=True)
-        with sb_col3:
-            st.markdown(" ")
+    gamified_sidebar(student_id)
+
     # Iterate cursor
     for entry in entries:
         subcol1, subcol2, subcol3 = st.columns([0.5,2,0.8])

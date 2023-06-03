@@ -23,16 +23,25 @@ if "db" not in st.session_state:
 else:
     db = st.session_state.db
 
-WIDTH = 200
 LVL_1_THRESHOLD = 1
 LVL_2_THRESHOLD = 3
 LVL_3_THRESHOLD = 8
 LVL_4_THRESHOLD = 15
 
+LVL_THRESHOLD = {
+    "LVL_1": LVL_1_THRESHOLD,
+    "LVL_2": LVL_2_THRESHOLD,
+    "LVL_3": LVL_3_THRESHOLD,
+    "LVL_4": LVL_4_THRESHOLD
+}
+
 class journalPlant:
-    def __init__(self, entries, plant="default"):
-        self.level = self._calculate_lvl(entries)
+    def __init__(self, student_id, plant="default"):
+        self.student_id = student_id
+        self.entries = self._count_journals()
+        self.level = self._calculate_lvl(self.entries)
         self.plant = plant
+        
 
     def _calculate_lvl(self, entries):
         if entries >= LVL_4_THRESHOLD:
@@ -58,30 +67,41 @@ class journalPlant:
     def set_plant(self, plant):
         self.plant = plant
 
+    def _count_journals(self):
+        journals = db.get_journal_entries(self.student_id)
+        journal_list = [journal for journal in journals if journal['private'] == False]
+        return len(journal_list)
+    
+    def _count_recent_journals(self):
+        # find date two weeks ago from today
+        today = datetime.now()
+        two_weeks_ago = today - timedelta(days=14)
+        journals = db.get_journal_entries(self.student_id)
+        journal_list = [journal for journal in journals if journal['private'] == False and journal['date'] > two_weeks_ago]
+        return len(journal_list)
+
     def show(self):
         current_plant = os.path.join(current, "images", f"plant{self.level}.png")
         image = Image.open(current_plant)
-        st.image(image, width=WIDTH)
+        st.image(image)
+        percentage_completion = self.entries/LVL_THRESHOLD[f"LVL_{self.level+1}"]*100
+        with open(os.path.join(current, 'gamification.css'))as f:
+            st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
+        st.markdown(f"""<div class="w3-light-grey w3-round-xlarge">
+<div class="w3-blue w3-round-xlarge" style='width:{percentage_completion}%'><p style='text-align:center'>{self.entries}/{LVL_THRESHOLD[f"LVL_{self.level+1}"]}</p></div></div><h2 style='text-align:center'>Level {self.level} Plant</h2>
+                    <p style='text-align:center'>Total Entries: {self.entries}<br>
+                    Recent Entries: {self._count_recent_journals()}<br>
+                    Write more to grow your plant!</p>
+                    """, unsafe_allow_html=True)
         
-
-def count_journals(student_id):
-    journals = db.get_journal_entries(student_id)
-    journal_list = [journal for journal in journals if journal['private'] == False]
-    return len(journal_list)
-
-def count_recent_journals(student_id):
-    # find date two weeks ago from today
-    today = datetime.now()
-    two_weeks_ago = today - timedelta(days=14)
-    journals = db.get_journal_entries(student_id)
-    journal_list = [journal for journal in journals if journal['private'] == False and journal['date'] > two_weeks_ago]
-    return len(journal_list)
-
-
-# misslim = db.teachers.find_one({"name": "Miss Lim"})
-# teacher_id = misslim['_id']
-
-# # get all students
-# students = db.get_all_students(teacher_id)
-# for student in students:
-#     print(count_journals(student['_id']))
+def gamified_sidebar(student_id):
+    
+    with st.sidebar:
+        sb_col1, sb_col2, sb_col3 = st.columns([0.1,1,0.1])
+        with sb_col1:
+            st.markdown(" ")
+        with sb_col2:
+            plant = journalPlant(student_id)
+            plant.show()
+        with sb_col3:
+            st.markdown(" ")
