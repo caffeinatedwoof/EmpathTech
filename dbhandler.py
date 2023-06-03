@@ -142,7 +142,8 @@ class DBHandler:
             "content": content,
             "date": date,
             "student_id": student_id,
-            "comments": []
+            "comments": [],
+            "private": private,
         }
         journal_id = self.journals.insert_one(new_entry).inserted_id
         return journal_id
