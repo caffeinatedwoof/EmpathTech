@@ -16,8 +16,6 @@ parent = os.path.dirname(current)
 # the sys.path.
 sys.path.append(parent)
 
-from dbhandler import DBHandler
-
 if "db" not in st.session_state:
     db = connect_db()
 else:
