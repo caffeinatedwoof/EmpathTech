@@ -6,6 +6,7 @@ from src.sentiment_analysis import perform_sentiment_analysis
 import json
 from streamlit_chat import message
 from datetime import datetime
+from src.gamification import gamified_sidebar
 
 #from streamlit_extras.switch_page_button import switch_page
 
@@ -157,6 +158,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     student_id = current_student['_id']
     print(student_id)
     st.markdown(f"Hi, {student_name}!")
+
+    gamified_sidebar(student_id)
 
 
     if 'chatlog_id' not in st.session_state or st.session_state.chatlog_id is None:

@@ -19,7 +19,7 @@ def filter_journal_entries(student_name, start_date, end_date):
     student_id = student['_id']  # Name of the student
     class_ = student['class'] # Student's class 
 
-    journals = db_handler.get_journal_entries(student_id)
+    journals = db_handler.get_public_journals(student_id)
 
     # Iterate over all journal entries for the student
     for journal in journals:

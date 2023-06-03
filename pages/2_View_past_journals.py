@@ -2,6 +2,8 @@ import streamlit as st
 from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_teacher_pages, error_page_redirect, connect_db
 from streamlit_extras.switch_page_button import switch_page
 from datetime import datetime
+from src.gamification import gamified_sidebar
+from PIL import Image
 
 # Layout config 
 st.set_page_config(
@@ -17,6 +19,11 @@ hide_teacher_pages()
 
 if 'logged_in' in st.session_state and st.session_state.logged_in:
 
+    if st.session_state.role == 'student':
+        hide_teacher_pages()
+    else:
+        hide_student_pages()    
+
     if 'db' in st.session_state:
         db = st.session_state.db
     else:
@@ -28,6 +35,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
     st.title(f"Past Journal Entries for {student_name}")
     entries = db.get_journal_entries(student_id)
+
+    gamified_sidebar(student_id)
 
     # Iterate cursor
     for entry in entries:
