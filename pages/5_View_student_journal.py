@@ -134,7 +134,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     st.subheader(f"Journal entries by {selected_student_name}")
 
     counter = 0
-    for entry in entries_list:
+    public_entries = [entry for entry in entries_list if entry['private'] == False]
+    for entry in public_entries:
         subcol1, subcol2, subcol3, subcol4= st.columns([0.5,2,0.5,0.8])
         with subcol1:
             if counter == 0:
