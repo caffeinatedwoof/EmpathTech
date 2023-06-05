@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
 from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_student_pages, error_page_redirect, connect_db, hide_streamlit_footer, hide_other_pages, show_privacy_data_protection_footer
-
+from src.sidebar import render_sidebar
 import semantic_search as ss
 #from streamlit_extras.switch_page_button import switch_page
 
@@ -60,7 +60,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     teacher_id = st.session_state.role_id
     teacher_name = st.session_state.user_fullname
     teaching_class = st.session_state.teaching_class
-
+    render_sidebar()
+    
     student_list = show_student_filter()
 
     col1, col2 = st.columns(2)
@@ -156,7 +157,5 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                     st.error('Error: End date must fall after start date.')
             else:
                 st.write('Please enter a query.')
-    with st.sidebar:
-        show_privacy_data_protection_footer()
 else:
     error_page_redirect()

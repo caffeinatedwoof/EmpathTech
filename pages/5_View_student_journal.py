@@ -4,6 +4,7 @@ import pandas as pd
 from datetime import datetime
 from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_student_pages, error_page_redirect, connect_db, hide_streamlit_footer, hide_other_pages, show_privacy_data_protection_footer
 from streamlit_extras.switch_page_button import switch_page
+from src.sidebar import render_sidebar
 
 # Layout config 
 st.set_page_config(
@@ -19,6 +20,7 @@ hide_student_pages()
 hide_other_pages()
 navbar_edit()
 hide_streamlit_footer()
+render_sidebar()
 
 # st.session_state.update(st.session_state)
 
@@ -177,7 +179,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                 switch_page("View_Journal")
         st.markdown("----")
         counter += 1
-    with st.sidebar:
-        show_privacy_data_protection_footer()
+       
 else:
     error_page_redirect()

@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_student_pages, error_page_redirect, connect_db, hide_st_table_row_index, hide_streamlit_footer, show_privacy_data_protection_footer
+from src.sidebar import render_sidebar
 
 # Layout config 
 st.set_page_config(
@@ -40,6 +41,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     else:
         db = connect_db()
 
+    render_sidebar()
     students = db.students
     student_list = show_student_filter()
 
@@ -61,7 +63,5 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
     hide_st_table_row_index()
     st.table(df)
-    with st.sidebar:
-        show_privacy_data_protection_footer()
 else:
     error_page_redirect()

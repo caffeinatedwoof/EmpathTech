@@ -1,9 +1,10 @@
 import streamlit as st
 from st_helper_func import remove_top_space_canvas, hide_other_pages, hide_streamlit_footer, hide_teacher_pages, navbar_edit, post_navbar_edit, show_privacy_data_protection_footer, error_page_redirect
+from src.sidebar import render_sidebar
 
 # Layout config 
 st.set_page_config(
-    layout = "wide",
+    # layout = "wide",
     initial_sidebar_state = "expanded"
 )
 
@@ -17,10 +18,7 @@ hide_other_pages()
 hide_teacher_pages()
 hide_streamlit_footer()
 
-_, colT2, _ = st.columns(3)
-
-with colT2:
-    st.title("Note to Students")
+st.markdown("<h1 style='text-align:center'>Note to Students</h1>", unsafe_allow_html=True)
 
 st.markdown("""
     Welcome to EmpathJot!
@@ -53,4 +51,4 @@ st.markdown("""
 st.markdown("---")
 
 with st.sidebar:
-    show_privacy_data_protection_footer()
+    render_sidebar()

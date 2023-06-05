@@ -7,7 +7,7 @@ from src.sentiment_analysis import perform_sentiment_analysis
 import json
 from streamlit_chat import message
 from datetime import datetime
-from src.gamification import gamified_sidebar
+from src.sidebar import render_sidebar
 
 #from streamlit_extras.switch_page_button import switch_page
 
@@ -215,8 +215,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     submit_journal = False
     make_journal_private = False
 
-    gamified_sidebar(student_id)
-
     if 'chatlog_id' not in st.session_state or st.session_state.chatlog_id is None:
         current_chatlog = init_new_chatlog()
 
@@ -310,6 +308,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     submit_journal = False
     make_journal_private = False
     with st.sidebar:
-        show_privacy_data_protection_footer()
+        render_sidebar()
 else:   
     error_page_redirect()

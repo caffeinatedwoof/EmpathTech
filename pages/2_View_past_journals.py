@@ -3,6 +3,7 @@ from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edi
 from streamlit_extras.switch_page_button import switch_page
 from datetime import datetime
 from src.gamification import gamified_sidebar
+from src.sidebar import render_sidebar
 
 # Layout config 
 st.set_page_config(
@@ -38,11 +39,11 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
     st.title(f"Past Journal Entries for {student_name}")
     entries = db.get_journal_entries(student_id)
-    gamified_sidebar(student_id)
+    render_sidebar()
 
     # Iterate cursor
     for entry in entries:
-        subcol1, subcol2, subcol3, subcol4= st.columns([0.4,1.8,0.4,0.6])
+        subcol1, subcol2, subcol3, subcol4 = st.columns([0.4,1.8,0.4,0.6])
         with subcol1:
             # format entry datetime to dd/mm/yyyy
             entry_date = datetime.strftime(entry['date'], "%d/%m/%Y")
@@ -67,7 +68,5 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             else:
                 pass
         st.markdown("---")
-    with st.sidebar:
-        show_privacy_data_protection_footer()
 else:
     error_page_redirect()

@@ -96,7 +96,7 @@ class journalPlant:
             st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html = True)
             st.markdown(f"""
                 <div class="w3-light-grey w3-round-xlarge">
-                <div class="w3-blue w3-round-xlarge" style='width:{percentage_completion}%'><p style='text-align:center'>{progress_bar_label}</p></div></div><h2 style='text-align:center'>Level {self.level} Plant</h2>
+                <div class="w3-green w3-round-xlarge" style='width:{percentage_completion}%'><p style='text-align:center'>{progress_bar_label}</p></div></div><h2 style='text-align:center'>Level {self.level} Plant</h2>
                 <p style='text-align:center'>Total Entries: {self.entries}<br>
                 Recent Entries: {self._count_recent_journals()}<br>
                 Write more to grow your plant!</p> """, unsafe_allow_html=True)

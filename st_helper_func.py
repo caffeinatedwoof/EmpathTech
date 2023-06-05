@@ -83,19 +83,22 @@ def post_navbar_edit(name_string=None):
 
     html_string = f"""
     <style>
+        [kind="primary"] {{
+            background-color: #19A7CE;
+            border: 0px;
+            border-radius: 1.5rem;
+        }}
+        [kind="primary"]:hover {{
+            background-color: #5B8FB9;
+            border: 0px
+        }}
         [data-testid="stSidebar"] {{
             padding: 0rem 1rem 1rem 1rem;
             font-size: 1.5rem;
             overflow: hidden;
         }}
 
-        [data-testid="stSidebarNav"]::before {{
-            content: "Welcome to EmpathJot platform, \A {hello_string}" ;
-            color: #87CEFA;
-            white-space: pre-wrap;
-            display: inline;
-            overflow: hidden;
-        }}
+
 
         .css-lrlib, .css-1oe5cao {{
             padding-top: 1rem;
@@ -129,7 +132,7 @@ def navbar_edit():
             font-size: 1.5rem;
         }
         [data-testid="stSidebarNav"]::before {
-            content: "Welcome to EmpathJot platform";
+            content: "";
             display: inline;
         }
         .css-lrlib, .css-1oe5cao {
@@ -459,12 +462,10 @@ def show_privacy_data_protection_footer():
     data_policy_footer="""
         <style>
                 .footer {
-                    position: fixed;
                     bottom: 0;
-                    width: 50%;
                     margin-left: 0rem;
-                    text-align: left;
-                    font-size: 1rem;
+                    text-align: center;
+                    font-size: 0.9rem;
                 }
                 a {
                     line-height: 1em;
@@ -479,5 +480,5 @@ def show_privacy_data_protection_footer():
         </div>
         """
 
-    st.markdown(data_policy_footer,unsafe_allow_html=True)
+    st.markdown(data_policy_footer, unsafe_allow_html=True)
     return None
