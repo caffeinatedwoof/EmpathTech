@@ -3,18 +3,20 @@ from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edi
 from src.journal_utils import is_journal_entry
 from src.journal_guidance import provide_journal_guidance
 from src.sentiment_analysis import perform_sentiment_analysis
+from src.sidebar import render_sidebar
 
 from streamlit_chat import message
 from datetime import datetime
 import pymongo
-from src.st_utils import switch_chatlog, show_chatlog_filter,chatlog_list_format, save_chatlog, get_student, save_journal, clean_llm_output, get_journal_comments
-from src.gamification import gamified_sidebar
+from src.st_utils import switch_chatlog, save_chatlog, get_student, save_journal, clean_llm_output, get_journal_comments
+
 
 #######
 #Helper function
 #######
 # st.session_state.update(st.session_state)
     # Render journal display / entry form
+
 def render_comments():
     if comments is None:
         st.markdown("No comments yet!")
@@ -39,9 +41,11 @@ st.set_page_config(
     layout = "wide",
     initial_sidebar_state = 'expanded'
 )
-
+st.sidebar.empty()
 if 'user_fullname' not in st.session_state:
     error_page_redirect()
+
+render_sidebar()
 
 remove_top_space_canvas()
 navbar_edit()
@@ -97,24 +101,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         current_chatlog = switch_chatlog(st.session_state.chatlog_id)
 
     # Render sidebar for View journals / journal selection
-    with st.sidebar:
-        journal_type = st.radio("Journal type", ["Incomplete", "Complete"], )
-        if journal_type == "Complete":
-            chatlog_list = show_chatlog_filter(student_id, 'Complete')
-        else:
-            chatlog_list = show_chatlog_filter(student_id)
-            
-        chatlog_selection = st.selectbox("Your journals", chatlog_list, format_func=chatlog_list_format)
-        submit_button = st.button(label="Select journal")
-        if submit_button:
-            if chatlog_selection is None:
-                # current_chatlog = init_new_chatlog()
-                print("Started a new chatlog")
-            else:
-                current_chatlog = switch_chatlog(chatlog_selection['_id'])
-                print("Switched chatlog to", current_chatlog['_id'])
 
-    gamified_sidebar(student_id)
 
     padding, container1, padding2, container2, padding3 = st.columns([0.5, 3, 0.5, 2, 0.5])
 
@@ -228,7 +215,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
     with padding3:
         pass
-    with st.sidebar:
-        show_privacy_data_protection_footer()
+
 else:
     error_page_redirect()

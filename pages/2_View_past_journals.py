@@ -18,6 +18,7 @@ remove_top_space_canvas()
 navbar_edit()
 hide_other_pages()
 hide_streamlit_footer()
+
 # st.session_state.update(st.session_state)
 
 if 'logged_in' in st.session_state and st.session_state.logged_in:

@@ -70,7 +70,7 @@ class journalPlant:
 
     def _count_journals(self):
         journals = db.get_journal_entries(self.student_id)
-        journal_list = [journal for journal in journals if journal['private'] == False]
+        journal_list = [journal for journal in journals]
         return len(journal_list)
     
     def _count_recent_journals(self):
@@ -78,7 +78,7 @@ class journalPlant:
         today = datetime.now()
         two_weeks_ago = today - timedelta(days=14)
         journals = db.get_journal_entries(self.student_id)
-        journal_list = [journal for journal in journals if journal['private'] == False and journal['date'] > two_weeks_ago]
+        journal_list = [journal for journal in journals if journal['date'] > two_weeks_ago]
         return len(journal_list)
 
     def show(self):

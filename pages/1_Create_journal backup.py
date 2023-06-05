@@ -273,28 +273,27 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         with st.spinner('Checking entry before submission...'):
             check = is_journal_entry(text_input)
 
-            # Save journal to db
-            if check['journal_entry']:
-                entry_date = current_chatlog['start_time']
+        # Save journal to db
+        if check['journal_entry']:
+            entry_date = current_chatlog['start_time']
 
-                # Uses function to call db.insert_journal_entry
-                journal_id = save_journal(entry_title,
-                                            text_input,
-                                            entry_date, private=make_journal_private)
-                
-                current_chatlog['journal_id'] = journal_id
-                save_chatlog(current_chatlog)
-                print(journal_id, "has been saved to db")                
-
-                # Submit journal for sentiment analysis
-                sent_analysis_results = perform_sentiment_analysis(text_input)
-                cleaned_output = clean_llm_output(sent_analysis_results)
-                db.insert_summary(journal_id, cleaned_output)
-                st.success('Your journal has been submitted!', icon="✅")
-                init_new_chatlog()
-            else:
-                st.error("Please enter a valid journal entry.")
+            # Uses function to call db.insert_journal_entry
+            journal_id = save_journal(entry_title,
+                                        text_input,
+                                        entry_date, private=make_journal_private)
             
+            current_chatlog['journal_id'] = journal_id
+            save_chatlog(current_chatlog)
+            print(journal_id, "has been saved to db")                
+
+            # Submit journal for sentiment analysis
+            sent_analysis_results = perform_sentiment_analysis(text_input)
+            cleaned_output = clean_llm_output(sent_analysis_results)
+            db.insert_summary(journal_id, cleaned_output)
+            st.success('Your journal has been submitted!', icon="✅")
+        else:
+            st.error("Please enter a valid journal entry.")
+
     st.markdown("---")
 
     for i in range(len(st.session_state["generated"])-1, -1, -1):
