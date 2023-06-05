@@ -7,7 +7,6 @@ import toml
 import dbhandler
 from streamlit.source_util import _on_pages_changed, get_pages
 from streamlit_extras.switch_page_button import switch_page
-from streamlit_extras.app_logo import add_logo
 
 #CONFIG
 data = toml.load(os.path.join('.streamlit','pages.toml'))
@@ -23,8 +22,8 @@ def connect_db():
     return db
 
 
-def hide_main_page_tabs_of_teacher():
-    """Helper function to hide main page tabs(login) which is seen on side navigation bar for student view.
+def hide_other_pages():
+    """Helper function to hide page tabs(Main, Data protection, Privacy policy) which is seen on side navigation bar.
 
     This is a css workaround to hide them instead of actual removal of info from pages information of the app get_pages function as such removal would cause errors in routing back to main page(login) or other page required.
 
@@ -35,44 +34,22 @@ def hide_main_page_tabs_of_teacher():
     Raise:
         None
     """
-    # Hide Main page and View Journal
+    # Hide Main page, Data Protection and Privacy Policy and buggy Main page
     html_string = """
         <style>
             .css-lrlib li:nth-child(1), .css-1oe5cao li:nth-child(1) {
                 display: None;
             }
 
-            .css-lrlib li:nth-child(4) {
+            .css-lrlib li:nth-child(9), .css-1oe5cao li:nth-child(9) {
                 display: None;
             }
 
-        </style>
-    """
-    
-    st.markdown(html_string, unsafe_allow_html=True)
-
-    return None
-
-def hide_main_page_tabs_of_student():
-    """Helper function to hide main page tabs(login) which is seen on side navigation bar for teacher view.
-
-    This is a css workaround to hide them instead of actual removal of info from pages information of the app get_pages function as such removal would cause errors in routing back to main page(login) or other page required.
-
-    Args:
-        None
-    Returns:
-        None
-    Raise:
-        None
-    """
-    # Hide Main page and View Journal
-    html_string = """
-        <style>
-            .css-lrlib li:nth-child(1), .css-1oe5cao li:nth-child(1) {
+            .css-lrlib li:nth-last-child(3), .css-lrlib li:nth-last-child(4) {
                 display: None;
             }
 
-            .css-lrlib li:nth-child(5) {
+            .css-1oe5cao li:nth-last-child(3), .css-1oe5cao li:nth-last-child(4) {
                 display: None;
             }
 
@@ -108,19 +85,22 @@ def post_navbar_edit(name_string=None):
     <style>
         [data-testid="stSidebar"] {{
             padding: 0rem 1rem 1rem 1rem;
-            font-size: 2rem;
-            position: sticky;
-            margin: auto;
+            font-size: 1.5rem;
+            overflow: hidden;
         }}
+
         [data-testid="stSidebarNav"]::before {{
             content: "Welcome to EmpathJot platform, \A {hello_string}" ;
             color: #87CEFA;
             white-space: pre-wrap;
             display: inline;
+            overflow: hidden;
         }}
+
         .css-lrlib, .css-1oe5cao {{
             padding-top: 1rem;
         }}
+
         ul {{
             font-size: 1rem;
             position: sticky;
@@ -128,7 +108,6 @@ def post_navbar_edit(name_string=None):
         }}
     </style>
     """
-    
     st.markdown(html_string, unsafe_allow_html=True)
     return None
 
@@ -147,9 +126,7 @@ def navbar_edit():
     <style>
         [data-testid="stSidebar"] {
             padding: 0rem 1rem 1rem 1rem;
-            font-size: 2rem;
-            position: sticky;
-            margin: auto;
+            font-size: 1.5rem;
         }
         [data-testid="stSidebarNav"]::before {
             content: "Welcome to EmpathJot platform";
@@ -158,6 +135,7 @@ def navbar_edit():
         .css-lrlib, .css-1oe5cao {
             padding-top: 1rem;
         }
+
         ul {
             font-size: 1rem;
             position: sticky;
@@ -167,6 +145,7 @@ def navbar_edit():
     """
     
     st.markdown(html_string, unsafe_allow_html=True)
+
     return None
 
 def adjust_filter_font():
@@ -205,12 +184,12 @@ def remove_top_space_canvas():
     """
     st.markdown("""
         <style>
-                .block-container {
-                    padding-top: 1rem; 
-                    padding-bottom: 0rem;
-                    padding-left: 1rem;
-                    padding-right: 1rem;
-                }
+            .block-container {
+                padding-top: 1rem; 
+                padding-bottom: 0rem;
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
         </style>
         """, unsafe_allow_html=True
     )
@@ -227,9 +206,11 @@ def disable_sidebar():
         None
     """
     no_sidebar_style = """
-    <style>
-        div[data-testid="stSidebarNav"] {display: none;}
-    </style>
+        <style>
+            div[data-testid="collapsedControl"] {
+                display: none
+            }
+        </style>
     """
     st.markdown(no_sidebar_style, unsafe_allow_html=True)
     return None
@@ -279,6 +260,7 @@ def clear_all_but_first_page():
         None
     """
     current_pages = get_pages(LOGIN_PAGE)
+    st.write(current_pages)
 
     if len(current_pages.keys()) == 1:
         return
@@ -289,6 +271,8 @@ def clear_all_but_first_page():
     # Extract current page information prior to removing all but the first page
     key, val = list(current_pages.items())[0]
     current_pages.clear()
+
+    # Append only necessary page
     current_pages[key] = val
 
     # Send event change signal
@@ -349,15 +333,18 @@ def hide_student_pages():
     student_pages_name_list = ["Access_denied",
                                "View_past_journals",
                                "Create_journal",
+                               "View_journal"
                                "Sentiment_analysis",
-                               "Chatbot"]
+                               "Chatbot",
+                               "About_Empathjot",
+                               ]
 
     # Hide listed pages
     for pages in student_pages_name_list:
         current_pages = hide_page(pages, current_pages)
     
     # Workaround to hide main page tab without removing from current page
-    hide_main_page_tabs_of_student()
+    hide_other_pages()
     _on_pages_changed.send()
 
 def hide_teacher_pages():
@@ -376,15 +363,14 @@ def hide_teacher_pages():
                                "Dashboard_summary",
                                "Teaching_classes",
                                "View_student_journal",
+                               "View_journal"
                                "Chatbot",
-                               "Sentiment_analysis"
+                               "Sentiment_analysis",
                                ]
 
     for pages in teacher_pages_name_list:
         current_pages = hide_page(pages, current_pages)
 
-    # Workaround to hide main page tab without removing from current page
-    hide_main_page_tabs_of_teacher()
     _on_pages_changed.send()
 
     return None
@@ -438,4 +424,60 @@ def hide_st_table_row_index():
     # Inject CSS with Markdown
     st.markdown(hide_table_row_index, unsafe_allow_html=True)
 
+    return None
+
+def hide_streamlit_footer():
+    """Function to hide "Made with Streamlit" Footer display on webpage
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    hide_streamlit_style = """
+        <style>
+        #MainMenu { 
+            visibility: hidden;
+        }
+        footer { 
+            visibility: hidden;
+        }
+        </style>
+        """
+    st.markdown(hide_streamlit_style, unsafe_allow_html=True) 
+    return None
+
+def show_privacy_data_protection_footer():
+    """Function to show privacy and data protection footer links to privacy and data protection pages.
+    Args:
+        None
+
+    Returns:
+        None
+    """
+    
+    data_policy_footer="""
+        <style>
+                .footer {
+                    position: fixed;
+                    bottom: 0;
+                    width: 50%;
+                    margin-left: 0rem;
+                    text-align: left;
+                    font-size: 1rem;
+                }
+                a {
+                    line-height: 1em;
+                    display: inline-block;
+                    margin: 0.5rem;
+                }
+        </style>
+
+        <div class="footer">
+            <a href="./Data_protection" target="_blank">Data Protection Policy</a>
+            <a href="./Privacy_policy" target="_blank">Privacy Policy</a>
+        </div>
+        """
+
+    st.markdown(data_policy_footer,unsafe_allow_html=True)
     return None

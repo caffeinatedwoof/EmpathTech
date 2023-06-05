@@ -1,5 +1,6 @@
 import streamlit as st
-from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_teacher_pages, error_page_redirect, connect_db
+import time
+from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_teacher_pages, error_page_redirect, connect_db, hide_streamlit_footer, hide_other_pages, show_privacy_data_protection_footer
 from src.journal_utils import is_journal_entry
 from src.journal_guidance import provide_journal_guidance
 from src.sentiment_analysis import perform_sentiment_analysis
@@ -18,12 +19,22 @@ st.set_page_config(
 remove_top_space_canvas()
 navbar_edit()
 hide_teacher_pages()
+hide_other_pages()
+hide_streamlit_footer()
 st.session_state.update(st.session_state)
 
 ###################
 # Helper functions
 ##################
 def map_labels(label):
+    """Function that maps label categories to value equivalent
+
+    Args:
+        label (str): Either negative, neutral or positive
+
+    Returns:
+        int: Mapped value.
+    """
     label = label.strip().lower()
     if label == "negative":
         return 0
@@ -50,13 +61,23 @@ def toggle_elements_disabled(state=False):
         st.session_state.content_disabled = True
         st.session_state.feedback_disabled = True
         st.session_state.submit_disabled = True
+        st.session_state.privacy_disabled = True
     else:    
         st.session_state.title_disabled = False
         st.session_state.content_disabled = False
         st.session_state.feedback_disabled = False
         st.session_state.submit_disabled = False
+        st.session_state.privacy_disabled = False
 
 def clear_messages():
+    """Function that clears generated and past keys of session states to empty list.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     st.session_state.generated = []
     st.session_state.past = []
 
@@ -68,6 +89,13 @@ def get_student(username):
     return student
 
 def init_new_chatlog():
+    """Function that initialise a new dictionary pertaining to chatlog info
+
+    Args:
+        None
+    Returns:
+        dict: Dictionary containing chatlog related information.
+    """
     print("chatlog id does not exist")
     clear_messages()
     st.session_state.chatlog_id = None
@@ -76,22 +104,43 @@ def init_new_chatlog():
     st.session_state.title_value = ""
     st.session_state.create_journal_label = "Create your journal"
     chatlog = {
-    "start_time": datetime.now(),
-    "end_time": None,
-    "student_id": student_id,
-    "journal_id": None,
-    "messages": []
+        "start_time": datetime.now(),
+        "end_time": None,
+        "student_id": student_id,
+        "journal_id": None,
+        "messages": []
     }
     toggle_elements_disabled(False)
 
     return chatlog
 
-def save_journal(title, content, date):
+def save_journal(title, content, date, private):
+    """Function that calls dbhandler's insert_journal_entry to store journal title, content, submission date and its privacy required to backend database.
+
+    Args:
+        title (str): 
+            title of the journal entry
+        content (str):
+            content of the journal entry
+        date (datetime):
+            datetime object containing the date/time of entry creation
+        privat (bool):
+            Boolean status on whether entry is to be private
+    Returns:
+        ObjectId: _id of the journal entry
+    """
     if current_chatlog['journal_id'] is None:
-        journal_id = db.insert_journal_entry(student_id, title, content, date)
+        journal_id = db.insert_journal_entry(student_id, title, content, date, private)
         return journal_id
 
 def save_chatlog(chatlog):
+    """Function that creates a chatlog entry or updates existing chatlog entries if applicable.
+
+    Args:
+        chatlog (dict): Dictionary containing chatlog details 
+    Returns:
+        None
+    """
     if st.session_state.chatlog_id == None:
         chatlog_id = db.insert_chatlog(chatlog)
         st.session_state.chatlog_id = chatlog_id
@@ -102,12 +151,12 @@ def switch_chatlog(chatlog_id):
     st.session_state.chatlog_id = chatlog_id
     chatlog_obj = db.get_chatlog(chatlog_id)
     chatlog = {
-    "_id" : chatlog_id,
-    "start_time": chatlog_obj['start_time'],
-    "end_time": chatlog_obj["end_time"],
-    "student_id": chatlog_obj["student_id"],
-    "journal_id": chatlog_obj["journal_id"],
-    "messages": chatlog_obj["messages"]
+        "_id" : chatlog_id,
+        "start_time": chatlog_obj['start_time'],
+        "end_time": chatlog_obj["end_time"],
+        "student_id": chatlog_obj["student_id"],
+        "journal_id": chatlog_obj["journal_id"],
+        "messages": chatlog_obj["messages"]
     }
 
     if chatlog['journal_id'] is not None:
@@ -133,9 +182,12 @@ def switch_chatlog(chatlog_id):
 
     return chatlog
 
+if 'user_fullname' not in st.session_state:
+    error_page_redirect()
+
 
 if 'logged_in' in st.session_state and st.session_state.logged_in:
-
+    # This is to facilitate reconnection
     if 'db' in st.session_state:
         db = st.session_state.db
     else:
@@ -156,11 +208,14 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     current_student = get_student(username)
     student_name = current_student['name']
     student_id = current_student['_id']
-    print(student_id)
-    st.markdown(f"Hi, {student_name}!")
+    #print(student_id)
+
+    # Temp variables to capture if get feed back, submit journal or make my journal entry private widgets are being clicked. Default setting is all false.
+    get_feedback_state = False
+    submit_journal = False
+    make_journal_private = False
 
     gamified_sidebar(student_id)
-
 
     if 'chatlog_id' not in st.session_state or st.session_state.chatlog_id is None:
         current_chatlog = init_new_chatlog()
@@ -171,19 +226,34 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     init_new_chatlog()
     st.title(st.session_state.create_journal_label)
     post_navbar_edit(st.session_state.user_fullname)
-    entry_title = st.text_input("Give your entry a title", value=st.session_state.title_value, key="journal_title", disabled=st.session_state.title_disabled)
+    entry_title = st.text_input(f"Give your entry a title, {student_name}",
+                                value=st.session_state.title_value, key="journal_title", disabled=st.session_state.title_disabled)
     st.markdown(f"Date: {st.session_state.date_value.strftime('%d %b %Y')}")
 
     text_input = st.text_area("Type your journal entry here!", value=st.session_state.entry_value, disabled=st.session_state.content_disabled)
 
-    # Get feedback
-    col1, col2, col3 = st.columns([1, 1, 3])
+    if st.checkbox("Make my journal entry private",
+                disabled=st.session_state.privacy_disabled):
+        make_journal_private = True
 
+    col1, col2, _ = st.columns([1, 1, 3])
+
+    # Feedback button
     with col1:
         if st.button("Get Feedback", disabled=st.session_state.feedback_disabled):
-            with st.spinner('Checking entry...'):
-                check = is_journal_entry(text_input)
-                print(check)
+            get_feedback_state = True
+            pass
+    # Submit journal
+    with col2:
+        if st.button("Submit Journal", disabled=st.session_state.submit_disabled):
+            submit_journal = True
+            pass
+
+    # Case when get feedback
+    if get_feedback_state:
+        with st.spinner('Checking entry...'):
+            check = is_journal_entry(text_input)
+            print(check)
 
             if check['journal_entry']:
                 with st.spinner('Generating feedback...'):
@@ -191,41 +261,55 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             else:
                 # output = check['explanation']
                 output = "Please enter a valid journal entry."
-
             st.session_state.past.append(text_input)
             st.session_state.generated.append(output)
             current_chatlog['messages'].append({"student_msg": text_input, "llm_msg": output})
             current_chatlog['endtime'] = datetime.now()
             save_chatlog(current_chatlog)
 
-    with col2:
-        if st.button("Submit Journal", disabled=st.session_state.submit_disabled):
-            # Check if journal entry is valid
-            with st.spinner('Checking entry before submission...'):
-                check = is_journal_entry(text_input)
 
-                # Save journal to db
-                if check['journal_entry']:
-                    entry_date = current_chatlog['start_time']
-                    journal_id = save_journal(entry_title, text_input, entry_date)
-                    current_chatlog['journal_id'] = journal_id
-                    save_chatlog(current_chatlog)
-                    print(journal_id, "has been saved to db")
-                    st.success('Your journal has been submitted!', icon="✅")
+    # Case when journal submitted
+    if submit_journal:
+        # Check if journal entry is valid
+        with st.spinner('Checking entry before submission...'):
+            check = is_journal_entry(text_input)
 
-                    # Submit journal for sentiment analysis
-                    sent_analysis_results = perform_sentiment_analysis(text_input)
-                    cleaned_output = clean_llm_output(sent_analysis_results)
-                    db.insert_summary(journal_id, cleaned_output)
-                                    
-                else:
-                    st.error("Please enter a valid journal entry.")
-            # Save sentiment analysis to db
-            pass
+            # Save journal to db
+            if check['journal_entry']:
+                entry_date = current_chatlog['start_time']
+
+                # Uses function to call db.insert_journal_entry
+                journal_id = save_journal(entry_title,
+                                          text_input,
+                                          entry_date, private=make_journal_private)
+                
+                current_chatlog['journal_id'] = journal_id
+                save_chatlog(current_chatlog)
+                print(journal_id, "has been saved to db")
+                # To delay tick icon from showing too fast
+                time.sleep(5)
+                st.success('Your journal has been submitted!', icon="✅")
+
+                # Submit journal for sentiment analysis
+                sent_analysis_results = perform_sentiment_analysis(text_input)
+                cleaned_output = clean_llm_output(sent_analysis_results)
+                db.insert_summary(journal_id, cleaned_output)
+                # Set journal to private if checkbox is marked
+            else:
+                st.error("Please enter a valid journal entry.")
+        # Save sentiment analysis to db
+        pass
     st.markdown("---")
 
     for i in range(len(st.session_state["generated"])-1, -1, -1):
         message(st.session_state["generated"][i], key=str(i))
         message(st.session_state["past"][i], is_user=True, key=str(i) + "_user")
-else:
+
+    # Reset temp states when done
+    get_feedback_state = False
+    submit_journal = False
+    make_journal_private = False
+    with st.sidebar:
+        show_privacy_data_protection_footer()
+else:   
     error_page_redirect()

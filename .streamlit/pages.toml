@@ -15,6 +15,10 @@ name = "Main"
     path = "pages/6_View_journal.py"
     name = "View journal"
 
+    [student.about_empathjot]
+    path = "pages/10_About_Empathjot.py"
+    name = "About EmpathJot"
+
 [teacher]
     [teacher.dashboard]
     path = "pages/3_Dashboard_summary.py"
@@ -34,5 +38,13 @@ path = "pages/7_Access_denied.py"
 name = "Access denied"
 
 [logout]
-path = "pages/8_Logout.py"
+path = "pages/11_Logout.py"
 name = "Logout"
+
+[privacy_policy]
+path = "pages/8_Privacy_policy.py"
+name = "Privacy policy"
+
+[data_protection]
+path = "pages/9_Data_protection.py"
+name = "Data protection"

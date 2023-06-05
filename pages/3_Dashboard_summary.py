@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
-from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_student_pages,  error_page_redirect, connect_db
+from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_student_pages, error_page_redirect, connect_db, hide_streamlit_footer, hide_other_pages, show_privacy_data_protection_footer
+
 import semantic_search as ss
 #from streamlit_extras.switch_page_button import switch_page
 
@@ -9,9 +10,15 @@ st.set_page_config(
     layout = "wide",
     initial_sidebar_state = 'expanded'
 )
+
+if 'user_fullname' not in st.session_state:
+    error_page_redirect()
+
 remove_top_space_canvas()
 navbar_edit()
 hide_student_pages()
+hide_other_pages()
+hide_streamlit_footer()
 
 def ss_query(student_name, start_date, end_date, question):
     journal_entries, metadatas = ss.filter_journal_entries(student_name, start_date, end_date)
@@ -44,6 +51,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         db = st.session_state.db
     else:
         db = connect_db()
+
     post_navbar_edit(st.session_state.user_fullname)
     st.title("Dashboard for Sentiment Analysis")
     st.markdown("Numbers below indicate the number of events in each category")
@@ -148,6 +156,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                     st.error('Error: End date must fall after start date.')
             else:
                 st.write('Please enter a query.')
-
+    with st.sidebar:
+        show_privacy_data_protection_footer()
 else:
     error_page_redirect()

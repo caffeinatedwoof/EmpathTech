@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_student_pages, error_page_redirect, connect_db, hide_st_table_row_index
+from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_student_pages, error_page_redirect, connect_db, hide_st_table_row_index, hide_streamlit_footer, show_privacy_data_protection_footer
 
 # Layout config 
 st.set_page_config(
@@ -8,12 +8,15 @@ st.set_page_config(
     initial_sidebar_state = 'expanded'
 )
 
-st.session_state.update(st.session_state)
+#st.session_state.update(st.session_state)
+
+if 'user_fullname' not in st.session_state:
+    error_page_redirect()
 
 remove_top_space_canvas()
 navbar_edit()
-post_navbar_edit(st.session_state.user_fullname)
 hide_student_pages()
+hide_streamlit_footer()
 
 @st.cache_data
 def show_student_filter():
@@ -28,6 +31,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     teacher_name = st.session_state.user_fullname
     teaching_class = st.session_state.teaching_class
     post_navbar_edit(st.session_state.user_fullname)
+
 
     st.title(f"Hi {teacher_name}, Teaching classes for this year")
 
@@ -57,6 +61,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
     hide_st_table_row_index()
     st.table(df)
-
+    with st.sidebar:
+        show_privacy_data_protection_footer()
 else:
     error_page_redirect()

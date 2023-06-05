@@ -131,6 +131,8 @@ class DBHandler:
             content of the journal entry
         date : datetime
             datetime object containing the date/time of entry creation
+        private: bool
+            Boolean status on whether entry is to be private
 
         Returns
         -------

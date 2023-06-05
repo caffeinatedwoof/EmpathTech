@@ -1,5 +1,5 @@
 import streamlit as st
-from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_teacher_pages, error_page_redirect, connect_db, hide_student_pages
+from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_teacher_pages, error_page_redirect, connect_db, hide_student_pages, hide_streamlit_footer, show_privacy_data_protection_footer, hide_other_pages
 from src.journal_utils import is_journal_entry
 from src.journal_guidance import provide_journal_guidance
 from src.sentiment_analysis import perform_sentiment_analysis
@@ -7,7 +7,7 @@ from src.sentiment_analysis import perform_sentiment_analysis
 from streamlit_chat import message
 from datetime import datetime
 import pymongo
-from src.st_utils import switch_chatlog, show_chatlog_filter, chatlog_list_format, save_chatlog, get_student, save_journal, clean_llm_output, get_journal_comments
+from src.st_utils import switch_chatlog, show_chatlog_filter,chatlog_list_format, save_chatlog, get_student, save_journal, clean_llm_output, get_journal_comments
 from src.gamification import gamified_sidebar
 
 #######
@@ -39,9 +39,13 @@ st.set_page_config(
     layout = "wide",
     initial_sidebar_state = 'expanded'
 )
+
+if 'user_fullname' not in st.session_state:
+    error_page_redirect()
+
 remove_top_space_canvas()
 navbar_edit()
-post_navbar_edit(st.session_state.user_fullname)
+hide_streamlit_footer()
 
 # Since it is a common page viewed by student and teacher, hide navigation pages accordingly based on role
 if st.session_state.role == 'student':
@@ -49,17 +53,20 @@ if st.session_state.role == 'student':
 else:
     hide_student_pages()
 
+hide_other_pages()
 # Set None as current student name by default if for some reason session state did not persist.
 if "current_student_name" not in st.session_state:
     st.session_state["current_student_name"] = None
 
 # Check if status is logged in
 if 'logged_in' in st.session_state and st.session_state.logged_in:
+
+    # This is to facilitate reconnection
     if 'db' in st.session_state:
         db = st.session_state.db
     else:
         db = connect_db()
-        
+    post_navbar_edit(st.session_state.user_fullname)
     username = st.session_state.username
 
     if "generated" not in st.session_state:
@@ -221,6 +228,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
     with padding3:
         pass
-
+    with st.sidebar:
+        show_privacy_data_protection_footer()
 else:
     error_page_redirect()

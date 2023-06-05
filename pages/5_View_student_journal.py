@@ -2,7 +2,7 @@ import streamlit as st
 import plotly.express as px
 import pandas as pd
 from datetime import datetime
-from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_student_pages, error_page_redirect, connect_db
+from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_student_pages, error_page_redirect, connect_db, hide_streamlit_footer, hide_other_pages, show_privacy_data_protection_footer
 from streamlit_extras.switch_page_button import switch_page
 
 # Layout config 
@@ -11,9 +11,15 @@ st.set_page_config(
     initial_sidebar_state = 'expanded'
 )
 
+if 'user_fullname' not in st.session_state:
+    error_page_redirect()
+
 remove_top_space_canvas()
 hide_student_pages()
+hide_other_pages()
 navbar_edit()
+hide_streamlit_footer()
+
 # st.session_state.update(st.session_state)
 
 def SetColor(df):
@@ -41,6 +47,8 @@ def SetColor(df):
 def show_student_filter():
     return [student for student in db.get_all_students(teacher_id)]
 
+if 'user_fullname' not in st.session_state:
+    error_page_redirect()
 
 if 'logged_in' in st.session_state and st.session_state.logged_in:
     if 'db' in st.session_state:
@@ -48,6 +56,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     else:
         db = connect_db()
     post_navbar_edit(st.session_state.user_fullname)
+
     st.title("Student Journal View")
 
     # Initialize variables
@@ -168,6 +177,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                 switch_page("View_Journal")
         st.markdown("----")
         counter += 1
-
+    with st.sidebar:
+        show_privacy_data_protection_footer()
 else:
     error_page_redirect()

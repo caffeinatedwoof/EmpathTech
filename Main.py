@@ -6,7 +6,7 @@ import toml
 
 from PIL import Image
 from streamlit_extras.switch_page_button import switch_page
-from st_helper_func import remove_top_space_canvas, navbar_edit, reset_session_state, update_current_pages, clear_all_but_first_page, connect_db
+from st_helper_func import remove_top_space_canvas, navbar_edit, reset_session_state, update_current_pages, disable_sidebar, connect_db, show_privacy_data_protection_footer, hide_streamlit_footer
 
 # GLOBAL VARIABLE ON PAGES
 #LOGIN_PAGE = "Login.py"
@@ -19,7 +19,7 @@ from st_helper_func import remove_top_space_canvas, navbar_edit, reset_session_s
 data = toml.load(os.path.join('.streamlit','pages.toml'))
 
 TEACHER_LANDING_PAGE = data['teacher']['classes']['name']
-STUDENT_LANDING_PAGE = data['student']['view_past_journal']['name']
+STUDENT_LANDING_PAGE = data['student']['about_empathjot']['name']
 
 #Internally, Streamlit manages two different states : user-defined states (used when you store values like so: st.session_state.my_state = "hey"), and widget states (when you use a key parameter). These two states work a little bit differently. User-defined states are completely persistent after multiple runs. However if a widget with a key assigned disappear (when your page changes for example), its associated widget state will be cleared. To make widget state persistent, the trick is to transform a widget state into a user-defined state. 
 
@@ -30,11 +30,7 @@ st.set_page_config(
     layout = "centered",
     initial_sidebar_state = 'collapsed'
 )
-remove_top_space_canvas()
-navbar_edit()
 
-# Clear cache
-st.runtime.legacy_caching.clear_cache()
 
 def st_state_update(state, value):
     """Function that updates streamlit session states with given state and values info
@@ -49,16 +45,19 @@ def st_state_update(state, value):
     st.session_state[state]= value
 
     return None
-
+# Remove navbar on load
+disable_sidebar()
 
 def main():
     # Main function
     # Reset all session state
     reset_session_state()
 
-    # Remove navbar on load
-    clear_all_but_first_page()
-
+    remove_top_space_canvas()
+    navbar_edit()
+    hide_streamlit_footer()
+    # Clear cache
+    st.runtime.legacy_caching.clear_cache()
     # Init connect to database, which will set session state
     db = connect_db()
 
@@ -83,7 +82,8 @@ def main():
 
     # SHould place after text input before connect db
     login_submit = login_form.form_submit_button(label='Sign In')
-
+    
+    show_privacy_data_protection_footer()
     if login_submit and username and user_pas:
         st_state_update('username', True)
         # Init connect to database
