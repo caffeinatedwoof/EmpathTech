@@ -246,6 +246,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         if st.checkbox("Make my journal entry private",
                     disabled=st.session_state.privacy_disabled):
             make_journal_private = True
+
     with checkbox_col2:
         if make_journal_private:
             st.image(lock_image, width=40)
@@ -258,19 +259,18 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     with col1:
         if st.button("Get Feedback", disabled=st.session_state.feedback_disabled):
             get_feedback_state = True
-            pass
+
     # Submit journal
     with col2:
         if st.button("Submit Journal", 
                      disabled=st.session_state.submit_disabled):
             submit_journal = True
-            pass
 
     # Case when get feedback
     if get_feedback_state:
         with st.spinner('Checking entry...'):
             check = is_journal_entry(text_input)
-            print(check)
+            # print(check)
 
         if check['journal_entry']:
             with st.spinner('Generating feedback...'):
@@ -284,7 +284,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         current_chatlog['endtime'] = datetime.now()
         save_chatlog(current_chatlog)
 
-
     # Case when journal submitted
     if submit_journal:
         # Check if journal entry is valid
@@ -297,8 +296,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
                 # Uses function to call db.insert_journal_entry
                 journal_id = save_journal(entry_title,
-                                            text_input,
-                                            entry_date, private=make_journal_private)
+                                          text_input,
+                                          entry_date, private=make_journal_private)
                 
                 current_chatlog['journal_id'] = journal_id
                 save_chatlog(current_chatlog)
