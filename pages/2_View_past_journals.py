@@ -1,9 +1,16 @@
 import streamlit as st
+import os
 from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_teacher_pages, error_page_redirect, connect_db, hide_streamlit_footer, hide_student_pages, hide_other_pages, show_privacy_data_protection_footer
 from streamlit_extras.switch_page_button import switch_page
 from datetime import datetime
-from src.gamification import gamified_sidebar
+from PIL import Image
 from src.sidebar import render_sidebar
+
+#Path to lock and unlock icons
+lock_icon_path = os.path.join(os.getcwd(), 'src', 'images', 'lock-icon.png')
+lock_image = Image.open(lock_icon_path)
+unlock_icon_path = os.path.join(os.getcwd(), 'src', 'images', 'unlock-icon.png')
+unlock_image = Image.open(unlock_icon_path)
 
 # Layout config 
 st.set_page_config(
@@ -56,7 +63,11 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             st.markdown(f"{content}")
         with subcol3:
             private_status = entry['private']
-            st.markdown(f"Private post: {private_status}")
+            # Show different lock images based on private status
+            if private_status:
+                st.image(lock_image)
+            else:
+                st.image(unlock_image)
         with subcol4:
             # Upon clicking full entry
             if st.button("View full entry", key=f"{entry['_id']}_btn"):
