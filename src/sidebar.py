@@ -7,7 +7,7 @@ from st_helper_func import show_privacy_data_protection_footer
 def display_name():
     if "user_fullname" in st.session_state:
         name = st.session_state.user_fullname
-        st.markdown(f"<div style='text-align:center;'>Welcome to EmpathJot,<br> {name}!</div>", unsafe_allow_html=True)
+        st.markdown(f"<div style='text-align:center; color: #00bbf0';> Hello {name}, <br> Welcome to EmpathJot </div>", unsafe_allow_html=True)
     else:
         st.markdown("<div style='text-align:center;'>Welcome to EmpathJot</div>", unsafe_allow_html=True)
 
@@ -15,7 +15,7 @@ def display_name():
 def render_sidebar():
     st.markdown("""<style>
     .css-1oe5cao {
-    display: None;
+        display: None;
     }</style>
     """, unsafe_allow_html=True)
     with st.sidebar:
