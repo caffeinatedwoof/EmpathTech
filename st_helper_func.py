@@ -97,9 +97,6 @@ def post_navbar_edit(name_string=None):
             font-size: 1.5rem;
             overflow: hidden;
         }}
-
-
-
         .css-lrlib, .css-1oe5cao {{
             padding-top: 1rem;
         }}

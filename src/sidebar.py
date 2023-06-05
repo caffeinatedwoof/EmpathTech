@@ -20,7 +20,7 @@ def render_sidebar():
     """, unsafe_allow_html=True)
     with st.sidebar:
         display_name()
-        st.markdown("""<hr style='height:50%'>""", unsafe_allow_html=True)
+        st.markdown("""<hr>""", unsafe_allow_html=True)
     if st.session_state.role == 'student':
         with st.sidebar:
             if st.button("Create journal", use_container_width=True, type="primary"):
@@ -35,13 +35,11 @@ def render_sidebar():
         with st.sidebar:
             if st.button("Teaching Classes", use_container_width=True, type="primary"):
                 switch_page("Teaching_classes")
-            if st.button("View Student Journal", use_container_width=True, type="primary"):
-                switch_page("View_student_journal")
             if st.button("Sentiment Dashboard", use_container_width=True, type="primary"):
                 switch_page("Dashboard_summary")
+            if st.button("Browse Student Journals", use_container_width=True, type="primary"):
+                switch_page("View_student_journal")
             if st.button("Logout", use_container_width=True, type="primary"):
                 switch_page("Logout")
-            
-            
     with st.sidebar:
         show_privacy_data_protection_footer()
