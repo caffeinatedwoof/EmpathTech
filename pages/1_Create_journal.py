@@ -1,13 +1,14 @@
 import streamlit as st
-import time
-from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_teacher_pages, error_page_redirect, connect_db, hide_streamlit_footer, hide_other_pages, show_privacy_data_protection_footer
+import os
+import json
+from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_teacher_pages, error_page_redirect, connect_db, hide_streamlit_footer, hide_other_pages
 from src.journal_utils import is_journal_entry
 from src.journal_guidance import provide_journal_guidance
 from src.sentiment_analysis import perform_sentiment_analysis
-import json
 from streamlit_chat import message
 from datetime import datetime
 from src.sidebar import render_sidebar
+from PIL import Image
 
 #from streamlit_extras.switch_page_button import switch_page
 
@@ -186,7 +187,10 @@ def switch_chatlog(chatlog_id):
 if 'user_fullname' not in st.session_state:
     error_page_redirect()
 
-
+lock_icon_path = os.path.join(os.getcwd(), 'src', 'images', 'lock-icon.png')
+lock_image = Image.open(lock_icon_path)
+unlock_icon_path = os.path.join(os.getcwd(), 'src', 'images', 'unlock-icon.png')
+unlock_image = Image.open(unlock_icon_path)
 if 'logged_in' in st.session_state and st.session_state.logged_in:
     # This is to facilitate reconnection
     if 'db' in st.session_state:
@@ -225,15 +229,28 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     init_new_chatlog()
     st.title(st.session_state.create_journal_label)
     post_navbar_edit(st.session_state.user_fullname)
-    entry_title = st.text_input(f"Give your entry a title, {student_name}",
-                                value=st.session_state.title_value, key="journal_title", disabled=st.session_state.title_disabled)
+    entry_title = st.text_input("Give your entry a title",
+                                value=st.session_state.title_value, key="journal_title",
+                                placeholder="Eg. Interesting encounter, What a day today",
+                                disabled=st.session_state.title_disabled)
     st.markdown(f"Date: {st.session_state.date_value.strftime('%d %b %Y')}")
 
-    text_input = st.text_area("Type your journal entry here!", value=st.session_state.entry_value, disabled=st.session_state.content_disabled)
+    text_input = st.text_area("Type your journal entry here!", 
+                              value=st.session_state.entry_value,
+                              placeholder="E.g I encountered something today which made me....",
+                              disabled=st.session_state.content_disabled)
 
-    if st.checkbox("Make my journal entry private",
-                disabled=st.session_state.privacy_disabled):
-        make_journal_private = True
+    checkbox_col1, checkbox_col2, _ = st.columns([3,1,4])
+
+    with checkbox_col1:
+        if st.checkbox("Make my journal entry private",
+                    disabled=st.session_state.privacy_disabled):
+            make_journal_private = True
+    with checkbox_col2:
+        if make_journal_private:
+            st.image(lock_image, width=40)
+        else:
+            st.image(unlock_image, width=40)
 
     col1, col2, _ = st.columns([1, 1, 3])
 
@@ -244,7 +261,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             pass
     # Submit journal
     with col2:
-        if st.button("Submit Journal", disabled=st.session_state.submit_disabled):
+        if st.button("Submit Journal", 
+                     disabled=st.session_state.submit_disabled):
             submit_journal = True
             pass
 
@@ -284,7 +302,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                 
                 current_chatlog['journal_id'] = journal_id
                 save_chatlog(current_chatlog)
-                print(journal_id, "has been saved to db")                
+                print(journal_id, "has been saved to db")
 
                 # Submit journal for sentiment analysis
                 sent_analysis_results = perform_sentiment_analysis(text_input)
