@@ -73,7 +73,7 @@ chain = LLMChain(
     memory=window_memory
 )
 
-def provide_journal_guidance(journal_entry, level="secondary"):
+def provide_journal_guidance(journal_entry, level=None):
     """
     Provide guidance and support for a student's journal entry.
 
