@@ -96,7 +96,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     entries = db.get_journal_entries(key_list[selected_student_id])
     
     # Pymongo has sorted order
-    entries_list = [i for i in entries]
+    entries_list = [entry for entry in entries if not entry['private']]
     
     ####
     #Emotion history
