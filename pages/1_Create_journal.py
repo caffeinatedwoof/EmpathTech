@@ -22,6 +22,7 @@ hide_teacher_pages()
 hide_other_pages()
 hide_streamlit_footer()
 st.session_state.update(st.session_state)
+render_sidebar()
 
 ###################
 # Helper functions
@@ -307,7 +308,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     get_feedback_state = False
     submit_journal = False
     make_journal_private = False
-    with st.sidebar:
-        render_sidebar()
+
 else:   
     error_page_redirect()
