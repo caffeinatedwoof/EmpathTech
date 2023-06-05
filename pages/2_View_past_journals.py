@@ -1,6 +1,6 @@
 import streamlit as st
 import os
-from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_teacher_pages, error_page_redirect, connect_db, hide_streamlit_footer, hide_student_pages, hide_other_pages, show_privacy_data_protection_footer
+from st_helper_func import remove_top_space_canvas, navbar_edit, post_navbar_edit, hide_teacher_pages, error_page_redirect, connect_db, hide_streamlit_footer, hide_student_pages, hide_other_pages
 from streamlit_extras.switch_page_button import switch_page
 from datetime import datetime
 from PIL import Image
