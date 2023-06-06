@@ -63,7 +63,7 @@ def main():
 
     st.session_state.username = ''
     # Authenticate with database information, provides additional detail on the role of the login
-    image = Image.open("./src/empathjot.jpg")
+    image = Image.open("./src/empathjot.png")
     col1, col2, col3 = st.columns([1,2,1])
     with col1:
         st.write(' ')
