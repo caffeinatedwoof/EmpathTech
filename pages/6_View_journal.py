@@ -188,7 +188,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     with padding2:
         pass
     with container2:
-        st.header("Past comments on your current journal entry")
+        st.header("Comments")
         comment_placeholder = st.empty()
         comments = get_journal_comments(current_chatlog['journal_id'])
         with comment_placeholder.container():
