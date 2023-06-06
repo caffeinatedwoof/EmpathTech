@@ -38,6 +38,15 @@ is_journal_entry_prompt = PromptTemplate(
 
 chain = LLMChain(llm = language_model, prompt=is_journal_entry_prompt)
 
+def clean_llm_output(llm_output):
+    if "output:" in llm_output:
+        llm_output = llm_output.replace("output:", "")
+    elif "Output:" in llm_output:
+        llm_output = llm_output.replace("Output:", "")
+
+    return llm_output
+
+
 def is_journal_entry(entry):
     """
     Determine if the given text is a genuine student's journal entry.
@@ -51,6 +60,8 @@ def is_journal_entry(entry):
             - 'explanation' (str): Brief explanation for the language model's answer.
     """
     llm_output = chain.run(entry)
-    print(llm_output)
+    print("original journal check output", llm_output)
+    llm_output = clean_llm_output(llm_output)
+    print("cleaned journal check output:", llm_output)
     result_dict = json.loads(llm_output)
     return result_dict
