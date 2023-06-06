@@ -35,7 +35,7 @@ def render_sidebar():
         with st.sidebar:
             if st.button("Teaching Classes", use_container_width=True, type="primary"):
                 switch_page("Teaching_classes")
-            if st.button("Emotion Dashboard", use_container_width=True, type="primary"):
+            if st.button("Sentiment Dashboard", use_container_width=True, type="primary"):
                 switch_page("Dashboard_summary")
             if st.button("Browse Student Journals", use_container_width=True, type="primary"):
                 switch_page("View_student_journal")
