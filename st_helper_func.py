@@ -92,6 +92,27 @@ def post_navbar_edit(name_string=None):
             background-color: #5B8FB9;
             border: 0px
         }}
+        [kind="secondary"] {{
+            background-color: #5B8FB9;
+            color: #ffffff;
+            border: 1px;
+            border-radius: 1.5rem;
+        }}
+        [kind="secondary"]:hover {{
+            background-color: #19A7CE;
+            color: #ffffff;
+            border: 1px
+        }}
+        [kind="secondary"]:active {{
+            background-color: #19A7CE;
+            color: #000000;
+            border: 1px
+        }}
+        [kind="secondary"]:focus {{
+            background-color: #19A7CE;
+            color: #000000;
+            border: 1px
+        }}
         [data-testid="stSidebar"] {{
             padding: 0rem 1rem 1rem 1rem;
             font-size: 1.5rem;

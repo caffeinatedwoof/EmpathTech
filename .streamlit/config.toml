@@ -186,7 +186,7 @@ serverPort = 8501
 base="dark"
 
 # Primary accent color for interactive element
-primaryColor="#bd93f9"
+primaryColor="#92DDF2"
 
 # Background color for the main content area.
 backgroundColor="#282a36"

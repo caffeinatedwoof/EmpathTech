@@ -4,11 +4,12 @@ from src.journal_utils import is_journal_entry
 from src.journal_guidance import provide_journal_guidance
 from src.sentiment_analysis import perform_sentiment_analysis
 from src.sidebar import render_sidebar
-
+from src.st_utils import switch_chatlog, save_chatlog, get_student, save_journal, clean_llm_output, get_journal_comments
 from streamlit_chat import message
+from streamlit_extras.switch_page_button import switch_page 
 from datetime import datetime
 import pymongo
-from src.st_utils import switch_chatlog, save_chatlog, get_student, save_journal, clean_llm_output, get_journal_comments
+
 
 
 #######
@@ -109,6 +110,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     with padding:
         pass
     with container1:
+        if st.button("Back to Journal List", type="secondary"):
+            switch_page("View past journals")
         st.title(f"{student_name}'s Journal")
         st.session_state.label_visibility = "hidden"
         if st.session_state.is_teacher == False:
@@ -118,7 +121,6 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         st.markdown(f"Date: {st.session_state.date_value.strftime('%d %b %Y')}")
 
         text_input = st.text_area("Type your journal entry here!", value=st.session_state.entry_value, height=300, disabled=st.session_state.content_disabled, label_visibility=st.session_state.label_visibility)
-
         # Get feedback
         col1, col2, col3 = st.columns([1, 1, 3])
 
