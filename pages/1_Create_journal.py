@@ -243,18 +243,18 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                               placeholder="E.g Today, I encountered something which made me....",
                               disabled=st.session_state.content_disabled)
 
-    checkbox_col1, checkbox_col2, _ = st.columns([3,1,4])
+    checkbox_col1, checkbox_col2, _ = st.columns([.25,2.5,4])
 
-    with checkbox_col1:
+    with checkbox_col2:
         if st.checkbox("Make my journal entry private",
                     disabled=st.session_state.privacy_disabled):
             make_journal_private = True
 
-    with checkbox_col2:
+    with checkbox_col1:
         if make_journal_private:
-            st.image(lock_image, width=40)
+            st.image(lock_image, width=25)
         else:
-            st.image(unlock_image, width=40)
+            st.image(unlock_image, width=25)
 
     col1, col2, _ = st.columns([1, 1, 3])
 
