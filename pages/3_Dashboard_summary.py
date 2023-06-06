@@ -53,7 +53,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         db = connect_db()
 
     post_navbar_edit(st.session_state.user_fullname)
-    st.title("Emotion Dashboard")
+    st.title("Sentiment Dashboard")
     st.markdown("The numbers below show events that are recorded in each student's journal.")
  
     # Initialize variables
