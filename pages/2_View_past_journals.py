@@ -46,6 +46,9 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     student_name = st.session_state.user_fullname
 
     st.title(f"Past Journal Entries for {student_name}")
+    if "success_message" in st.session_state and st.session_state.success_message is not None:
+        st.success(st.session_state.success_message, icon="✅")
+        st.session_state.success_message = None
     entries = db.get_journal_entries(student_id)
     render_sidebar()
 

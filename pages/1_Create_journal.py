@@ -9,8 +9,7 @@ from streamlit_chat import message
 from datetime import datetime
 from src.sidebar import render_sidebar
 from PIL import Image
-
-#from streamlit_extras.switch_page_button import switch_page
+from streamlit_extras.switch_page_button import switch_page
 
 # Layout config 
 st.set_page_config(
@@ -83,6 +82,11 @@ def clear_messages():
     st.session_state.generated = []
     st.session_state.past = []
 
+
+def clear_textboxes():
+    """ empties the textboxes after entry is submitted """
+
+    
 # find student from username and cache it
 @st.cache_data
 def get_student(username):
@@ -98,7 +102,7 @@ def init_new_chatlog():
     Returns:
         dict: Dictionary containing chatlog related information.
     """
-    print("chatlog id does not exist")
+    print("Initiating new chatlog")
     clear_messages()
     st.session_state.chatlog_id = None
     st.session_state.entry_value = ""
@@ -225,19 +229,18 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
 
     else:
         current_chatlog = switch_chatlog(st.session_state.chatlog_id)
+        print("Switch to existing chatlog")
 
     init_new_chatlog()
     st.title(st.session_state.create_journal_label)
     post_navbar_edit(st.session_state.user_fullname)
-    entry_title = st.text_input("Give your entry a title",
-                                value=st.session_state.title_value, key="journal_title",
+    entry_title = st.text_input("Give your entry a title", key="journal_title",
                                 placeholder="Eg. Interesting encounter, What a day today",
                                 disabled=st.session_state.title_disabled)
     st.markdown(f"Date: {st.session_state.date_value.strftime('%d %b %Y')}")
 
-    text_input = st.text_area("Type your journal entry here!", 
-                              value=st.session_state.entry_value,
-                              placeholder="E.g I encountered something today which made me....",
+    text_input = st.text_area("Type your journal entry here!",
+                              placeholder="E.g Today, I encountered something which made me....",
                               disabled=st.session_state.content_disabled)
 
     checkbox_col1, checkbox_col2, _ = st.columns([3,1,4])
@@ -307,8 +310,10 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                 sent_analysis_results = perform_sentiment_analysis(text_input)
                 cleaned_output = clean_llm_output(sent_analysis_results)
                 db.insert_summary(journal_id, cleaned_output)
-                st.success('Your journal has been submitted!', icon="✅")
                 init_new_chatlog()
+                st.session_state["success_message"] = "Your journal has been submitted!"
+                switch_page("View past journals")
+                
             else:
                 st.error("Please enter a valid journal entry.")
             

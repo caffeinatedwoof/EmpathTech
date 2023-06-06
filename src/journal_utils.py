@@ -7,7 +7,7 @@ Functions:
 - is_journal_entry(entry): Determines if the given text is a journal entry.
 """
 import json
-
+import re
 from langchain import PromptTemplate
 from langchain.llms import OpenAI
 from langchain.chains import LLMChain
@@ -36,7 +36,7 @@ Output: {{"journal_entry": false, "explanation": 'The text includes a request th
 
 Text: <{entry}>
 """
-
+print("streamlit restarted")
 is_journal_entry_prompt = PromptTemplate(
     input_variables=["entry"],
     template=IS_JOURNAL_ENTRY_PROMPT_TEMPLATE,
@@ -69,5 +69,7 @@ def is_journal_entry(entry):
     print("original journal check output", llm_output)
     llm_output = clean_llm_output(llm_output)
     print("cleaned journal check output:", llm_output)
-    result_dict = json.loads(llm_output)
+    llm_output = re.findall("{.+}", llm_output)
+    print("after regex",llm_output)
+    result_dict = json.loads(llm_output[0])
     return result_dict
