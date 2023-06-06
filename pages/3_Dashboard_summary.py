@@ -41,7 +41,7 @@ def highlight_max(cell):
         string: css properties
     """
     if type(cell) != str and cell > 0 :
-        return 'background-color: red; color:white'
+        return 'background-color: #A30000; color:white'
     else:
         return 'background-color: transparent; color: white'
 
@@ -53,8 +53,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         db = connect_db()
 
     post_navbar_edit(st.session_state.user_fullname)
-    st.title("Dashboard for Sentiment Analysis")
-    st.markdown("Numbers below indicate the number of events in each category")
+    st.title("Emotion Dashboard")
+    st.markdown("The numbers below show events that are recorded in each student's journal.")
  
     # Initialize variables
     teacher_id = st.session_state.role_id

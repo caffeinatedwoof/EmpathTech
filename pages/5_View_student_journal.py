@@ -59,7 +59,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
         db = connect_db()
     post_navbar_edit(st.session_state.user_fullname)
 
-    st.title("Student Journal View")
+    st.header("Browse Journals by Student")
 
     # Initialize variables
     teacher_id = st.session_state.role_id
@@ -72,7 +72,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     col1, padding, col2 = st.columns((10,2,10))
     with col1:
         student_class = set([student['class'] for student in student_list])
-        selected_class = st.selectbox("Class", student_class)
+        selected_class = st.selectbox("Select a class", student_class)
 
     with col2:
         # Apply filter after extracting all student based on class selection
@@ -81,7 +81,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
                             if student['class']==selected_class}
         
         # Create a selectbox using dict values containing student full name
-        selected_student_name = st.selectbox("Student name",\
+        selected_student_name = st.selectbox("Select a student",\
                                               student_names_id_dict.values())
         st.session_state.current_student_name = selected_student_name
 
@@ -101,7 +101,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     ####
     #Emotion history
     ####
-    st.subheader("Emotion history")
+    st.subheader(f"Emotion history of {selected_student_name}")
     emotion_list = ['Positive', 'Neutral', 'Negative']
     sent_dict = dict(zip([2, 1, 0], emotion_list))
 
