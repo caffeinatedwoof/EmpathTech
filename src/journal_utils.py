@@ -50,5 +50,7 @@ def is_journal_entry(entry):
             - 'journal_entry' (bool): True if the text is a journal entry, False otherwise.
             - 'explanation' (str): Brief explanation for the language model's answer.
     """
-    result_dict = json.loads(chain.run(entry))
+    llm_output = chain.run(entry)
+    print(llm_output)
+    result_dict = json.loads(llm_output)
     return result_dict
