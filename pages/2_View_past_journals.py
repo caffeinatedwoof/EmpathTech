@@ -45,7 +45,7 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
     student_id = st.session_state.role_id
     student_name = st.session_state.user_fullname
 
-    st.title(f"Past Journal Entries for {student_name}")
+    st.title(f"Journal Entries for {student_name}")
     if "success_message" in st.session_state and st.session_state.success_message is not None:
         st.success(st.session_state.success_message, icon="✅")
         st.session_state.success_message = None
@@ -70,7 +70,8 @@ if 'logged_in' in st.session_state and st.session_state.logged_in:
             if private_status:
                 st.image(lock_image)
             else:
-                st.image(unlock_image)
+                # st.image(unlock_image)
+                pass
         with subcol4:
             # Upon clicking full entry
             if st.button("View full entry", key=f"{entry['_id']}_btn"):

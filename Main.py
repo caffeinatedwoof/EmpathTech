@@ -19,7 +19,7 @@ from st_helper_func import remove_top_space_canvas, navbar_edit, reset_session_s
 data = toml.load(os.path.join('.streamlit','pages.toml'))
 
 TEACHER_LANDING_PAGE = data['teacher']['classes']['name']
-STUDENT_LANDING_PAGE = data['student']['about_empathjot']['name']
+STUDENT_LANDING_PAGE = data['student']['view_past_journal']['name']
 
 #Internally, Streamlit manages two different states : user-defined states (used when you store values like so: st.session_state.my_state = "hey"), and widget states (when you use a key parameter). These two states work a little bit differently. User-defined states are completely persistent after multiple runs. However if a widget with a key assigned disappear (when your page changes for example), its associated widget state will be cleared. To make widget state persistent, the trick is to transform a widget state into a user-defined state. 
 
@@ -73,7 +73,7 @@ def main():
 
     with col3:
         st.write(' ')
-    st.title("Welcome to EmpathJot Platform!")
+    # st.title("Welcome to EmpathJot Platform!")
     st.subheader("Login into your account")
 
     login_form = st.form(key='signin_form', clear_on_submit=True)
