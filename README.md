@@ -4,7 +4,7 @@
 
 EmpathTech's journaling tool, EmpathJot, leverages Large Language Models to empower teachers and students in classroom settings, offering a guided journaling experience, sentiment analysis for tracking well-being, a teacher dashboard for sentiment scores, natural language querying, and guardrails for identifying concerning events.
 
-This repository contains the source code and documentation, including the ML/AI models, front-end interface, and backend architecture.
+This repository contains all the source code and documentation, including the ML/AI models, front-end interface, and backend architecture.
 
 ---
 
