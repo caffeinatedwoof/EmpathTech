@@ -2,9 +2,25 @@
   <h1>EmpathJot</h1>
 </div>
 
+## About
+
+This repository is developed by a like-minded team (EmpathTech) of people who participated and were awarded 2nd-runner-up in HackSingapore 2023 (organised by AngelHack) Digital Empowerment theme with the focus: "Optimising the use of digital technologies to create opportunities for underserved individuals so that they can better participate and express themselves".
+
+Team members:
+
+- Chia Wei Han
+- Law Shu Ying
+- Ong Zhi Xuan
+- Quek Zhi Qiang
+
+
+## The problem statement
+
+There has been a growing concern pertaining to youth mental-well being nowadays which is evidenced by newsreport published on various news outlet such as the report from Singapore's Straits Time article: [About 1 in 3 young people in Singapore has mental health symptoms: Study](https://www.straitstimes.com/singapore/about-1-in-3-youths-in-singapore-has-mental-health-symptoms-study) and a research article from NUS Medicine, [NUS Youth Epidemiology and Resilience Study (2023)](https://medicine.nus.edu.sg/news/building-resilience-is-key-to-good-mental-health-nus-youth-epidemiology-and-resilience-study). If left unchecked, it may result in a lost productivity as a result of anxiety and depression, which is estimated to cost Singapore 2.9% of its GDP, or close to $26bn annually. [Prevalence and economic burden of depression and anxiety symptoms among Singaporean adults: results from a 2022 web panel. BMC Psychiatry 23, 104 (2023)](https://doi.org/10.1186/s12888-023-04581-7)
+
 EmpathTech's journaling tool, EmpathJot, leverages Large Language Models to empower teachers and students in classroom settings, offering a guided journaling experience, sentiment analysis for tracking well-being, a teacher dashboard for sentiment scores, natural language querying, and guardrails for identifying concerning events.
 
-This repository contains all the source code and documentation, including the ML/AI models, front-end interface, and backend architecture.
+All the source code and documentation, including the ML/AI models, front-end interface, and backend architecture are contained in the repository.
 
 ---
 
